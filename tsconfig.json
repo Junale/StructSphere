@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [ "src/*" ]
+    },
+    "target": "ESNext", // Ensure compatibility with older browsers
+    "lib": [ "DOM", "DOM.Iterable", "ESNext" ], // Include the required libraries
+    "module": "ESNext", // Support dynamic imports
+    "moduleResolution": "Node", // Use Node.js module resolution
+    "allowJs": false, // Disable JavaScript support
+    "useDefineForClassFields": true, // Use ECMAScript class fields
+    "strict": true,
+    "esModuleInterop": false, // Disable ES module interop
+    "allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export
+    "resolveJsonModule": true, // Enable JSON module resolution
+    "isolatedModules": true, // Ensure each file is treated as a separate module
+    "noEmit": true, // Disable emitting files
+    "noImplicitAny": true, // Disable implicit any
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true,
+  },
+  "include": [ "src", "test/stories" ],
+  "extends": "./tsconfig.node.json"
+}
