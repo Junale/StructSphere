@@ -24,7 +24,6 @@ export default [
       semi: ["error", "always"], // Code should use semicolons
       quotes: ["error", "double"], // Code should use double quotes
       "no-console": "warn", // Code should not use console.log
-      "no-unused-vars": "error", // Code should not have unused variables
       "no-var": "error", // Code should not use var but let or const
       "prefer-const": "error", // Code should use const when possible
       "no-template-curly-in-string": "error", // Disallow template literals
@@ -71,6 +70,7 @@ export default [
 
       // TypeScript rules
       "@typescript-eslint/consistent-type-definitions": ["error", "type"], // Enforce consistent type definitions
+      "@typescript-eslint/no-unused-vars": "error", // Disallow unused variables
     }
   },
 ];
