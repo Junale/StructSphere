@@ -1,7 +1,7 @@
 import TEdge from "./edge";
 
 type TLayer = {
-	id: string;
+	id: number;
 	name: string;
 	children: TLayer[];
 	edges: TEdge[];

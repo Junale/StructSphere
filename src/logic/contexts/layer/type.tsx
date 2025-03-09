@@ -3,14 +3,16 @@ import TLayer from "@/logic/type/models/layer";
 
 
 type LayerContextType = {
-	layer: TLayer;
-	setLayer: (layer: TLayer) => void;
+	rootLayer: TLayer;
+	setRootLayer: (layer: TLayer) => void;
 
 	addChildLayer: (layer: TLayer) => void;
 	removeChildLayer: (layer: TLayer) => void;
 
 	addEdge: (edge: TEdge) => void;
 	removeEdge: (edge: TEdge) => void;
+
+	moveChildIntoTarget: (child: TLayer, targetId: string) => void;
 };
 
 export default LayerContextType;

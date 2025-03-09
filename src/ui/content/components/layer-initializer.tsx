@@ -9,17 +9,17 @@ type props = {
 
 const LayerInitializer = ({ setDefaultLayer }: props) => {
 	const defaultLayer: TLayer = {
-		id: "default",
+		id: 1,
 		name: "Default Layer",
 		children: [
 			{
-				id: "child1",
+				id: 2,
 				name: "Child 1",
 				children: [],
 				edges: []
 			},
 			{
-				id: "child2",
+				id: 3,
 				name: "Child 2",
 				children: [],
 				edges: []

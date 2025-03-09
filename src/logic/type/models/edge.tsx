@@ -1,5 +1,5 @@
 type TEdge = {
-	id: string;
+	id: number;
 	name: string;
 	LayerIds: [number, number];
 };

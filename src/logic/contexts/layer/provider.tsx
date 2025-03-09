@@ -13,45 +13,51 @@ const LayerContextProvider = ({
 	defaultLayer,
 	children
 }: LayerContextProviderProps): JSX.Element => {
-	const [layer, setLayer] = useState<TLayer>(defaultLayer);
+	const [rootLayer, setRootLayer] = useState<TLayer>(defaultLayer);
+	const [currentLayerId, setCurrentLayerId] = useState<string | undefined>(undefined);
 
 	const addChildLayer = (childLayer: TLayer) => {
-		setLayer({
-			...layer,
-			children: [...layer.children, childLayer]
+		setRootLayer({
+			...rootLayer,
+			children: [...rootLayer.children, childLayer]
 		});
 	};
 
 	const removeChildLayer = (childLayer: TLayer) => {
-		setLayer({
-			...layer,
-			children: layer.children.filter((c) => c.id !== childLayer.id)
+		setRootLayer({
+			...rootLayer,
+			children: rootLayer.children.filter((c) => c.id !== childLayer.id)
 		});
 	};
 
 	const addEdge = (edge: TEdge) => {
-		setLayer({
-			...layer,
-			edges: [...layer.edges, edge]
+		setRootLayer({
+			...rootLayer,
+			edges: [...rootLayer.edges, edge]
 		});
 	};
 
 	const removeEdge = (edge: TEdge) => {
-		setLayer({
-			...layer,
-			edges: layer.edges.filter((e) => e.id !== edge.id)
+		setRootLayer({
+			...rootLayer,
+			edges: rootLayer.edges.filter((e) => e.id !== edge.id)
 		});
+	};
+
+	const moveChildIntoTarget = (child: TLayer, targetId: string) => {
+
 	};
 
 	return (
 		<LayerContext.Provider value={
 			{
-				layer,
-				setLayer,
+				rootLayer,
+				setRootLayer,
 				addChildLayer,
 				removeChildLayer,
 				addEdge,
-				removeEdge
+				removeEdge,
+				moveChildIntoTarget
 			}
 		}
 		>
