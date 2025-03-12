@@ -9,13 +9,27 @@ export function getLayerById(layer: TLayer, id: number): TLayer | undefined {
 }
 
 export function getPathToLayer(layer: TLayer, id: number): TLayer[] {
-	const path: TLayer[] = [];
-	layer.children.forEach((child) => {
+	if (layer.id === id) return [layer];
+
+	for (const child of layer.children) {
 		if (child.id === id) {
-			path.push(child);
-		} else {
-			path.push(...getPathToLayer(child, id));
+			return [child];
 		}
-	});
-	return path;
+		const path = getPathToLayer(child, id);
+		if (path.length > 0) {
+			return path;
+		}
+	}
+	return [];
+}
+
+export function layerPlacedInTarget(layer: TLayer, target: TLayer): boolean {
+	if (layer.id === target.id) return false;
+
+	return layer.location.x >= target.location.x && layer.location.x <= target.location.x + target.width &&
+		layer.location.y >= target.location.y && layer.location.y <= target.location.y + target.height;
+}
+
+export function layerPlacedInTargets(layer: TLayer, targets: TLayer[]): number | undefined {
+	return targets.find((target) => layerPlacedInTarget(layer, target))?.id;
 }
