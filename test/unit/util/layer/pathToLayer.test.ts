@@ -1,32 +1,41 @@
-import { getPathToLayer } from "@/logic/utils/layer";
-import { mockLayer } from "test/util/mocks/layer";
-import { testFunction, TTestCase } from "test/util/unit";
+import { describe, test, expect } from "bun:test";
+import { getPathToLayer } from "../../../../src/logic/utils/layer";
+import { mockLayer } from "../../../util/mocks/layer";
+import { TTestCase } from "../../../util/unit";
+
+const parentLayer = mockLayer({ id: 1 });
+const childLayer = mockLayer({ id: 2 });
+parentLayer.children = [childLayer];
 
 const testCases: TTestCase<typeof getPathToLayer>[] = [
 	{
 		caseName: "Get the path to root layer",
 		input: [
-			mockLayer({ id: 1, name: "Test name", children: [], edges: [] }),
+			parentLayer,
 			1
 		],
-		expectedResult: [mockLayer({ id: 1, name: "Test name", children: [], edges: [] })]
+		expectedResult: [parentLayer]
 	},
 	{
-		caseName: "Get the path to a child layer",
-		input: [
-			mockLayer({ id: 1, name: "Test name", children: [mockLayer({ id: 2, name: "Test name", children: [], edges: [] })], edges: [] }),
-			2
-		],
-		expectedResult: [mockLayer({ id: 1, name: "Test name", children: [mockLayer({ id: 2, name: "Test name", children: [], edges: [] })], edges: [] })]
+		caseName: "Get the path to child layer",
+		input: [parentLayer, 2],
+		expectedResult: [childLayer]
 	},
 	{
-		caseName: "Get the path to a child layer that is not present",
+		caseName: "Get the path to child layer that is not present",
 		input: [
-			mockLayer({ id: 1, name: "Test name", children: [], edges: [] }),
-			2
+			parentLayer,
+			3
 		],
 		expectedResult: []
 	}
-]
+];
 
-testFunction("getPathToLayer", testCases, getPathToLayer);
+describe("getPathToLayer", () => {
+	testCases.forEach((testCase) => {
+		test(testCase.caseName, () => {
+			const result = getPathToLayer.apply(null, testCase.input);
+			expect(result).toEqual(testCase.expectedResult);
+		});
+	});
+});

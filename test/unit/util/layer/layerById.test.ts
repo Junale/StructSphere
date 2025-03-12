@@ -1,7 +1,6 @@
 import { getLayerById } from "@/logic/utils/layer";
 import { mockLayer } from "test/util/mocks/layer";
 import { TTestCase } from "test/util/unit";
-import { testFunction } from "../../../util/unit";
 
 const testCases: TTestCase<typeof getLayerById>[] = [
 	{
@@ -55,4 +54,12 @@ const testCases: TTestCase<typeof getLayerById>[] = [
 
 ]
 
-testFunction("getLayerById", testCases, getLayerById)
+
+describe("getLayerById", () => {
+	testCases.forEach((testCase) => {
+		test(testCase.caseName, () => {
+			const result = getLayerById(...testCase.input);
+			expect(result).toEqual(testCase.expectedResult);
+		});
+	});
+});
