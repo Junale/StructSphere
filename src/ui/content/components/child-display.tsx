@@ -12,20 +12,24 @@ type props = {
 const ChildDisplay = ({ child, bounds }: props) => {
 	const { setLocation, currentLayer, moveChildIntoTarget } = useLayerContext();
 
-
-	const handleStop = (e: DraggableEvent, data: DraggableData) => {
-		setLocation(child, { x: data.x, y: data.y });
+	useEffect(() => {
+		console.log(currentLayer?.children);
 		if (currentLayer) {
 			const targetId = layerPlacedInTargets(child, currentLayer.children);
 			if (targetId) {
 				moveChildIntoTarget(child, targetId);
 			}
 		}
+	}, [child]);
+
+	const handleStop = (e: DraggableEvent, data: DraggableData) => {
+		setLocation(child, { x: data.x, y: data.y });
 	};
 
 	return (
 		<Draggable
 			defaultClassName="hover:cursor-pointer active:cursor-grabbing bg-white rounded-lg border-2 border-black p-4 top-0 left-0 absolute"
+			defaultClassNameDragging="bg-gray-200 z-10"
 			bounds={bounds}
 			onStop={handleStop}
 			position={child.location}

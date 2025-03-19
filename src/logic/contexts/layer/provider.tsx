@@ -2,11 +2,22 @@ import TLayer from "@/logic/type/models/layer";
 import LayerContext from "./context";
 import { useEffect, useState } from "react";
 import TEdge from "@/logic/type/models/edge";
+import { getLayerById } from "@/logic/utils/layer";
 
 
 type LayerContextProviderProps = {
 	defaultLayer: TLayer;
 	children: React.ReactNode;
+};
+
+const updateLayerInTree = (layer: TLayer, targetId: number, updater: (layer: TLayer) => TLayer): TLayer => {
+	if (layer.id === targetId) {
+		return updater(layer);
+	}
+	return {
+		...layer,
+		children: layer.children.map(child => updateLayerInTree(child, targetId, updater))
+	};
 };
 
 const LayerContextProvider = ({
@@ -24,70 +35,77 @@ const LayerContextProvider = ({
 		setRootLayer(defaultLayer);
 	}, [defaultLayer]);
 
+	useEffect(() => {
+		if (currentLayerId) {
+			setCurrentLayer(getLayerById(rootLayer, currentLayerId));
+		}
+	}, [currentLayerId, rootLayer]);
+
 	const addChildLayer = (childLayer: TLayer) => {
-		setRootLayer({
-			...rootLayer,
-			children: [...rootLayer.children, childLayer]
-		});
+		if (!currentLayer) return;
+
+		setRootLayer(prevRoot => updateLayerInTree(prevRoot, currentLayer.id, layer => ({
+			...layer,
+			children: [...layer.children, childLayer]
+		})));
 	};
 
 	const removeChildLayer = (childLayer: TLayer) => {
-		setRootLayer({
-			...rootLayer,
-			children: rootLayer.children.filter((c) => c.id !== childLayer.id)
-		});
+		if (!currentLayer) return;
+
+		setRootLayer(prevRoot => updateLayerInTree(prevRoot, currentLayer.id, layer => ({
+			...layer,
+			children: layer.children.filter(c => c.id !== childLayer.id)
+		})));
 	};
 
 	const addEdge = (edge: TEdge) => {
-		setRootLayer({
-			...rootLayer,
-			edges: [...rootLayer.edges, edge]
-		});
+		if (!currentLayer) return;
+
+		setRootLayer(prevRoot => updateLayerInTree(prevRoot, currentLayer.id, layer => ({
+			...layer,
+			edges: [...layer.edges, edge]
+		})));
 	};
 
 	const removeEdge = (edge: TEdge) => {
-		setRootLayer({
-			...rootLayer,
-			edges: rootLayer.edges.filter((e) => e.id !== edge.id)
-		});
+		if (!currentLayer) return;
+
+		setRootLayer(prevRoot => updateLayerInTree(prevRoot, currentLayer.id, layer => ({
+			...layer,
+			edges: layer.edges.filter(e => e.id !== edge.id)
+		})));
 	};
 
 	const moveChildIntoTarget = (child: TLayer, targetId: number) => {
+		if (!currentLayer) return;
 
-		const target = rootLayer.children.find((c) => c.id === targetId);
-		if (target) {
-			// remove child from rootLayer.children
-			const newRootLayer = {
-				...rootLayer,
-				children: rootLayer.children.filter((c) => c.id !== child.id)
-			};
+		const target = currentLayer.children.find(c => c.id === targetId);
+		if (!target) return;
 
-			setRootLayer({
-				...newRootLayer,
-				children: [...newRootLayer.children,
-					target
-				]
-			});
-		}
-
+		setRootLayer(prevRoot => updateLayerInTree(prevRoot, currentLayer.id, layer => ({
+			...layer,
+			children: layer.children
+				.filter(c => c.id !== child.id)
+				.map(c => c.id === targetId ? {
+					...c,
+					children: [...c.children, child]
+				} : c)
+		})));
 	};
 
 	const setLocation = (child: TLayer, location: { x: number, y: number }) => {
-		setRootLayer({
-			...rootLayer,
-			children: rootLayer.children.map((c) => c.id === child.id ? { ...c, location } : c)
-		});
+		if (!currentLayer) return;
+
+		setRootLayer(prevRoot => updateLayerInTree(prevRoot, currentLayer.id, layer => ({
+			...layer,
+			children: layer.children.map(c => c.id === child.id ? { ...c, location } : c)
+		})));
 	};
 
 	const setCurrentLayerById = (id: number) => {
 		setCurrentLayerId(id);
-		const newCurrentLayer = rootLayer.children.find((c) => c.id === id);
-		if (newCurrentLayer) {
-			setCurrentLayer(newCurrentLayer);
-			return true;
-		}
-		setCurrentLayerId(undefined);
-		return false;
+		return true;
 	};
 
 	return (
