@@ -1,37 +1,22 @@
 {
-  "name": "react-testing-poc",
+  "name": "structsphere",
   "private": true,
-  "version": "0.0.0",
+  "version": "1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "test-storybook": "test-storybook"
+    "lint": "eslint ."
   },
   "dependencies": {
-    "@storybook/jest": "^0.2.3",
     "autoprefixer": "^10.4.20",
     "eslint-plugin-tailwindcss": "^3.17.4",
     "postcss": "^8.4.41",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-draggable": "4.4.5",
-    "react-error-boundary": "^4.0.13",
-    "react-responsive": "^10.0.0"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.10.0",
-    "@storybook/addon-essentials": "^8.3.0",
-    "@storybook/addon-interactions": "^8.3.0",
-    "@storybook/blocks": "^8.3.0",
-    "@storybook/react": "^8.3.0",
-    "@storybook/react-vite": "^8.3.0",
-    "@storybook/test": "^8.3.0",
-    "@storybook/test-runner": "^0.19.1",
     "@types/bun": "^1.2.4",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -42,7 +27,6 @@
     "eslint-plugin-react": "^7.36.0",
     "eslint-plugin-react-refresh": "^0.4.11",
     "globals": "^15.9.0",
-    "storybook": "^8.3.0",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.5.0",
