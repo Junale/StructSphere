@@ -1,11 +1,12 @@
-import ComponentDisplay from "./components/componentDisplay"
-import { TComponent } from "./types";
+import ComponentDisplay from "@/components/componentDisplay"
+import ComponentEditorModal from "@/components/ComponentEditorModal";
+import { TComponent } from "@/types";
+import { useState } from "react";
 
 
 
 const App = () => {
-
-    const TestComponent: TComponent = {
+    const [component, setComponent] = useState<TComponent>({
         id: 1,
         title: "Test Component",
         description: "This is a test component",
@@ -25,9 +26,11 @@ const App = () => {
             }
         ],
         relationships: []
-    };
+    })
 
-    return <ComponentDisplay component={TestComponent} />;
+    return (
+        <ComponentDisplay component={component} setComponent={setComponent} />
+    );
 };
 
 export default App;
