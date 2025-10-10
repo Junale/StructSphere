@@ -1,4 +1,4 @@
-import { TColor } from "@/types";
+import { TColor, TComponent, TPosition, TRelationship } from "@/types";
 
 
 export const isColor = (color: any): color is TColor => {
@@ -13,4 +13,19 @@ export const isColor = (color: any): color is TColor => {
 let counter = 0;
 export const getId = (): number => {
     return counter++;
+}
+
+export const getComponentCenterPosition = (component: TComponent): TPosition => {
+    return {
+        x: component.position.x + (component.size.width / 2),
+        y: component.position.y + (component.size.height / 2)
+    }
+}
+
+export const getIdsOfRelatedComponents = (id: number, relationships: TRelationship[]): number[] => {
+    return relationships.map((relationship) => {
+        if (relationship.firstComponentId === id) return relationship.secondComponentId;
+        if (relationship.secondComponentId === id) return relationship.firstComponentId;
+        return;
+    }).filter((id) => id !== undefined);
 }

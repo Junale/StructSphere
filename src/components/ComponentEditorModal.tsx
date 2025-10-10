@@ -1,14 +1,27 @@
-import { TComponent } from "@/types"
+import { TComponent, TRelationship } from "@/types"
 import { isColor } from "@/utils";
+import React, { MouseEventHandler } from "react";
 
 
 type props = {
     component: TComponent | undefined;
     updateComponent: (callback: (prev: TComponent) => TComponent) => void;
     onClose: () => void;
+    siblings: TComponent[];
+    relationshipIds: number[];
+    onNewRelationship: (id1: number, id2: number) => void
+    onRemoveRelationship: (id1: number, id2: number) => void
 }
 
-const ComponentEditorModal = ({ component, onClose, updateComponent }: props) => {
+const ComponentEditorModal = ({
+    component,
+    siblings,
+    relationshipIds,
+    onClose,
+    updateComponent,
+    onNewRelationship,
+    onRemoveRelationship
+}: props) => {
 
     if (!component) return;
 
@@ -87,47 +100,70 @@ const ComponentEditorModal = ({ component, onClose, updateComponent }: props) =>
         }))
     }
 
+    const handleRelationshipChange = (e: React.MouseEvent<HTMLSelectElement, MouseEvent>) => {
+        const updatedRelation = Number(e.currentTarget.value);
+        const existingRelationship = relationshipIds.find((id) => updatedRelation);
+        console.log(relationshipIds);
+        if (!existingRelationship) {
+            onNewRelationship(component.id, updatedRelation);
+        }
+        else {
+            onRemoveRelationship(component.id, updatedRelation)
+        }
+    }
+
     return (
-        <div className="flex flex-col absolute right-0 top-0 h-full border rounded-xl bg-white w-1/5 min-w-72">
-            <div className="absolute top-0 right-0 p-2">
-                <span className="cursor-pointer hover:underline" onClick={onClose}>
-                    close
-                </span>
-            </div>
-            <div className="flex flex-col size-full p-4">
-                <div className="flex">
-                    <label htmlFor="title">Title: </label>
-                    <input defaultValue={component.title} type="text" onChange={handleTitleChange} />
+        <div className="flex flex-col z-20 p-4 absolute right-0 top-0 w-1/5 min-w-72  h-full">
+            <div className=" relative flex flex-col size-full border rounded-xl bg-white">
+                <div className="absolute top-0 right-0 p-2">
+                    <span className="cursor-pointer hover:underline" onClick={onClose}>
+                        close
+                    </span>
                 </div>
-                <div className="flex">
-                    <label htmlFor="description">Description: </label>
-                    <input defaultValue={component.description} type="text" onChange={handleDescriptionChange} />
-                </div>
-                <div className="flex">
-                    <label htmlFor="color">Color: </label>
-                    <input defaultValue={component.color} type="color" onChange={handleColorChange} />
-                </div>
-                <h2>
-                    Size:
-                </h2>
-                <div className="flex">
-                    <label htmlFor="Height">Height: </label>
-                    <input defaultValue={component.size.height} type="number" onChange={handleHeightChange} />
-                </div>
-                <div className="flex">
-                    <label htmlFor="Width">Width: </label>
-                    <input defaultValue={component.size.width} type="number" onChange={handleWidthChange} />
-                </div>
-                <h2>
-                    Position:
-                </h2>
-                <div className="flex">
-                    <label htmlFor="X">X: </label>
-                    <input defaultValue={component.position.x} type="number" onChange={handleXChange} />
-                </div>
-                <div className="flex">
-                    <label htmlFor="Y">Y: </label>
-                    <input defaultValue={component.position.y} type="number" onChange={handleYChange} />
+                <div className="flex flex-col size-full p-4">
+                    <div className="flex flex-col">
+                        <label htmlFor="title">Title: </label>
+                        <input defaultValue={component.title} type="text" onChange={handleTitleChange} />
+                    </div>
+                    <div className="flex flex-col">
+                        <label htmlFor="description">Description: </label>
+                        <input defaultValue={component.description} type="text" onChange={handleDescriptionChange} />
+                    </div>
+                    <div className="flex">
+                        <label htmlFor="color">Color: </label>
+                        <input defaultValue={component.color} type="color" onChange={handleColorChange} />
+                    </div>
+                    <h2>
+                        Size:
+                    </h2>
+                    <div className="flex">
+                        <label htmlFor="Height">Height: </label>
+                        <input defaultValue={component.size.height} type="number" onChange={handleHeightChange} />
+                    </div>
+                    <div className="flex">
+                        <label htmlFor="Width">Width: </label>
+                        <input defaultValue={component.size.width} type="number" onChange={handleWidthChange} />
+                    </div>
+                    <h2>
+                        Position:
+                    </h2>
+                    <div className="flex">
+                        <label htmlFor="X">X: </label>
+                        <input defaultValue={component.position.x} type="number" onChange={handleXChange} />
+                    </div>
+                    <div className="flex">
+                        <label htmlFor="Y">Y: </label>
+                        <input defaultValue={component.position.y} type="number" onChange={handleYChange} />
+                    </div>
+                    <h2>
+
+                    </h2>
+                    <div className="flex">
+                        <label htmlFor="relations">Relations: </label>
+                        <select defaultValue={relationshipIds.map(toString)} name="relations" id="relations" onClick={handleRelationshipChange} multiple >
+                            {siblings.map((sibling) => <option value={sibling.id}>{sibling.title}</option>)}
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>

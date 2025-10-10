@@ -1,3 +1,4 @@
+export type TId = number;
 export type TTitle = string;
 export type TDescription = string;
 
@@ -21,12 +22,12 @@ export type TRelationshipType = 'association'
 
 export type TRelationship = {
     type: TRelationshipType;
-    firstComponentId: string;
-    secondComponentId: string;
+    firstComponentId: TId;
+    secondComponentId: TId;
 }
 
 export type TComponent = {
-    id: number;
+    id: TId;
     title: TTitle;
     description: TDescription;
     size: TSize;

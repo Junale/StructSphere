@@ -1,35 +1,26 @@
-import ComponentDisplay from "@/components/componentDisplay"
-import ComponentEditorModal from "@/components/ComponentEditorModal";
+import ComponentDisplay from "@/components/componentDisplay";
 import { TComponent } from "@/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getId } from "./utils";
 
 
 
 const App = () => {
     const [component, setComponent] = useState<TComponent>({
-        id: 1,
+        id: getId(),
         title: "Test Component",
         description: "This is a test component",
         size: { width: 100, height: 100 },
         color: "#ff0000",
         position: { x: 0, y: 0 },
-        children: [
-            {
-                id: 2,
-                title: "Child Component 1",
-                description: "This is the first child component",
-                size: { width: 50, height: 50 },
-                color: "#00ff00",
-                position: { x: 10, y: 10 },
-                children: [],
-                relationships: []
-            }
-        ],
+        children: [],
         relationships: []
     })
 
     return (
-        <ComponentDisplay component={component} setComponent={setComponent} />
+        <div className="flex w-screen h-screen p-2 overflow-hidden">
+            <ComponentDisplay component={component} setComponent={setComponent} />
+        </div>
     );
 };
 
