@@ -1,11 +1,14 @@
 import type { TSlug } from "./shared";
 
-export type TRelationshipType =
-	| "association"
-	| "dependency"
-	| "inheritance"
-	| "aggregation"
-	| "composition";
+export const relationshipTypes = [
+	"association",
+	"dependency",
+	"inheritance",
+	"aggregation",
+	"composition",
+] as const;
+
+export type TRelationshipType = (typeof relationshipTypes)[number];
 
 export type TRelationship = {
 	source: TSlug;

@@ -13,7 +13,7 @@ export type TPosition = {
 };
 
 export type TNode = {
-	entitySlug: TSlug;
+	slug: TSlug;
 	position: TPosition;
 	size: TSize;
 	color?: TColor;

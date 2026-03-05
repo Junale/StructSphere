@@ -7,15 +7,17 @@ import { useDiagrams } from "./DiagramsContext";
 
 type DiagramEditorContextType = {
 	activeDiagramSlug: TSlug | null;
-
 	setActiveDiagram: (slug: TSlug) => void;
 
-	addNode: (nodeSlug: TSlug, node: TNode) => void;
-	updateNode: (nodeSlug: TSlug, patch: Partial<TNode>) => void;
+	updateSlug: (newSlug: TSlug) => void;
+	updateTitle: (title: string) => void;
+	updateDescription: (description: string) => void;
+
+	addNode: (node: TNode) => void;
 	removeNode: (nodeSlug: TSlug) => void;
 
 	addRelationship: (rel: TRelationship) => void;
-	removeRelationship: (index: number) => void;
+	removeRelationship: (source: TSlug, target: TSlug) => void;
 };
 
 const DiagramEditorContext = createContext<DiagramEditorContextType | null>(
@@ -44,38 +46,46 @@ export const DiagramEditorProvider: React.FC<{
 		updateDiagram(next);
 	};
 
-	const addNode = (nodeSlug: TSlug, node: TNode) => {
+	const updateSlug = (newSlug: TSlug) => {
 		if (!activeDiagram) return;
 
 		update({
 			...activeDiagram,
-			nodes: {
-				...activeDiagram.nodes,
-				[nodeSlug]: node,
-			},
+			slug: newSlug,
 		});
 	};
 
-	const updateNode = (nodeSlug: TSlug, patch: Partial<TNode>) => {
+	const updateTitle = (title: string) => {
 		if (!activeDiagram) return;
 
 		update({
 			...activeDiagram,
-			nodes: {
-				...activeDiagram.nodes,
-				[nodeSlug]: {
-					...activeDiagram.nodes[nodeSlug],
-					...patch,
-				},
-			},
+			title,
+		});
+	};
+
+	const updateDescription = (description: string) => {
+		if (!activeDiagram) return;
+
+		update({
+			...activeDiagram,
+			description,
+		});
+	};
+
+	const addNode = (node: TNode) => {
+		if (!activeDiagram) return;
+
+		update({
+			...activeDiagram,
+			nodes: [...activeDiagram.nodes, node],
 		});
 	};
 
 	const removeNode = (nodeSlug: TSlug) => {
 		if (!activeDiagram) return;
 
-		const nodes = { ...activeDiagram.nodes };
-		delete nodes[nodeSlug];
+		const nodes = activeDiagram.nodes.filter((n) => n.slug !== nodeSlug);
 
 		const relationships = activeDiagram.relationships.filter(
 			(r) => r.source !== nodeSlug && r.target !== nodeSlug,
@@ -97,11 +107,12 @@ export const DiagramEditorProvider: React.FC<{
 		});
 	};
 
-	const removeRelationship = (index: number) => {
+	const removeRelationship = (source: TSlug, target: TSlug) => {
 		if (!activeDiagram) return;
 
-		const relationships = [...activeDiagram.relationships];
-		relationships.splice(index, 1);
+		const relationships = activeDiagram.relationships.filter(
+			(r) => !(r.source === source && r.target === target),
+		);
 
 		update({
 			...activeDiagram,
@@ -114,8 +125,10 @@ export const DiagramEditorProvider: React.FC<{
 			value={{
 				activeDiagramSlug,
 				setActiveDiagram,
+				updateSlug,
+				updateTitle,
+				updateDescription,
 				addNode,
-				updateNode,
 				removeNode,
 				addRelationship,
 				removeRelationship,

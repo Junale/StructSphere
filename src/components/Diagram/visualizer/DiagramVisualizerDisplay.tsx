@@ -1,42 +1,20 @@
-import type { TComponent, TDiagram } from "@/types";
-import { getSlug } from "@/utils";
 import { useParams } from "react-router-dom";
+import { useDiagrams } from "@/contexts/DiagramsContext";
+import { useEntities } from "@/contexts/EntityContext";
 import EntityVisualizerDisplay from "./EntityVisualizerDisplay";
 import RelationshipVisualizerDisplay from "./RelationshipVisualizerDisplay";
 
 const DiagramVisualizerDisplay = () => {
 	const { slug } = useParams();
+	const { diagrams } = useDiagrams();
+	const { entities } = useEntities();
 
-	const components: Record<string, TComponent> = {
-		"component-1": {
-			slug: "component-1",
-			title: "Component 1",
-			description: "This is component 1",
-		},
-		"component-2": {
-			slug: "component-2",
-			title: "Component 2",
-			description: "This is component 2",
-		},
-	};
-	const diagramComponents = Object.values(components).filter((component) =>
-		Object.keys(diagram.componentMetaData).includes(component.slug),
-	);
+	if (!slug) return <div>Diagram slug is required.</div>;
 
-	const diagram: TDiagram = {
-		slug: getSlug(),
-		title: "Test diagram",
-		description: "This is a test diagram",
-		componentMetaData: {
-			[components[Object.keys(components)[0]].slug]: {
-				size: { width: 150, height: 100 },
-				color: "#f0f0f0",
-				position: { x: 100, y: 100 },
-			},
-		},
-		relationships: {},
-		subDiagrams: {},
-	};
+	const diagram = diagrams[slug];
+	if (!diagram) return <div>Diagram not found.</div>;
+
+	const nodes = Object.values(diagram.nodes);
 
 	return (
 		<div className="flex flex-col size-full">
@@ -48,29 +26,20 @@ const DiagramVisualizerDisplay = () => {
 
 			{/* View Content Visualization */}
 			<div className="flex flex-1 size-full p-4 border rounded-lg shadow-md bg-white relative overflow-auto">
-				{diagramComponents.map((component) => (
-					<EntityVisualizerDisplay
-						key={component.slug}
-						entity={component}
-						metaData={diagram.componentMetaData[component.slug]}
-					/>
+				{nodes.map((node) => (
+					<EntityVisualizerDisplay key={node.slug} node={node} />
 				))}
-				{Object.entries(diagram.relationships).map(
-					([componentSlug, componentRelationships]) =>
-						componentRelationships.map((relationship) => {
-							return (
-								<RelationshipVisualizerDisplay
-									key={`${componentSlug}_${relationship.relatedComponentSlug}`}
-									relationType={relationship.type}
-									component={components[componentSlug]}
-									relatedComponent={
-										components[relationship.relatedComponentSlug]
-									}
-									metaData={diagram.componentMetaData}
-								/>
-							);
-						}),
-				)}
+				{Object.values(diagram.relationships).map((relationship) => {
+					return (
+						<RelationshipVisualizerDisplay
+							key={`${relationship.source}_${relationship.target}`}
+							relationType={relationship.type}
+							component={entities[relationship.source]}
+							relatedComponent={entities[relationship.target]}
+							nodes={diagram.nodes}
+						/>
+					);
+				})}
 			</div>
 		</div>
 	);

@@ -1,15 +1,24 @@
+import { useEntities } from "@/contexts/EntityContext";
 import ListDisplay from "../Shared/ListDisplay";
 
 const EntityListDisplay = () => {
-	const items = [
-		{
-			slug: "entity-1",
-			title: "Entity 1",
-			description: "This is the first entity",
-		},
-	];
+	const { entities, addEntity, removeEntity } = useEntities();
 
-	return <ListDisplay itemType="entity" items={items} enableView={false} />;
+	return (
+		<ListDisplay
+			itemType="entity"
+			items={Object.values(entities)}
+			enableView={false}
+			onCreate={() =>
+				addEntity({
+					slug: `entity-${Date.now()}`,
+					title: "New Entity",
+					description: "A newly created entity",
+				})
+			}
+			onDelete={removeEntity}
+		/>
+	);
 };
 
 export default EntityListDisplay;

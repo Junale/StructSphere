@@ -4,6 +4,7 @@ import DiagramListDisplay from "./Diagram/DiagramListDisplay";
 import EntityEditDisplay from "./Entity/EntityEditDisplay";
 import EntityListDisplay from "./Entity/EntityListDisplay";
 import DiagramVisualizerDisplay from "./Diagram/visualizer/DiagramVisualizerDisplay";
+import { DiagramEditorProvider } from "@/contexts/DiagramEditorContext";
 
 const RouterCustom = () => {
 	return (
@@ -14,8 +15,22 @@ const RouterCustom = () => {
 			<Route path="entity/:slug/edit" element={<EntityEditDisplay />} />
 
 			<Route path="diagram" element={<DiagramListDisplay />} />
-			<Route path="diagram/:slug" element={<DiagramVisualizerDisplay />} />
-			<Route path="diagram/:slug/edit" element={<DiagramEditDisplay />} />
+			<Route
+				path="diagram/:slug"
+				element={
+					<DiagramEditorProvider>
+						<DiagramVisualizerDisplay />
+					</DiagramEditorProvider>
+				}
+			/>
+			<Route
+				path="diagram/:slug/edit"
+				element={
+					<DiagramEditorProvider>
+						<DiagramEditDisplay />
+					</DiagramEditorProvider>
+				}
+			/>
 
 			<Route path="*" element={<div>404 Not Found</div>} />
 		</Routes>

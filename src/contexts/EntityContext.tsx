@@ -3,14 +3,14 @@ import { createContext, useContext, useState } from "react";
 import type { TEntity } from "../types/entity";
 import type { TSlug } from "../types/shared";
 
-type EntitiesState = Record<TSlug, TEntity>;
-
 type EntitiesContextType = {
-	entities: EntitiesState;
+	entities: Record<TSlug, TEntity>;
 
 	addEntity: (entity: TEntity) => void;
-	updateEntity: (entity: TEntity) => void;
 	removeEntity: (slug: TSlug) => void;
+
+	updateEntityTitle: (slug: TSlug, title: string) => void;
+	updateEntityDescription: (slug: TSlug, description: string) => void;
 	updateEntitySlug: (oldSlug: TSlug, newSlug: TSlug) => void;
 };
 
@@ -19,16 +19,9 @@ const EntitiesContext = createContext<EntitiesContextType | null>(null);
 export const EntitiesProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
-	const [entities, setEntities] = useState<EntitiesState>({});
+	const [entities, setEntities] = useState<Record<TSlug, TEntity>>({});
 
 	const addEntity = (entity: TEntity) => {
-		setEntities((prev) => ({
-			...prev,
-			[entity.slug]: entity,
-		}));
-	};
-
-	const updateEntity = (entity: TEntity) => {
 		setEntities((prev) => ({
 			...prev,
 			[entity.slug]: entity,
@@ -55,14 +48,37 @@ export const EntitiesProvider: React.FC<{ children: React.ReactNode }> = ({
 		});
 	};
 
+	const updateEntityTitle = (slug: TSlug, title: string) => {
+		setEntities((prev) => {
+			const next = { ...prev };
+			const entity = next[slug];
+			if (entity) {
+				next[slug] = { ...entity, title };
+			}
+			return next;
+		});
+	};
+
+	const updateEntityDescription = (slug: TSlug, description: string) => {
+		setEntities((prev) => {
+			const next = { ...prev };
+			const entity = next[slug];
+			if (entity) {
+				next[slug] = { ...entity, description };
+			}
+			return next;
+		});
+	};
+
 	return (
 		<EntitiesContext.Provider
 			value={{
 				entities,
 				addEntity,
-				updateEntity,
 				removeEntity,
 				updateEntitySlug,
+				updateEntityTitle,
+				updateEntityDescription,
 			}}
 		>
 			{children}

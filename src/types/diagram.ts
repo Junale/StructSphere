@@ -7,6 +7,6 @@ export type TDiagram = {
 	title: TTitle;
 	description: TDescription;
 
-	nodes: Record<TSlug, TNode>;
+	nodes: TNode[];
 	relationships: TRelationship[];
 };

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import type { TItem } from "./ListDisplay";
 
 type props = {
@@ -16,6 +17,11 @@ const ListFilterDisplay = ({ itemType, items, onFilterChange }: props) => {
 		);
 		onFilterChange(filtered);
 	};
+
+	useEffect(() => {
+		onFilterChange(items);
+	}, [items, onFilterChange]);
+
 	return (
 		<div className="flex items-center justify-center">
 			<label htmlFor="search-filter">Filter:</label>

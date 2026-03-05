@@ -1,25 +1,27 @@
-import type { TComponent, TMetaData, TRelationshipType } from "@/types";
+import type { TEntity } from "@/types/entity";
+import type { TNode } from "@/types/node";
+import type { TRelationshipType } from "@/types/relationship";
 import { getComponentCenterPosition } from "@/utils";
 
 type props = {
 	relationType: TRelationshipType;
-	component: TComponent;
-	relatedComponent: TComponent;
-	metaData: Record<string, TMetaData>;
+	component: TEntity;
+	relatedComponent: TEntity;
+	nodes: TNode[];
 };
 
 const RelationshipVisualizerDisplay = ({
 	relationType,
 	component,
 	relatedComponent,
-	metaData,
+	nodes,
 }: props) => {
 	if (!component || !relatedComponent) return;
 	const componentCenterPosition = getComponentCenterPosition(
-		metaData[component.slug],
+		nodes.find((n) => n.slug === component.slug),
 	);
 	const relatedComponentCenterPosition = getComponentCenterPosition(
-		metaData[relatedComponent.slug],
+		nodes.find((n) => n.slug === relatedComponent.slug),
 	);
 
 	const height = relatedComponentCenterPosition.y - componentCenterPosition.y;
