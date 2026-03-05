@@ -1,7 +1,4 @@
-export type TId = number;
-export type TTitle = string;
-export type TDescription = string;
-
+// MetaData types
 export type TSize = {
 	width: number;
 	height: number;
@@ -14,6 +11,13 @@ export type TPosition = {
 	y: number;
 };
 
+export type TMetaData = {
+	size: TSize;
+	color: TColor;
+	position: TPosition;
+};
+
+// Diagram types
 export type TRelationshipType =
 	| "association"
 	| "dependency"
@@ -23,17 +27,25 @@ export type TRelationshipType =
 
 export type TRelationship = {
 	type: TRelationshipType;
-	firstComponentId: TId;
-	secondComponentId: TId;
+	relatedEntitySlug: TSlug;
 };
 
-export type TComponent = {
-	id: TId;
+export type TDiagram = {
+	slug: TSlug;
 	title: TTitle;
 	description: TDescription;
-	size: TSize;
-	color: TColor;
-	position: TPosition;
-	children: TComponent[];
-	relationships: TRelationship[];
+	entityMetaData: Record<TSlug, TMetaData>;
+	relationships: Record<TSlug, TRelationship[]>;
+	subDiagrams: Record<TSlug, TDiagram>;
+};
+
+// Entity types
+export type TSlug = string;
+export type TTitle = string;
+export type TDescription = string;
+
+export type TEntity = {
+	slug: TSlug;
+	title: TTitle;
+	description: TDescription;
 };

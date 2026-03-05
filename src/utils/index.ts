@@ -1,4 +1,10 @@
-import type { TColor, TComponent, TPosition, TRelationship } from "@/types";
+import type {
+	TColor,
+	TMetaData,
+	TPosition,
+	TRelationship,
+	TSlug,
+} from "@/types";
 
 export const isColor = (color: unknown): color is TColor => {
 	if (typeof color !== "string") return false;
@@ -9,33 +15,27 @@ export const isColor = (color: unknown): color is TColor => {
 };
 
 let counter = 0;
-export const getId = (): number => {
-	return counter++;
+export const getSlug = (): TSlug => {
+	return `component-${counter++}`;
 };
 
-export const getComponentCenterPosition = (
-	component: TComponent,
-): TPosition => {
+export const getComponentCenterPosition = (metaData: TMetaData): TPosition => {
 	return {
-		x: component.position.x + component.size.width / 2,
-		y: component.position.y + component.size.height / 2,
+		x: metaData.position.x + metaData.size.width / 2,
+		y: metaData.position.y + metaData.size.height / 2,
 	};
 };
 
-export const getIdsOfRelatedComponents = (
-	id: number,
-	relationships: TRelationship[],
-): number[] => {
-	return relationships
-		.filter((relationship) => {
-			return (
-				relationship.firstComponentId === id ||
-				relationship.secondComponentId === id
-			);
-		})
-		.map((relationship) => {
-			if (relationship.firstComponentId === id)
-				return relationship.secondComponentId;
-			return relationship.firstComponentId;
-		});
+export const getSlugsOfRelatedComponents = (
+	slug: TSlug,
+	relationships: Record<TSlug, TRelationship[]>,
+): TSlug[] => {
+	return (
+		relationships[slug]?.flatMap((relationship) => {
+			if (relationship.relatedComponentSlug === slug) {
+				return [];
+			}
+			return [relationship.relatedComponentSlug];
+		}) || []
+	);
 };
