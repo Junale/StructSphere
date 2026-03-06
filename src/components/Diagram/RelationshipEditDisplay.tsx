@@ -12,9 +12,11 @@ const RelationshipEditDisplay = () => {
 	const { entities } = useEntities();
 	const [tempRelationship, setTempRelationship] =
 		useState<Partial<TRelationship> | null>(null);
-	const relationships = activeDiagramSlug
-		? diagrams[activeDiagramSlug].relationships
-		: [];
+
+	const activeDiagram = activeDiagramSlug ? diagrams[activeDiagramSlug] : null;
+
+	const relationships = activeDiagram ? activeDiagram.relationships : [];
+	const nodes = activeDiagram ? activeDiagram.nodes : [];
 
 	useEffect(() => {
 		console.log(tempRelationship);
@@ -44,48 +46,78 @@ const RelationshipEditDisplay = () => {
 
 	return (
 		<div className="flex flex-col w-full h-full p-4 border rounded-lg shadow-md">
-			RelationshipEditDisplay
+			<h1 className="font-bold">Manage Relationships</h1>
 			<div className="flex">
-				<label htmlFor="type">Type: </label>
-				<select name="type" id="type" onChange={handleTypeChange}>
-					{!tempRelationship?.type && (
-						<option selected value="">
-							Select type
-						</option>
-					)}
-					{relationshipTypes.map((type) => (
-						<option key={type} value={type}>
-							{type}
-						</option>
-					))}
-				</select>
-				<label htmlFor="source">Source: </label>
-				<select name="source" id="source" onChange={handleSourceChange}>
-					{!tempRelationship?.source && (
-						<option selected value="">
-							Select source
-						</option>
-					)}
-					{Object.values(entities).map((entity) => (
-						<option key={entity.slug} value={entity.slug}>
-							{entity.title}
-						</option>
-					))}
-				</select>
-				<label htmlFor="target">Target: </label>
-				<select name="target" id="target" onChange={handleTargetChange}>
-					{!tempRelationship?.target && (
-						<option selected value="">
-							Select target
-						</option>
-					)}
-					{Object.values(entities).map((entity) => (
-						<option key={entity.slug} value={entity.slug}>
-							{entity.title}
-						</option>
-					))}
-				</select>
-
+				<div className="flex flex-col">
+					<label htmlFor="type">Type: </label>
+					<select
+						name="type"
+						id="type"
+						onChange={handleTypeChange}
+						className="border rounded-md p-2"
+					>
+						{!tempRelationship?.type && (
+							<option selected value="">
+								Select type
+							</option>
+						)}
+						{relationshipTypes.map((type) => (
+							<option key={type} value={type}>
+								{type}
+							</option>
+						))}
+					</select>
+				</div>
+				<div className="flex flex-col">
+					<label htmlFor="source">Source: </label>
+					<select
+						name="source"
+						id="source"
+						onChange={handleSourceChange}
+						className="border rounded-md p-2"
+					>
+						{!tempRelationship?.source && (
+							<option selected value="">
+								Select source
+							</option>
+						)}
+						{Object.values(nodes).map((node) => (
+							<option key={node.slug} value={node.slug}>
+								{entities[node.slug]?.title || node.slug}
+							</option>
+						))}
+					</select>
+				</div>
+				<div className="flex flex-col">
+					<label htmlFor="target">Target: </label>
+					<select
+						name="target"
+						id="target"
+						onChange={handleTargetChange}
+						className="border rounded-md p-2"
+					>
+						{!tempRelationship?.target && (
+							<option selected value="">
+								Select target
+							</option>
+						)}
+						{Object.values(nodes)
+							.filter(
+								(node) =>
+									node.slug !== tempRelationship?.source &&
+									!relationships.some(
+										(r) =>
+											r.source === tempRelationship?.source &&
+											r.target === node.slug,
+									),
+							)
+							.map((node) => (
+								<option key={node.slug} value={node.slug}>
+									{entities[node.slug]?.title || node.slug}
+								</option>
+							))}
+					</select>
+				</div>
 				<button
 					type="button"
 					onClick={handleAddRelationship}
@@ -101,12 +133,16 @@ const RelationshipEditDisplay = () => {
 					Add Relationship
 				</button>
 			</div>
-			<div>
+			<div className="flex flex-col py-2">
 				{relationships.map((rel) => (
-					<div key={`${rel.source}_${rel.target}`}>
-						<span>{`${rel.source} --(${rel.type})-> ${rel.target}`}</span>
+					<div
+						className="flex items-center justify-between mb-2"
+						key={`${rel.source}_${rel.target}`}
+					>
+						<span className="px-2">{`${entities[rel.source]?.title || rel.source} --(${rel.type})-> ${entities[rel.target]?.title || rel.target}`}</span>
 						<button
 							type="button"
+							className="px-2 py-1 bg-red-500 text-white rounded-md"
 							onClick={() => removeRelationship(rel.source, rel.target)}
 						>
 							Remove
