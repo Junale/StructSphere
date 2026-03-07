@@ -22,8 +22,8 @@ jobs:
       - name: Build 
         run: bun run build
 
-  eslint:
-    name: ESLint
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -32,25 +32,18 @@ jobs:
           bun-version: latest
       - name: install dependencies
         run: bun i
-      - name: ESLint
+      - name: lint
         run: bun run lint
 
-  storybook:
-    name: Storybook
+  format:
+    name: Format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
       - name: install dependencies
         run: bun i
-      - name: Install Playwright
-        run: npx playwright install --with-deps
-      - name: Build Storybook
-        run: bun build-storybook --quiet
-      - name: Serve Storybook and run tests
-        run: |
-          npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
-            "npx http-server storybook-static --port 6006 --silent" \
-            "npx wait-on tcp:127.0.0.1:6006 && bun test-storybook"
+      - name: format
+        run: bun run format

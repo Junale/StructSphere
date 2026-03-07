@@ -1,12 +1,12 @@
 import { Route, Routes } from "react-router-dom";
+import { DiagramEditorProvider } from "@/contexts/DiagramEditorContext";
 import DiagramEditDisplay from "./Diagram/DiagramEditDisplay";
 import DiagramListDisplay from "./Diagram/DiagramListDisplay";
+import DiagramVisualizerDisplay from "./Diagram/visualizer/DiagramVisualizerDisplay";
 import EntityEditDisplay from "./Entity/EntityEditDisplay";
 import EntityListDisplay from "./Entity/EntityListDisplay";
-import DiagramVisualizerDisplay from "./Diagram/visualizer/DiagramVisualizerDisplay";
-import { DiagramEditorProvider } from "@/contexts/DiagramEditorContext";
-import ImportExportDisplay from "./ImportExport/ImportExportDisplay";
 import Home from "./Home";
+import ImportExportDisplay from "./ImportExport/ImportExportDisplay";
 
 const RouterCustom = () => {
 	return (

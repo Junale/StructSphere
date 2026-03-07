@@ -1,6 +1,6 @@
+import type { FormEvent } from "react";
 import { useDiagrams } from "@/contexts/DiagramsContext";
 import { useEntities } from "@/contexts/EntityContext";
-import type { FormEvent } from "react";
 
 const ImportExportDisplay = () => {
 	const { entities, setEntities } = useEntities();

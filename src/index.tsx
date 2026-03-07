@@ -11,7 +11,6 @@ if (rootElement)
 			<StrictMode>
 				<App />
 			</StrictMode>
-		</div>
+		</div>,
 	);
-else
-	throw new Error("Root element not found");
+else throw new Error("Root element not found");

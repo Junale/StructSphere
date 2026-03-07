@@ -1,8 +1,8 @@
+import { useMemo, useRef } from "react";
+import { useParams } from "react-router-dom";
 import { useDiagrams } from "@/contexts/DiagramsContext";
 import { useEntities } from "@/contexts/EntityContext";
 import { layoutDiagram } from "@/utils/layoutEngine";
-import { useMemo, useRef } from "react";
-import { useParams } from "react-router-dom";
 import EntityVisualizerDisplay from "./EntityVisualizerDisplay";
 import RelationshipVisualizerDisplay from "./RelationshipVisualizerDisplay";
 

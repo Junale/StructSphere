@@ -1,28 +1,29 @@
 {
-  "name": "structsphere",
-  "private": true,
-  "version": "1",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "biome check ."
-  },
-  "dependencies": {
-    "@tailwindcss/vite": "^4.1.13",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^7.13.1"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "2.4.5",
-    "@types/bun": "^1.2.4",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "globals": "^15.9.0",
-    "tailwindcss": "^4.1.13",
-    "typescript": "^5.5.3",
-    "vite": "^5.4.1"
-  }
+	"name": "structsphere",
+	"private": true,
+	"version": "1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"lint": "biome check .",
+		"format": "biome format ."
+	},
+	"dependencies": {
+		"@tailwindcss/vite": "^4.1.13",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"react-router-dom": "^7.13.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.5",
+		"@types/bun": "^1.2.4",
+		"@types/react": "^18.3.3",
+		"@types/react-dom": "^18.3.0",
+		"@vitejs/plugin-react": "^4.3.1",
+		"globals": "^15.9.0",
+		"tailwindcss": "^4.1.13",
+		"typescript": "^5.5.3",
+		"vite": "^5.4.1"
+	}
 }

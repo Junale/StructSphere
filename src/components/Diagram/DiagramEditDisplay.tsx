@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDiagramEditor } from "@/contexts/DiagramEditorContext";
 import { useDiagrams } from "@/contexts/DiagramsContext";
-import RelationshipEditDisplay from "./RelationshipEditDisplay";
 import NodeEditDisplay from "./NodeEditDisplay";
+import RelationshipEditDisplay from "./RelationshipEditDisplay";
 
 const DiagramEditDisplay = () => {
 	const { slug } = useParams();
