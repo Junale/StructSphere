@@ -6,11 +6,12 @@ import EntityListDisplay from "./Entity/EntityListDisplay";
 import DiagramVisualizerDisplay from "./Diagram/visualizer/DiagramVisualizerDisplay";
 import { DiagramEditorProvider } from "@/contexts/DiagramEditorContext";
 import ImportExportDisplay from "./ImportExport/ImportExportDisplay";
+import Home from "./Home";
 
 const RouterCustom = () => {
 	return (
 		<Routes>
-			<Route index element={<>Home</>} />
+			<Route index element={<Home />} />
 
 			<Route path="entity" element={<EntityListDisplay />} />
 			<Route path="entity/:slug/edit" element={<EntityEditDisplay />} />
