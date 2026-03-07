@@ -61,7 +61,6 @@ const DiagramVisualizerDisplay = () => {
 					return (
 						<RelationshipVisualizerDisplay
 							key={`${relationship.source}_${relationship.target}`}
-							relationType={relationship.type}
 							component={entities[relationship.source]}
 							relatedComponent={entities[relationship.target]}
 							layoutNodes={layout}

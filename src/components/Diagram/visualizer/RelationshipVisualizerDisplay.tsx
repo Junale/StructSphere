@@ -1,17 +1,14 @@
 import type { TEntity } from "@/types/entity";
 import type { TLayout } from "@/types/layout";
-import type { TRelationshipType } from "@/types/relationship";
 import { getComponentCenterPosition } from "@/utils";
 
 type props = {
-	relationType: TRelationshipType;
 	component: TEntity;
 	relatedComponent: TEntity;
 	layoutNodes: TLayout;
 };
 
 const RelationshipVisualizerDisplay = ({
-	relationType,
 	component,
 	relatedComponent,
 	layoutNodes,
@@ -52,9 +49,7 @@ const RelationshipVisualizerDisplay = ({
 						rotate: angle,
 						transformOrigin: `${sourceCenterPosition.x < targetCenterPosition.x ? "left" : "right"} ${sourceCenterPosition.y < targetCenterPosition.y ? "top" : "bottom"}`,
 					}}
-				>
-					{relationType}
-				</div>
+				></div>
 			</div>
 		</div>
 	);

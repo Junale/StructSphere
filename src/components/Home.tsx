@@ -38,12 +38,12 @@ const Home = () => {
 
 					<div className="border rounded-lg p-5 space-y-2 hover:shadow-md transition-shadow">
 						<h3 className="text-lg font-semibold text-gray-800">
-							🔄 Define Relationships
+							🔄 Assemble diagrams
 						</h3>
 						<p className="text-gray-600">
-							Connect entities with meaningful relationships including
-							association, dependency, inheritance, aggregation, and
-							composition.
+							Connect entities with meaningful relationships to build
+							comprehensive diagrams that capture the structure and interactions
+							within your system.
 						</p>
 					</div>
 
