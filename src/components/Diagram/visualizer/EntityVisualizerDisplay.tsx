@@ -1,11 +1,13 @@
 import { useEntities } from "@/contexts/EntityContext";
+import type { TLayoutNode } from "@/types/layout";
 import type { TNode } from "@/types/node";
 
 type props = {
 	node: TNode;
+	layoutNode: TLayoutNode;
 };
 
-const EntityVisualizerDisplay = ({ node }: props) => {
+const EntityVisualizerDisplay = ({ node, layoutNode }: props) => {
 	const { entities } = useEntities();
 	const entity = entities[node.slug];
 	if (!entity) return null;
@@ -14,12 +16,12 @@ const EntityVisualizerDisplay = ({ node }: props) => {
 		<div
 			className="p-2 border rounded shadow-sm overflow-hidden z-10"
 			style={{
-				width: node.size.width,
-				height: node.size.height,
-				backgroundColor: node.color,
+				width: layoutNode.size.width,
+				height: layoutNode.size.height,
+				backgroundColor: node.color || "#fff",
 				position: "absolute",
-				left: node.position.x,
-				top: node.position.y,
+				left: layoutNode.position.x,
+				top: layoutNode.position.y,
 			}}
 		>
 			<h2 className="text-lg font-semibold">{entity.title}</h2>

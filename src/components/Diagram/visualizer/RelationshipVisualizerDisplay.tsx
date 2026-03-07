@@ -1,5 +1,5 @@
 import type { TEntity } from "@/types/entity";
-import type { TNode } from "@/types/node";
+import type { TLayout } from "@/types/layout";
 import type { TRelationshipType } from "@/types/relationship";
 import { getComponentCenterPosition } from "@/utils";
 
@@ -7,25 +7,27 @@ type props = {
 	relationType: TRelationshipType;
 	component: TEntity;
 	relatedComponent: TEntity;
-	nodes: TNode[];
+	layoutNodes: TLayout;
 };
 
 const RelationshipVisualizerDisplay = ({
 	relationType,
 	component,
 	relatedComponent,
-	nodes,
+	layoutNodes,
 }: props) => {
 	if (!component || !relatedComponent) return;
-	const componentCenterPosition = getComponentCenterPosition(
-		nodes.find((n) => n.slug === component.slug),
+	if (!layoutNodes[component.slug] || !layoutNodes[relatedComponent.slug])
+		return;
+	const sourceCenterPosition = getComponentCenterPosition(
+		layoutNodes[component.slug],
 	);
-	const relatedComponentCenterPosition = getComponentCenterPosition(
-		nodes.find((n) => n.slug === relatedComponent.slug),
+	const targetCenterPosition = getComponentCenterPosition(
+		layoutNodes[relatedComponent.slug],
 	);
 
-	const height = relatedComponentCenterPosition.y - componentCenterPosition.y;
-	const width = relatedComponentCenterPosition.x - componentCenterPosition.x;
+	const height = targetCenterPosition.y - sourceCenterPosition.y;
+	const width = targetCenterPosition.x - sourceCenterPosition.x;
 
 	const diagonal = Math.sqrt(height * height + width * width);
 
@@ -35,26 +37,20 @@ const RelationshipVisualizerDisplay = ({
 		<div
 			className="absolute flex"
 			style={{
-				top: Math.min(
-					componentCenterPosition.y,
-					relatedComponentCenterPosition.y,
-				),
-				left: Math.min(
-					componentCenterPosition.x,
-					relatedComponentCenterPosition.x,
-				),
+				top: Math.min(sourceCenterPosition.y, targetCenterPosition.y),
+				left: Math.min(sourceCenterPosition.x, targetCenterPosition.x),
 				height: Math.abs(height),
 				width: Math.abs(width),
 			}}
 		>
 			<div className="flex size-full relative">
 				<div
-					className={`absolute text-center bg-black ${componentCenterPosition.x < relatedComponentCenterPosition.x ? "left-0" : "right-0"} ${componentCenterPosition.y < relatedComponentCenterPosition.y ? "top-0" : "bottom-0"}`}
+					className={`absolute text-center bg-black ${sourceCenterPosition.x < targetCenterPosition.x ? "left-0" : "right-0"} ${sourceCenterPosition.y < targetCenterPosition.y ? "top-0" : "bottom-0"}`}
 					style={{
 						width: diagonal,
 						height: 2,
 						rotate: angle,
-						transformOrigin: `${componentCenterPosition.x < relatedComponentCenterPosition.x ? "left" : "right"} ${componentCenterPosition.y < relatedComponentCenterPosition.y ? "top" : "bottom"}`,
+						transformOrigin: `${sourceCenterPosition.x < targetCenterPosition.x ? "left" : "right"} ${sourceCenterPosition.y < targetCenterPosition.y ? "top" : "bottom"}`,
 					}}
 				>
 					{relationType}

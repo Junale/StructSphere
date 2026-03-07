@@ -1,5 +1,5 @@
 import type React from "react";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import type { TEntity } from "../types/entity";
 import type { TSlug } from "../types/shared";
 
@@ -16,10 +16,27 @@ type EntitiesContextType = {
 
 const EntitiesContext = createContext<EntitiesContextType | null>(null);
 
+const STORAGE_KEY = "structsphere-entities";
+
 export const EntitiesProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
-	const [entities, setEntities] = useState<Record<TSlug, TEntity>>({});
+	const [entities, setEntities] = useState<Record<TSlug, TEntity>>(() => {
+		try {
+			const stored = localStorage.getItem(STORAGE_KEY);
+			return stored ? JSON.parse(stored) : {};
+		} catch {
+			return {};
+		}
+	});
+
+	useEffect(() => {
+		try {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(entities));
+		} catch (error) {
+			console.error("Failed to save entities to localStorage:", error);
+		}
+	}, [entities]);
 
 	const addEntity = (entity: TEntity) => {
 		setEntities((prev) => ({

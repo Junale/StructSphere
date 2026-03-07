@@ -1,5 +1,5 @@
 import type { TNode } from "./node";
-import type { TRelationship } from "./Relationsship";
+import type { TRelationship } from "./relationship";
 import type { TDescription, TSlug, TTitle } from "./shared";
 
 export type TDiagram = {

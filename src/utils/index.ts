@@ -1,10 +1,7 @@
-import type {
-	TColor,
-	TMetaData,
-	TPosition,
-	TRelationship,
-	TSlug,
-} from "@/types";
+import type { TLayoutNode, TPosition } from "@/types/layout";
+import type { TColor } from "@/types/node";
+import type { TRelationship } from "@/types/relationship";
+import type { TSlug } from "@/types/shared";
 
 export const isColor = (color: unknown): color is TColor => {
 	if (typeof color !== "string") return false;
@@ -19,10 +16,10 @@ export const getSlug = (): TSlug => {
 	return `component-${counter++}`;
 };
 
-export const getComponentCenterPosition = (metaData: TMetaData): TPosition => {
+export const getComponentCenterPosition = (simNode: TLayoutNode): TPosition => {
 	return {
-		x: metaData.position.x + metaData.size.width / 2,
-		y: metaData.position.y + metaData.size.height / 2,
+		x: simNode.position.x + simNode.size.width / 2,
+		y: simNode.position.y + simNode.size.height / 2,
 	};
 };
 
@@ -32,10 +29,10 @@ export const getSlugsOfRelatedComponents = (
 ): TSlug[] => {
 	return (
 		relationships[slug]?.flatMap((relationship) => {
-			if (relationship.relatedComponentSlug === slug) {
-				return [];
+			if (relationship.source === slug) {
+				return [relationship.target];
 			}
-			return [relationship.relatedComponentSlug];
+			return [relationship.source];
 		}) || []
 	);
 };

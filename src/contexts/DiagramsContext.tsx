@@ -1,5 +1,5 @@
 import type React from "react";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import type { TDiagram } from "../types/diagram";
 import type { TSlug } from "../types/shared";
 
@@ -15,10 +15,27 @@ type DiagramsContextType = {
 
 const DiagramsContext = createContext<DiagramsContextType | null>(null);
 
+const STORAGE_KEY = "structsphere-diagrams";
+
 export const DiagramsProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
-	const [diagrams, setDiagrams] = useState<DiagramsState>({});
+	const [diagrams, setDiagrams] = useState<DiagramsState>(() => {
+		try {
+			const stored = localStorage.getItem(STORAGE_KEY);
+			return stored ? JSON.parse(stored) : {};
+		} catch {
+			return {};
+		}
+	});
+
+	useEffect(() => {
+		try {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(diagrams));
+		} catch (error) {
+			console.error("Failed to save diagrams to localStorage:", error);
+		}
+	}, [diagrams]);
 
 	const addDiagram = (diagram: TDiagram) => {
 		setDiagrams((prev) => ({
