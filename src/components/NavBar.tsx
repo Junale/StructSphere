@@ -29,6 +29,14 @@ const NavBar = () => {
 				>
 					Diagrams
 				</NavLink>
+				<NavLink
+					to="/import-export"
+					className={({ isActive, isPending }) =>
+						isPending ? "" : isActive ? " text-white" : ""
+					}
+				>
+					Import/Export
+				</NavLink>
 			</nav>
 		</div>
 	);

@@ -8,6 +8,7 @@ type DiagramsState = Record<TSlug, TDiagram>;
 type DiagramsContextType = {
 	diagrams: DiagramsState;
 
+	setDiagrams: React.Dispatch<React.SetStateAction<DiagramsState>>;
 	addDiagram: (diagram: TDiagram) => void;
 	updateDiagram: (diagram: TDiagram) => void;
 	removeDiagram: (slug: TSlug) => void;
@@ -61,7 +62,13 @@ export const DiagramsProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	return (
 		<DiagramsContext.Provider
-			value={{ diagrams, addDiagram, updateDiagram, removeDiagram }}
+			value={{
+				diagrams,
+				setDiagrams,
+				addDiagram,
+				updateDiagram,
+				removeDiagram,
+			}}
 		>
 			{children}
 		</DiagramsContext.Provider>

@@ -6,6 +6,8 @@ import type { TSlug } from "../types/shared";
 type EntitiesContextType = {
 	entities: Record<TSlug, TEntity>;
 
+	setEntities: React.Dispatch<React.SetStateAction<Record<TSlug, TEntity>>>;
+
 	addEntity: (entity: TEntity) => void;
 	removeEntity: (slug: TSlug) => void;
 
@@ -91,6 +93,7 @@ export const EntitiesProvider: React.FC<{ children: React.ReactNode }> = ({
 		<EntitiesContext.Provider
 			value={{
 				entities,
+				setEntities,
 				addEntity,
 				removeEntity,
 				updateEntitySlug,

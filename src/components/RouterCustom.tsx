@@ -5,6 +5,7 @@ import EntityEditDisplay from "./Entity/EntityEditDisplay";
 import EntityListDisplay from "./Entity/EntityListDisplay";
 import DiagramVisualizerDisplay from "./Diagram/visualizer/DiagramVisualizerDisplay";
 import { DiagramEditorProvider } from "@/contexts/DiagramEditorContext";
+import ImportExportDisplay from "./ImportExport/ImportExportDisplay";
 
 const RouterCustom = () => {
 	return (
@@ -31,6 +32,8 @@ const RouterCustom = () => {
 					</DiagramEditorProvider>
 				}
 			/>
+
+			<Route path="import-export" element={<ImportExportDisplay />} />
 
 			<Route path="*" element={<div>404 Not Found</div>} />
 		</Routes>
