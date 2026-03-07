@@ -44,6 +44,23 @@ function centerNodes(nodes: SimNode[], width: number, height: number) {
 	}
 }
 
+// Simple hash function for deterministic positioning
+function hashString(str: string): number {
+	let hash = 0;
+	for (let i = 0; i < str.length; i++) {
+		const char = str.charCodeAt(i);
+		hash = (hash << 5) - hash + char;
+		hash = hash & hash; // Convert to 32bit integer
+	}
+	return Math.abs(hash);
+}
+
+// Seeded random number generator for deterministic layout
+function seededRandom(seed: number): number {
+	const x = Math.sin(seed) * 10000;
+	return x - Math.floor(x);
+}
+
 export function layoutDiagram(diagram: TDiagram, options: LayoutOptions = {}) {
 	const width = options.width ?? 1000;
 	const height = options.height ?? 800;
@@ -54,13 +71,16 @@ export function layoutDiagram(diagram: TDiagram, options: LayoutOptions = {}) {
 	const springStrength = options.springStrength ?? 0.05;
 	const damping = options.damping ?? 0.85;
 
-	const simNodes: SimNode[] = diagram.nodes.map((n) => ({
-		slug: n.slug,
-		x: Math.random() * width,
-		y: Math.random() * height,
-		vx: 0,
-		vy: 0,
-	}));
+	const simNodes: SimNode[] = diagram.nodes.map((n) => {
+		const seed = hashString(n.slug);
+		return {
+			slug: n.slug,
+			x: seededRandom(seed) * width,
+			y: seededRandom(seed + 1) * height,
+			vx: 0,
+			vy: 0,
+		};
+	});
 
 	const nodeMap = new Map(simNodes.map((n) => [n.slug, n]));
 
