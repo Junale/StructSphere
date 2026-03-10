@@ -14,11 +14,10 @@ const EntityVisualizerDisplay = ({ node, layoutNode }: props) => {
 
 	return (
 		<div
-			className="p-2 border rounded shadow-sm overflow-hidden z-10"
+			className="p-2 border rounded shadow-sm overflow-hidden z-10 bg-white"
 			style={{
 				width: layoutNode.size.width,
 				height: layoutNode.size.height,
-				backgroundColor: node.color || "#fff",
 				position: "absolute",
 				left: layoutNode.position.x,
 				top: layoutNode.position.y,

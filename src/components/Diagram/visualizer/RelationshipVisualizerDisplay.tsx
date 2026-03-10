@@ -1,6 +1,6 @@
 import type { TEntity } from "@/types/entity";
 import type { TLayout } from "@/types/layout";
-import { getComponentCenterPosition } from "@/utils";
+import { getCenterPosition } from "@/utils";
 
 type props = {
 	component: TEntity;
@@ -16,10 +16,8 @@ const RelationshipVisualizerDisplay = ({
 	if (!component || !relatedComponent) return;
 	if (!layoutNodes[component.slug] || !layoutNodes[relatedComponent.slug])
 		return;
-	const sourceCenterPosition = getComponentCenterPosition(
-		layoutNodes[component.slug],
-	);
-	const targetCenterPosition = getComponentCenterPosition(
+	const sourceCenterPosition = getCenterPosition(layoutNodes[component.slug]);
+	const targetCenterPosition = getCenterPosition(
 		layoutNodes[relatedComponent.slug],
 	);
 
