@@ -3,12 +3,11 @@ import { createContext, useContext, useEffect, useState } from "react";
 import type { TDiagram } from "../types/diagram";
 import type { TSlug } from "../types/shared";
 
-type DiagramsState = Record<TSlug, TDiagram>;
-
 type DiagramsContextType = {
-	diagrams: DiagramsState;
+	diagrams: Record<TSlug, TDiagram>;
 
-	setDiagrams: React.Dispatch<React.SetStateAction<DiagramsState>>;
+	setDiagrams: React.Dispatch<React.SetStateAction<Record<TSlug, TDiagram>>>;
+
 	addDiagram: (diagram: TDiagram) => void;
 	updateDiagram: (diagram: TDiagram) => void;
 	removeDiagram: (slug: TSlug) => void;
@@ -21,7 +20,7 @@ const STORAGE_KEY = "structsphere-diagrams";
 export const DiagramsProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
-	const [diagrams, setDiagrams] = useState<DiagramsState>(() => {
+	const [diagrams, setDiagrams] = useState<Record<TSlug, TDiagram>>(() => {
 		try {
 			const stored = localStorage.getItem(STORAGE_KEY);
 			return stored ? JSON.parse(stored) : {};

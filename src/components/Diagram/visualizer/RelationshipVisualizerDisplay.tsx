@@ -1,25 +1,25 @@
-import type { TEntity } from "@/types/entity";
 import type { TLayout } from "@/types/layout";
+import type { TNode } from "@/types/node";
+import type { TDescription } from "@/types/shared";
 import { getCenterPosition } from "@/utils";
 
 type props = {
-	component: TEntity;
-	relatedComponent: TEntity;
+	source: TNode;
+	target: TNode;
 	layoutNodes: TLayout;
+	description: TDescription;
 };
 
 const RelationshipVisualizerDisplay = ({
-	component,
-	relatedComponent,
+	source,
+	target,
 	layoutNodes,
+	description,
 }: props) => {
-	if (!component || !relatedComponent) return;
-	if (!layoutNodes[component.slug] || !layoutNodes[relatedComponent.slug])
-		return;
-	const sourceCenterPosition = getCenterPosition(layoutNodes[component.slug]);
-	const targetCenterPosition = getCenterPosition(
-		layoutNodes[relatedComponent.slug],
-	);
+	if (!source || !target) return;
+	if (!layoutNodes[source.slug] || !layoutNodes[target.slug]) return;
+	const sourceCenterPosition = getCenterPosition(layoutNodes[source.slug]);
+	const targetCenterPosition = getCenterPosition(layoutNodes[target.slug]);
 
 	const height = targetCenterPosition.y - sourceCenterPosition.y;
 	const width = targetCenterPosition.x - sourceCenterPosition.x;
@@ -47,7 +47,9 @@ const RelationshipVisualizerDisplay = ({
 						rotate: angle,
 						transformOrigin: `${sourceCenterPosition.x < targetCenterPosition.x ? "left" : "right"} ${sourceCenterPosition.y < targetCenterPosition.y ? "top" : "bottom"}`,
 					}}
-				></div>
+				>
+					{description}
+				</div>
 			</div>
 		</div>
 	);

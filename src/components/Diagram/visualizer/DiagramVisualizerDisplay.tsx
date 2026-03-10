@@ -1,7 +1,8 @@
 import { useMemo, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useDiagrams } from "@/contexts/DiagramsContext";
-import { useEntities } from "@/contexts/EntityContext";
+import { useNodes } from "@/contexts/NodesContext";
+import { useRelationships } from "@/contexts/RelationshipsContext";
 import { layoutDiagram } from "@/utils/layoutEngine";
 import EntityVisualizerDisplay from "./EntityVisualizerDisplay";
 import RelationshipVisualizerDisplay from "./RelationshipVisualizerDisplay";
@@ -9,14 +10,19 @@ import RelationshipVisualizerDisplay from "./RelationshipVisualizerDisplay";
 const DiagramVisualizerDisplay = () => {
 	const { slug } = useParams();
 	const { diagrams } = useDiagrams();
-	const { entities } = useEntities();
+	const { nodes } = useNodes();
+	const { relationships } = useRelationships();
 	const ref = useRef<HTMLDivElement>(null);
+	const diagramNodes = useMemo(
+		() => Object.values(nodes).filter((n) => n.diagramSlug === slug),
+		[nodes, slug],
+	);
+	const diagramRelationships = useMemo(
+		() => Object.values(relationships).filter((r) => r.diagramSlug === slug),
+		[relationships, slug],
+	);
 	const layout = useMemo(() => {
-		if (!slug) return {};
-		const diagram = diagrams[slug];
-		if (!diagram) return {};
-
-		return layoutDiagram(diagram, {
+		return layoutDiagram(diagramNodes, diagramRelationships, {
 			width: ref.current?.clientWidth || 800,
 			height: ref.current?.clientHeight || 500,
 			iterations: 600,
@@ -25,15 +31,14 @@ const DiagramVisualizerDisplay = () => {
 			springStrength: 0.1,
 			damping: 0.9,
 		});
-	}, [slug, diagrams]);
+	}, [diagramNodes, diagramRelationships]);
 
 	if (!slug) return <div>Diagram slug is required.</div>;
 
 	const diagram = diagrams[slug];
 	if (!diagram) return <div>Diagram not found.</div>;
 
-	const nodes = Object.values(diagram.nodes);
-
+	console.log(diagramNodes, diagramRelationships, layout);
 	return (
 		<div className="flex flex-col size-full">
 			{/* View Info Header */}
@@ -47,7 +52,7 @@ const DiagramVisualizerDisplay = () => {
 				ref={ref}
 				className="flex flex-1 size-full p-4 border rounded-lg shadow-md bg-white relative overflow-auto"
 			>
-				{nodes.map(
+				{diagramNodes.map(
 					(node) =>
 						layout[node.slug] && (
 							<EntityVisualizerDisplay
@@ -57,13 +62,14 @@ const DiagramVisualizerDisplay = () => {
 							/>
 						),
 				)}
-				{Object.values(diagram.relationships).map((relationship) => {
+				{diagramRelationships.map((relationship) => {
 					return (
 						<RelationshipVisualizerDisplay
-							key={`${relationship.source}_${relationship.target}`}
-							component={entities[relationship.source]}
-							relatedComponent={entities[relationship.target]}
+							key={`${relationship.sourceNodeSlug}_${relationship.targetNodeSlug}`}
+							source={nodes[relationship.sourceNodeSlug]}
+							target={nodes[relationship.targetNodeSlug]}
 							layoutNodes={layout}
+							description={relationship.description || ""}
 						/>
 					);
 				})}

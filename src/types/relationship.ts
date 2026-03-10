@@ -1,6 +1,10 @@
-import type { TSlug } from "./shared";
+import type { TDescription, TSlug } from "./shared";
 
 export type TRelationship = {
-	source: TSlug;
-	target: TSlug;
+	slug: TSlug;
+	diagramSlug: TSlug;
+	sourceNodeSlug: TSlug;
+	targetNodeSlug: TSlug;
+
+	description?: TDescription;
 };

@@ -1,27 +1,24 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import type { TSlug } from "@/types/shared";
 import ListFilterDisplay from "./ListFilterDisplay";
 
 export type TItem = {
-	slug: string;
-	title: string;
-	description: string;
-};
+	slug: TSlug;
+} & Record<string, string>;
 
 type props = {
 	itemType: string;
 	items: TItem[];
 	enableView?: boolean;
-	onDelete?: (slug: string) => void;
-	onCreate?: () => void;
+	onDelete?: (slug: TSlug) => void;
 };
 
 const ListDisplay = ({
 	itemType,
 	items,
-	enableView = true,
+	enableView = false,
 	onDelete,
-	onCreate,
 }: props) => {
 	const [filteredItems, setFilteredItems] = useState<TItem[]>(items);
 	const itemTypeCapitalized =
@@ -40,31 +37,38 @@ const ListDisplay = ({
 					onFilterChange={setFilteredItems}
 				/>
 				<div className="flex items-center w-full justify-end mb-4">
-					<button
-						type="button"
+					<Link
+						to={`/${itemType}/add`}
 						className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-						onClick={onCreate}
 					>
 						Create New {itemTypeCapitalized}
-					</button>
+					</Link>
 				</div>
 			</div>
 
 			<table className="table-auto w-full border-collapse border border-gray-300">
 				<thead className="bg-gray-200">
 					<tr>
-						<th className="border border-gray-300 p-2">Slug</th>
-						<th className="border border-gray-300 p-2">Title</th>
-						<th className="border border-gray-300 p-2">Description</th>
+						{items.length > 0 &&
+							Object.keys(items[0]).map((key) => (
+								<th key={key} className="border border-gray-300 p-2">
+									{key.charAt(0).toUpperCase() + key.slice(1)}
+								</th>
+							))}
 						<th className="border border-gray-300 p-2">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
 					{filteredItems.map((item) => (
 						<tr key={item.slug}>
-							<td className="border border-gray-300 p-2">{item.slug}</td>
-							<td className="border border-gray-300 p-2">{item.title}</td>
-							<td className="border border-gray-300 p-2">{item.description}</td>
+							{Object.entries(item).map(([key, value]) => (
+								<td
+									key={item.slug + key}
+									className="border border-gray-300 p-2"
+								>
+									{value}
+								</td>
+							))}
 							<td className="border border-gray-300 p-2">
 								{enableView && (
 									<>
@@ -78,10 +82,10 @@ const ListDisplay = ({
 									</>
 								)}
 								<Link
-									to={`/${itemType}/${item.slug}/edit`}
+									to={`/${itemType}/${item.slug}/update`}
 									className="text-blue-500 hover:underline"
 								>
-									Edit
+									Update
 								</Link>
 								{" | "}
 								<button

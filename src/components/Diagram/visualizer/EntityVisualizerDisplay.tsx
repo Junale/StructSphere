@@ -9,7 +9,7 @@ type props = {
 
 const EntityVisualizerDisplay = ({ node, layoutNode }: props) => {
 	const { entities } = useEntities();
-	const entity = entities[node.slug];
+	const entity = entities[node.entitySlug];
 	if (!entity) return null;
 
 	return (

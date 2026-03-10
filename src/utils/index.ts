@@ -2,9 +2,8 @@ import type { TLayoutNode, TPosition } from "@/types/layout";
 import type { TRelationship } from "@/types/relationship";
 import type { TSlug } from "@/types/shared";
 
-let counter = 0;
 export const getSlug = (): TSlug => {
-	return `component-${counter++}`;
+	return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
 };
 
 export const getCenterPosition = (simNode: TLayoutNode): TPosition => {
@@ -20,10 +19,10 @@ export const getSlugsOfTarget = (
 ): TSlug[] => {
 	return (
 		relationships[slug]?.flatMap((relationship) => {
-			if (relationship.source === slug) {
-				return [relationship.target];
+			if (relationship.sourceNodeSlug === slug) {
+				return [relationship.targetNodeSlug];
 			}
-			return [relationship.source];
+			return [relationship.sourceNodeSlug];
 		}) || []
 	);
 };

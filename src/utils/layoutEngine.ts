@@ -1,4 +1,5 @@
-import type { TDiagram } from "../types/diagram";
+import type { TNode } from "@/types/node";
+import type { TRelationship } from "@/types/relationship";
 import type { TSlug } from "../types/shared";
 
 type LayoutOptions = {
@@ -61,7 +62,11 @@ function seededRandom(seed: number): number {
 	return x - Math.floor(x);
 }
 
-export function layoutDiagram(diagram: TDiagram, options: LayoutOptions = {}) {
+export function layoutDiagram(
+	nodes: TNode[],
+	relationships: TRelationship[],
+	options: LayoutOptions = {},
+) {
 	const width = options.width ?? 1000;
 	const height = options.height ?? 800;
 	const iterations = options.iterations ?? 500;
@@ -71,7 +76,7 @@ export function layoutDiagram(diagram: TDiagram, options: LayoutOptions = {}) {
 	const springStrength = options.springStrength ?? 0.05;
 	const damping = options.damping ?? 0.85;
 
-	const simNodes: SimNode[] = diagram.nodes.map((n) => {
+	const simNodes: SimNode[] = nodes.map((n) => {
 		const seed = hashString(n.slug);
 		return {
 			slug: n.slug,
@@ -113,9 +118,9 @@ export function layoutDiagram(diagram: TDiagram, options: LayoutOptions = {}) {
 		}
 
 		// spring forces
-		for (const rel of diagram.relationships) {
-			const source = nodeMap.get(rel.source);
-			const target = nodeMap.get(rel.target);
+		for (const rel of relationships) {
+			const source = nodeMap.get(rel.sourceNodeSlug);
+			const target = nodeMap.get(rel.targetNodeSlug);
 
 			if (!source || !target) continue;
 

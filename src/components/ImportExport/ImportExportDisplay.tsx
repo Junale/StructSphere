@@ -1,10 +1,14 @@
 import type { FormEvent } from "react";
 import { useDiagrams } from "@/contexts/DiagramsContext";
 import { useEntities } from "@/contexts/EntityContext";
+import { useNodes } from "@/contexts/NodesContext";
+import { useRelationships } from "@/contexts/RelationshipsContext";
 
 const ImportExportDisplay = () => {
 	const { entities, setEntities } = useEntities();
 	const { diagrams, setDiagrams } = useDiagrams();
+	const { relationships, setRelationships } = useRelationships();
+	const { nodes, setNodes } = useNodes();
 
 	const handleImport = (event: FormEvent<HTMLFormElement>) => {
 		const fileInput = event.currentTarget.parentElement?.querySelector(
@@ -34,6 +38,20 @@ const ImportExportDisplay = () => {
 						"Invalid file format: 'diagrams' field is missing or not an object.",
 					);
 				}
+				if (data.relationships && typeof data.relationships === "object") {
+					setRelationships(data.relationships);
+				} else {
+					alert(
+						"Invalid file format: 'relationships' field is missing or not an object.",
+					);
+				}
+				if (data.nodes && typeof data.nodes === "object") {
+					setNodes(data.nodes);
+				} else {
+					alert(
+						"Invalid file format: 'nodes' field is missing or not an object.",
+					);
+				}
 			} catch (error) {
 				console.error("Error parsing JSON file:", error);
 				alert(
@@ -52,6 +70,8 @@ const ImportExportDisplay = () => {
 		const data = {
 			entities,
 			diagrams,
+			nodes,
+			relationships,
 		};
 		const json = JSON.stringify(data, null, 2);
 		const blob = new Blob([json], { type: "application/json" });
