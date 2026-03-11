@@ -9,7 +9,9 @@ const App = () => {
 			<SystemProvider>
 				<HashRouter>
 					<NavBar />
-					<RouterCustom />
+					<div className="flex flex-1 flex-col overflow-hidden">
+						<RouterCustom />
+					</div>
 				</HashRouter>
 			</SystemProvider>
 		</div>

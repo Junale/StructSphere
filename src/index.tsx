@@ -7,10 +7,8 @@ const rootElement = document.getElementById("root");
 
 if (rootElement)
 	createRoot(rootElement).render(
-		<div className="flex h-screen w-screen">
-			<StrictMode>
-				<App />
-			</StrictMode>
-		</div>,
+		<StrictMode>
+			<App />
+		</StrictMode>,
 	);
 else throw new Error("Root element not found");
