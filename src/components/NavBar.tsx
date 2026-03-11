@@ -2,7 +2,7 @@ import StyledNavLink from "./StyledNavLink";
 
 const NavBar = () => {
 	return (
-		<div className="flex flex-col items-center justify-center w-full bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 shadow-lg rounded-xl border border-blue-800">
+		<div className="flex flex-col items-center justify-center w-full bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 shadow-lg rounded-xl border border-blue-800 overflow-hidden">
 			<div className="flex items-center justify-center py-5">
 				<h1 className="text-4xl font-extrabold text-white tracking-wide drop-shadow-md">
 					🌐 StructSphere

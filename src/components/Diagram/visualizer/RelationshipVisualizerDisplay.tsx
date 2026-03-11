@@ -8,6 +8,7 @@ type props = {
 	target: TNode;
 	layoutNodes: TLayout;
 	description: TDescription;
+	labelOffset?: { dx: number; dy: number };
 };
 
 const RelationshipVisualizerDisplay = ({
@@ -15,6 +16,7 @@ const RelationshipVisualizerDisplay = ({
 	target,
 	layoutNodes,
 	description,
+	labelOffset = { dx: 0, dy: 0 },
 }: props) => {
 	if (!source || !target) return;
 	if (!layoutNodes[source.slug] || !layoutNodes[target.slug]) return;
@@ -40,16 +42,26 @@ const RelationshipVisualizerDisplay = ({
 		>
 			<div className="flex size-full relative">
 				<div
-					className={`absolute text-center bg-black ${sourceCenterPosition.x < targetCenterPosition.x ? "left-0" : "right-0"} ${sourceCenterPosition.y < targetCenterPosition.y ? "top-0" : "bottom-0"}`}
+					className={`absolute bg-black ${sourceCenterPosition.x < targetCenterPosition.x ? "left-0" : "right-0"} ${sourceCenterPosition.y < targetCenterPosition.y ? "top-0" : "bottom-0"} `}
 					style={{
 						width: diagonal,
 						height: 2,
 						rotate: angle,
 						transformOrigin: `${sourceCenterPosition.x < targetCenterPosition.x ? "left" : "right"} ${sourceCenterPosition.y < targetCenterPosition.y ? "top" : "bottom"}`,
 					}}
-				>
-					{description}
-				</div>
+				/>
+				{description && (
+					<div
+						className="absolute bg-white px-2 py-1 text-xs rounded border border-gray-300 whitespace-nowrap"
+						style={{
+							left: `calc(50% + ${labelOffset.dx}px)`,
+							top: `calc(50% + ${labelOffset.dy}px)`,
+							transform: "translate(-50%, -50%)",
+						}}
+					>
+						{description}
+					</div>
+				)}
 			</div>
 		</div>
 	);

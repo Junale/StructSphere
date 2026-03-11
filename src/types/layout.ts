@@ -15,3 +15,8 @@ export type TLayoutNode = {
 };
 
 export type TLayout = Record<string, TLayoutNode>;
+
+export type TLayoutResult = {
+	nodes: TLayout;
+	edgeLabelOffsets: Record<string, { dx: number; dy: number }>;
+};

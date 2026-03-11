@@ -67,7 +67,7 @@ const ListDisplay = ({
 										key={item.slug + key}
 										className="border border-gray-300 p-2"
 									>
-										{value}
+										{value || ""}
 									</td>
 								))}
 								<td className="border border-gray-300 p-2">

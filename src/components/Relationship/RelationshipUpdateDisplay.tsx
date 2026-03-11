@@ -100,13 +100,10 @@ const RelationshipUpdateDisplay = () => {
 					id="sourceNodeSlug"
 					className="border rounded-md p-2"
 					disabled={!selectedDiagram}
+					defaultValue={relationship.sourceNodeSlug}
 				>
 					{nodesForSelectedDiagram.map((node) => (
-						<option
-							key={node.slug}
-							value={node.slug}
-							defaultChecked={node.slug === relationship.sourceNodeSlug}
-						>
+						<option key={node.slug} value={node.slug}>
 							{entities[node.entitySlug]?.title || node.entitySlug}
 						</option>
 					))}
@@ -118,6 +115,7 @@ const RelationshipUpdateDisplay = () => {
 					id="targetNodeSlug"
 					className="border rounded-md p-2"
 					disabled={!selectedDiagram}
+					defaultValue={relationship.targetNodeSlug}
 				>
 					{nodesForSelectedDiagram.map((node) => (
 						<option

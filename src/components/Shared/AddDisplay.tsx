@@ -23,12 +23,12 @@ const AddDisplay = ({ itemType, onSubmit, children }: props) => {
 		}
 	};
 	return (
-		<div className="flex flex-col w-full">
+		<div className="flex flex-col w-full flex-1 overflow-hidden">
 			<h2 className="text-2xl font-bold mb-4 flex w-full items-center justify-center">
 				Create New {itemTypeCapitalized}
 			</h2>
 			<form
-				className="flex flex-col w-full max-w-md mx-auto bg-white p-6 rounded-lg shadow-md"
+				className="flex  flex-1 overflow-y-scroll flex-col w-full max-w-md mx-auto bg-white p-6 rounded-lg shadow-md"
 				onSubmit={handleSubmit}
 			>
 				{error && <span className="text-red-500 text-sm">{error}</span>}
