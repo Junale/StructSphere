@@ -23,29 +23,63 @@ const AddDisplay = ({ itemType, onSubmit, children }: props) => {
 		}
 	};
 	return (
-		<div className="flex flex-col w-full flex-1 overflow-hidden">
-			<h2 className="text-2xl font-bold mb-4 flex w-full items-center justify-center">
-				Create New {itemTypeCapitalized}
-			</h2>
-			<form
-				className="flex  flex-1 overflow-y-scroll flex-col w-full max-w-md mx-auto bg-white p-6 rounded-lg shadow-md"
-				onSubmit={handleSubmit}
-			>
-				{error && <span className="text-red-500 text-sm">{error}</span>}
-				{children}
-				<button
-					type="submit"
-					className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mt-4"
-				>
-					Create {itemTypeCapitalized}
-				</button>
-				<Link
-					to={`/${itemType}`}
-					className=" flex px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 mt-2 justify-center items-center"
-				>
-					Cancel
-				</Link>
-			</form>
+		<div className="flex flex-col w-full flex-1 overflow-hidden bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-8">
+			<div className="max-w-2xl mx-auto w-full flex flex-col flex-1 overflow-hidden">
+				<div className="text-center mb-6">
+					<h2 className="text-4xl font-bold text-slate-800 mb-2">
+						Create New {itemTypeCapitalized}
+					</h2>
+					<p className="text-slate-600">
+						Fill in the details below to add a new {itemType}
+					</p>
+				</div>
+
+				<div className="flex-1 overflow-y-auto">
+					<form
+						className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 space-y-6"
+						onSubmit={handleSubmit}
+					>
+						{error && (
+							<div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+								<svg
+									className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+									aria-hidden="true"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+									/>
+								</svg>
+								<span className="text-red-700 text-sm font-medium">
+									{error}
+								</span>
+							</div>
+						)}
+
+						<div className="space-y-4">{children}</div>
+
+						<div className="flex gap-3 pt-6 border-t border-slate-200">
+							<button
+								type="submit"
+								className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-indigo-600 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+							>
+								Create {itemTypeCapitalized}
+							</button>
+							<Link
+								to={`/${itemType}`}
+								className="px-6 py-3 bg-slate-500 text-white font-semibold rounded-lg hover:bg-slate-600 transition shadow-md hover:shadow-lg flex items-center justify-center"
+							>
+								Cancel
+							</Link>
+						</div>
+					</form>
+				</div>
+			</div>
 		</div>
 	);
 };
