@@ -34,7 +34,7 @@ const EntityVisualizerDisplay = ({ node, layoutNode }: props) => {
 			onClick={handleOnClick}
 		>
 			<h2 className="text-lg font-semibold">{entity.title}</h2>
-			<p className="text-sm">{entity.description}</p>
+			<p className="text-sm line-clamp-3">{entity.description}</p>
 		</button>
 	);
 };
