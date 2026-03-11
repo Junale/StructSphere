@@ -1,7 +1,7 @@
 import { HashRouter } from "react-router-dom";
-import NavBar from "./components/NavBar";
-import RouterCustom from "./components/RouterCustom";
-import { SystemProvider } from "./contexts/SystemContext";
+import NavBar from "./NavBar";
+import RouterCustom from "./RouterCustom";
+import { SystemProvider } from "./SystemContext";
 
 const App = () => {
 	return (
