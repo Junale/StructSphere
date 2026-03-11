@@ -6,6 +6,7 @@ import type { TSettings } from "../SettingTypes";
 const SettingsDisplay = () => {
 	const { settings, setSettings, resetSettings } = useSettings();
 	const [tempSettings, setTempSettings] = useState<TSettings>({ ...settings });
+	const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
 	useEffect(() => {
 		setTempSettings({ ...settings });
@@ -14,6 +15,8 @@ const SettingsDisplay = () => {
 	const handleSave = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setSettings({ ...tempSettings });
+		setShowSuccessMessage(true);
+		setTimeout(() => setShowSuccessMessage(false), 3000);
 	};
 
 	return (
@@ -27,27 +30,68 @@ const SettingsDisplay = () => {
 				</div>
 
 				<div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 flex-1 flex flex-col ">
-					<form onSubmit={handleSave} className="space-y-6">
-						<div>
-							<h3 className="text-2xl font-semibold mb-4 text-slate-800 border-b pb-2">
-								Layout Settings
-							</h3>
-							<p className="text-sm text-slate-600 mb-6">
-								Adjust the force-directed graph layout parameters
-							</p>
+					{showSuccessMessage && (
+						<div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3 animate-fade-in">
+							<svg
+								className="w-6 h-6 text-green-500 flex-shrink-0"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+								aria-hidden="true"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+								/>
+							</svg>
+							<span className="text-green-700 font-medium">
+								Settings saved successfully!
+							</span>
 						</div>
+					)}
 
-						<div className="space-y-4">
+					<form onSubmit={handleSave} className="space-y-6">
+						<div className="flex items-center gap-3 mb-2">
+							<div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-lg flex items-center justify-center shadow-md">
+								<svg
+									className="w-6 h-6 text-white"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+									aria-hidden="true"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+									/>
+								</svg>
+							</div>
 							<div>
+								<h3 className="text-2xl font-semibold text-slate-800">
+									Layout Settings
+								</h3>
+								<p className="text-sm text-slate-600">
+									Adjust the force-directed graph layout parameters
+								</p>
+							</div>
+						</div>
+						<div className="border-b border-slate-200" />
+
+						<div className="grid md:grid-cols-2 gap-6">
+							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 								<label
 									htmlFor="iterations"
-									className="block text-sm font-medium text-slate-700 mb-2"
+									className="block text-sm font-semibold text-slate-700 mb-1"
 								>
 									Iterations
-									<span className="text-xs font-normal text-slate-500 ml-2">
-										(Number of simulation steps)
-									</span>
 								</label>
+								<p className="text-xs text-slate-500 mb-3">
+									Number of simulation steps
+								</p>
 								<input
 									type="number"
 									id="iterations"
@@ -61,20 +105,20 @@ const SettingsDisplay = () => {
 											},
 										})
 									}
-									className="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white font-medium text-slate-800"
 								/>
 							</div>
 
-							<div>
+							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 								<label
 									htmlFor="repulsion"
-									className="block text-sm font-medium text-slate-700 mb-2"
+									className="block text-sm font-semibold text-slate-700 mb-1"
 								>
 									Repulsion Force
-									<span className="text-xs font-normal text-slate-500 ml-2">
-										(Force between unconnected nodes)
-									</span>
 								</label>
+								<p className="text-xs text-slate-500 mb-3">
+									Force between unconnected nodes
+								</p>
 								<input
 									type="number"
 									id="repulsion"
@@ -88,20 +132,20 @@ const SettingsDisplay = () => {
 											},
 										})
 									}
-									className="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white font-medium text-slate-800"
 								/>
 							</div>
 
-							<div>
+							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 								<label
 									htmlFor="springLength"
-									className="block text-sm font-medium text-slate-700 mb-2"
+									className="block text-sm font-semibold text-slate-700 mb-1"
 								>
 									Spring Length
-									<span className="text-xs font-normal text-slate-500 ml-2">
-										(Ideal distance between connected nodes)
-									</span>
 								</label>
+								<p className="text-xs text-slate-500 mb-3">
+									Ideal distance between connected nodes
+								</p>
 								<input
 									type="number"
 									id="springLength"
@@ -115,20 +159,20 @@ const SettingsDisplay = () => {
 											},
 										})
 									}
-									className="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white font-medium text-slate-800"
 								/>
 							</div>
 
-							<div>
+							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 								<label
 									htmlFor="springStrength"
-									className="block text-sm font-medium text-slate-700 mb-2"
+									className="block text-sm font-semibold text-slate-700 mb-1"
 								>
 									Spring Strength
-									<span className="text-xs font-normal text-slate-500 ml-2">
-										(Strength of connection forces)
-									</span>
 								</label>
+								<p className="text-xs text-slate-500 mb-3">
+									Strength of connection forces
+								</p>
 								<input
 									type="number"
 									id="springStrength"
@@ -143,20 +187,20 @@ const SettingsDisplay = () => {
 											},
 										})
 									}
-									className="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white font-medium text-slate-800"
 								/>
 							</div>
 
-							<div>
+							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 								<label
 									htmlFor="damping"
-									className="block text-sm font-medium text-slate-700 mb-2"
+									className="block text-sm font-semibold text-slate-700 mb-1"
 								>
 									Damping
-									<span className="text-xs font-normal text-slate-500 ml-2">
-										(Stabilization factor)
-									</span>
 								</label>
+								<p className="text-xs text-slate-500 mb-3">
+									Stabilization factor
+								</p>
 								<input
 									type="number"
 									id="damping"
@@ -171,30 +215,72 @@ const SettingsDisplay = () => {
 											},
 										})
 									}
-									className="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white font-medium text-slate-800"
 								/>
 							</div>
 						</div>
 
-						<div className="flex gap-3 pt-6 border-t">
+						<div className="flex flex-wrap gap-3 pt-6 border-t border-slate-200">
 							<button
 								type="submit"
-								className="flex-1 px-6 py-3 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition shadow-sm hover:shadow-md cursor-pointer"
+								className="flex-1 min-w-[200px] px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-lg hover:from-green-600 hover:to-emerald-600 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
 							>
+								<svg
+									className="w-5 h-5"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+									aria-hidden="true"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M5 13l4 4L19 7"
+									/>
+								</svg>
 								Save Changes
 							</button>
 							<button
 								type="button"
-								className="px-6 py-3 bg-slate-500 text-white font-medium rounded-lg hover:bg-slate-600 transition shadow-sm hover:shadow-md cursor-pointer"
+								className="px-6 py-3 bg-slate-500 text-white font-semibold rounded-lg hover:bg-slate-600 transition shadow-md hover:shadow-lg flex items-center justify-center gap-2"
 								onClick={() => setTempSettings({ ...settings })}
 							>
+								<svg
+									className="w-5 h-5"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+									aria-hidden="true"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+									/>
+								</svg>
 								Reset
 							</button>
 							<button
 								type="button"
-								className="px-6 py-3 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition shadow-sm hover:shadow-md cursor-pointer"
+								className="px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition shadow-md hover:shadow-lg flex items-center justify-center gap-2"
 								onClick={resetSettings}
 							>
+								<svg
+									className="w-5 h-5"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+									aria-hidden="true"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+									/>
+								</svg>
 								Defaults
 							</button>
 						</div>

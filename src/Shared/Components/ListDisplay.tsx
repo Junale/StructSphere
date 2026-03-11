@@ -62,7 +62,7 @@ const ListDisplay = ({
 					</h2>
 				</div>
 
-				<div className="flex items-center justify-between gap-4 mb-6">
+				<div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
 					<ListFilterDisplay
 						itemType={itemType}
 						items={items}
