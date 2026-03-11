@@ -26,3 +26,7 @@ export const getSlugsOfTarget = (
 		}) || []
 	);
 };
+
+export const upperFirstChar = (item: string) => {
+	return item.charAt(0).toUpperCase() + item.slice(1);
+};

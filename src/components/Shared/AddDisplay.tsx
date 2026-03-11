@@ -1,3 +1,4 @@
+import { upperFirstChar } from "@/utils";
 import type { FormEvent, ReactNode } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,8 +11,7 @@ type props = {
 
 const AddDisplay = ({ itemType, onSubmit, children }: props) => {
 	const [error, setError] = useState<string | null>(null);
-	const itemTypeCapitalized =
-		itemType.charAt(0).toUpperCase() + itemType.slice(1);
+	const itemTypeCapitalized = upperFirstChar(itemType);
 	const navigate = useNavigate();
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();

@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import type { TSlug } from "@/types/shared";
 import ListFilterDisplay from "./ListFilterDisplay";
+import { upperFirstChar } from "@/utils";
+import { useNodes } from "@/contexts/NodesContext";
+import { useEntities } from "@/contexts/EntityContext";
+import { useDiagrams } from "@/contexts/DiagramsContext";
 
 export type TItem = {
 	slug: TSlug;
@@ -21,8 +25,33 @@ const ListDisplay = ({
 	onDelete,
 }: props) => {
 	const [filteredItems, setFilteredItems] = useState<TItem[]>(items);
-	const itemTypeCapitalized =
-		itemType.charAt(0).toUpperCase() + itemType.slice(1);
+	const itemTypeCapitalized = upperFirstChar(itemType);
+	const { nodes } = useNodes();
+	const { entities } = useEntities();
+	const { diagrams } = useDiagrams();
+
+	const removeStringFromKey = (key: string, string: string) => {
+		if (key.includes(string)) {
+			return key.replace(string, "");
+		} else return key;
+	};
+
+	const getTitle = useMemo(
+		() => (key: string, value: string) => {
+			if (key.toLowerCase().includes("entity")) {
+				return entities[value]?.title || value;
+			}
+			if (key.toLowerCase().includes("node")) {
+				return entities[nodes[value]?.entitySlug || ""]?.title || value;
+			}
+			if (key.toLowerCase().includes("diagram")) {
+				return diagrams[value]?.title || value;
+			}
+
+			return value;
+		},
+		[entities, nodes, diagrams],
+	);
 
 	return (
 		<div className="flex flex-1 flex-col w-full overflow-hidden">
@@ -53,7 +82,7 @@ const ListDisplay = ({
 							{items.length > 0 &&
 								Object.keys(items[0]).map((key) => (
 									<th key={key} className="border border-gray-300 p-2">
-										{key.charAt(0).toUpperCase() + key.slice(1)}
+										{upperFirstChar(removeStringFromKey(key, "Slug"))}
 									</th>
 								))}
 							<th className="border border-gray-300 p-2">Actions</th>
@@ -67,7 +96,7 @@ const ListDisplay = ({
 										key={item.slug + key}
 										className="border border-gray-300 p-2"
 									>
-										{value || ""}
+										{getTitle(key, value)}
 									</td>
 								))}
 								<td className="border border-gray-300 p-2">
