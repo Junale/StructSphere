@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useRelationships } from "../RelationshipsContext";
 import { useDiagrams } from "@/Diagram/DiagramsContext";
-import { useNodes } from "@/Node/NodesContext";
 import { useEntities } from "@/Entity/EntityContext";
+import { useNodes } from "@/Node/NodesContext";
 import UpdateDisplay from "@/Shared/Components/UpdateDisplay";
+import { useRelationships } from "../RelationshipsContext";
 
 const RelationshipUpdateDisplay = () => {
 	const { slug } = useParams();
