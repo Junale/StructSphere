@@ -6,12 +6,14 @@ import { useRelationships } from "@/Relationship/RelationshipsContext";
 import { layoutDiagram } from "@/Visualizer/layoutEngine";
 import EntityVisualizerDisplay from "./EntityVisualizerDisplay";
 import RelationshipVisualizerDisplay from "./RelationshipVisualizerDisplay";
+import { useSettings } from "@/Settings/SettingsContext";
 
 const DiagramVisualizerDisplay = () => {
 	const { slug } = useParams();
 	const { diagrams } = useDiagrams();
 	const { nodes } = useNodes();
 	const { relationships } = useRelationships();
+	const { settings } = useSettings();
 	const ref = useRef<HTMLDivElement>(null);
 	const [dimensions, setDimensions] = useState({ width: 800, height: 500 });
 
@@ -38,13 +40,9 @@ const DiagramVisualizerDisplay = () => {
 			layoutDiagram(diagramNodes, diagramRelationships, {
 				width: dimensions.width,
 				height: dimensions.height,
-				iterations: 600,
-				repulsion: 5000,
-				springLength: 350,
-				springStrength: 0.1,
-				damping: 0.9,
+				...settings.layout,
 			}),
-		[diagramNodes, diagramRelationships, dimensions],
+		[diagramNodes, diagramRelationships, dimensions, settings],
 	);
 
 	if (!slug) return <div>Diagram slug is required.</div>;

@@ -15,6 +15,7 @@ const NavBar = () => {
 				<StyledNavLink to="/node" label="Nodes" />
 				<StyledNavLink to="/relationship" label="Relationships" />
 				<StyledNavLink to="/import-export" label="Import/Export" />
+				<StyledNavLink to="/settings" label="Settings" />
 			</nav>
 		</div>
 	);

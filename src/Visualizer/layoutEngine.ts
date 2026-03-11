@@ -2,7 +2,7 @@ import type { TNode } from "@/Node/NodeTypes";
 import type { TRelationship } from "@/Relationship/RelationshipTypes";
 import type { TSlug } from "../Shared/SharedTypes";
 
-type LayoutOptions = {
+export type LayoutOptions = {
 	width?: number;
 	height?: number;
 	iterations?: number;

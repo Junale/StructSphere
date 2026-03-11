@@ -3,17 +3,20 @@ import { DiagramsProvider } from "@/Diagram/DiagramsContext";
 import { EntitiesProvider } from "@/Entity/EntityContext";
 import { NodesProvider } from "@/Node/NodesContext";
 import { RelationshipsProvider } from "@/Relationship/RelationshipsContext";
+import { SettingsProvider } from "./Settings/SettingsContext";
 
 export const SystemProvider: React.FC<{
 	children: React.ReactNode;
 }> = ({ children }) => {
 	return (
-		<EntitiesProvider>
-			<DiagramsProvider>
-				<NodesProvider>
-					<RelationshipsProvider>{children}</RelationshipsProvider>
-				</NodesProvider>
-			</DiagramsProvider>
-		</EntitiesProvider>
+		<SettingsProvider>
+			<EntitiesProvider>
+				<DiagramsProvider>
+					<NodesProvider>
+						<RelationshipsProvider>{children}</RelationshipsProvider>
+					</NodesProvider>
+				</DiagramsProvider>
+			</EntitiesProvider>
+		</SettingsProvider>
 	);
 };

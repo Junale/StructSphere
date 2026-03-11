@@ -14,6 +14,7 @@ import RelationshipListDisplay from "@/Relationship/Components/RelationshipListD
 import RelationshipUpdateDisplay from "@/Relationship/Components/RelationshipUpdateDisplay";
 import DiagramVisualizerDisplay from "@/Visualizer/Components/DiagramVisualizerDisplay";
 import Home from "./Home";
+import SettingsDisplay from "./Settings/Components/SettingsDisplay";
 
 const RouterCustom = () => {
 	return (
@@ -41,6 +42,8 @@ const RouterCustom = () => {
 			/>
 
 			<Route path="import-export" element={<ImportExportDisplay />} />
+
+			<Route path="settings" element={<SettingsDisplay />} />
 
 			<Route path="*" element={<div>404 Not Found</div>} />
 		</Routes>
