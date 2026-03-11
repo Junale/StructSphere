@@ -26,6 +26,7 @@ const NodeUpdateDisplay = () => {
 		if (
 			Object.values(nodes).some(
 				(node) =>
+					node.slug !== slug &&
 					node.diagramSlug === diagramSlug.value &&
 					node.entitySlug === entitySlug.value,
 			)

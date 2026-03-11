@@ -38,7 +38,6 @@ const DiagramVisualizerDisplay = () => {
 	const diagram = diagrams[slug];
 	if (!diagram) return <div>Diagram not found.</div>;
 
-	console.log(diagramNodes, diagramRelationships, layout);
 	return (
 		<div className="flex flex-col size-full">
 			{/* View Info Header */}
