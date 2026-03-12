@@ -1,18 +1,18 @@
 // Gemini AI Service with Function Calling
 // Using the @google/genai package
 
+import type {
+	Content,
+	FunctionCall as GenAIFunctionCall,
+	GenerateContentConfig,
+	Part,
+	Schema,
+	Tool,
+} from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import type { TChatMessageRole } from "./ChatTypes";
 import { toolDefinitions } from "./toolDefinitions";
 import { toolExecutors } from "./toolExecutors";
-import type {
-	Tool,
-	Schema,
-	Content,
-	GenerateContentConfig,
-	Part,
-	FunctionCall as GenAIFunctionCall,
-} from "@google/genai";
-import { GoogleGenAI } from "@google/genai";
 
 // Get settings from localStorage
 const getSettings = () => {

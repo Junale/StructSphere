@@ -1,11 +1,11 @@
 import type { FormEvent } from "react";
+import { useChat } from "@/Chat/ChatContext";
 import { useDiagrams } from "@/Diagram/DiagramsContext";
 import { useEntities } from "@/Entity/EntityContext";
 import { useNodes } from "@/Node/NodesContext";
 import { useRelationships } from "@/Relationship/RelationshipsContext";
 import { useSettings } from "@/Settings/SettingsContext";
 import ImportExportOptionList from "./ImportExportOptionList";
-import { useChat } from "@/Chat/ChatContext";
 
 const ImportExportDisplay = () => {
 	const { entities, setEntities } = useEntities();
