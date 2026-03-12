@@ -3,314 +3,211 @@ import type { TRelationship } from "@/Relationship/RelationshipTypes";
 import type { TSlug } from "../Shared/SharedTypes";
 
 export type LayoutOptions = {
-	width?: number;
-	height?: number;
-	iterations?: number;
-	repulsion?: number;
-	springLength?: number;
-	springStrength?: number;
-	damping?: number;
-	labelCollisionThreshold?: number;
+	width: number;
+	height: number;
+	nodeWidth: number;
+	nodeHeight: number;
+	horizontalGap: number;
+	verticalGap: number;
+	labelCollisionThreshold: number;
 };
 
 export function layoutDiagram(
 	nodes: TNode[],
 	relationships: TRelationship[],
-	options: LayoutOptions = {},
+	options: LayoutOptions,
 ) {
-	const width = options.width ?? 1000;
-	const height = options.height ?? 800;
+	const {
+		width,
+		height,
+		nodeWidth,
+		nodeHeight,
+		horizontalGap,
+		verticalGap,
+		labelCollisionThreshold,
+	} = options;
 
-	// Build adjacency map
+	if (nodes.length === 0) return { nodes: {}, edgeLabelOffsets: {} };
+
+	// Build adjacency maps
 	const childrenMap = new Map<TSlug, TSlug[]>();
 	const parentsMap = new Map<TSlug, TSlug[]>();
-
 	for (const node of nodes) {
 		childrenMap.set(node.slug, []);
 		parentsMap.set(node.slug, []);
 	}
-
 	for (const rel of relationships) {
 		childrenMap.get(rel.sourceNodeSlug)?.push(rel.targetNodeSlug);
 		parentsMap.get(rel.targetNodeSlug)?.push(rel.sourceNodeSlug);
 	}
 
-	// Find root nodes (no parents)
-	const roots = nodes.filter((n) => parentsMap.get(n.slug)?.length === 0);
-	if (roots.length === 0 && nodes.length > 0) {
-		// Handle cycles - pick first node as root
-		roots.push(nodes[0]);
+	// Topological sort (DFS post-order), cycle-safe
+	const topoOrder: TSlug[] = [];
+	const permVisited = new Set<TSlug>();
+	const tempVisited = new Set<TSlug>();
+	function topoVisit(slug: TSlug) {
+		if (permVisited.has(slug)) return;
+		if (tempVisited.has(slug)) return; // back edge — skip cycle
+		tempVisited.add(slug);
+		for (const child of childrenMap.get(slug) ?? []) topoVisit(child);
+		tempVisited.delete(slug);
+		permVisited.add(slug);
+		topoOrder.unshift(slug);
 	}
+	for (const node of nodes) topoVisit(node.slug);
 
-	// Assign levels (depth from root)
+	// Longest-path level assignment (pushes nodes as deep as possible)
 	const levels = new Map<TSlug, number>();
-	const visited = new Set<TSlug>();
-
-	function assignLevel(slug: TSlug, level: number) {
-		if (visited.has(slug)) return;
-		visited.add(slug);
-		levels.set(slug, Math.max(levels.get(slug) ?? 0, level));
-
+	for (const slug of topoOrder) levels.set(slug, 0);
+	for (const slug of topoOrder) {
+		const level = levels.get(slug) ?? 0;
 		for (const child of childrenMap.get(slug) ?? []) {
-			assignLevel(child, level + 1);
+			levels.set(child, Math.max(levels.get(child) ?? 0, level + 1));
 		}
 	}
 
-	for (const root of roots) {
-		assignLevel(root.slug, 0);
-	}
-
-	// Group nodes by level
+	// Group nodes by level, sorted alphabetically for deterministic output
 	const nodesByLevel = new Map<number, TSlug[]>();
 	for (const [slug, level] of levels) {
-		if (!nodesByLevel.has(level)) {
-			nodesByLevel.set(level, []);
-		}
+		if (!nodesByLevel.has(level)) nodesByLevel.set(level, []);
 		nodesByLevel.get(level)?.push(slug);
 	}
-
-	// Initial ordering by slug (alphabetically) to create a consistent starting point
-	for (const [level, slugs] of nodesByLevel) {
+	for (const slugs of nodesByLevel.values()) {
 		slugs.sort((a, b) => a.localeCompare(b));
-		nodesByLevel.set(level, slugs);
 	}
 
-	const maxLevel = Math.max(...levels.values());
+	const maxLevel = Math.max(...levels.values(), 0);
 
-	// Anti-crossing optimization using weighted median method
-	const optimizeCrossings = (iterations = 20) => {
-		for (let iter = 0; iter < iterations; iter++) {
-			// Top-down pass
-			for (let level = 1; level <= maxLevel; level++) {
-				const slugs = nodesByLevel.get(level) ?? [];
-				if (slugs.length <= 1) continue;
-
-				const priorities: Array<{
-					slug: TSlug;
-					value: number;
-					weight: number;
-				}> = [];
-
-				for (const slug of slugs) {
-					const parents = parentsMap.get(slug) ?? [];
-					const weight = parents.length;
-
-					if (parents.length > 0) {
-						const prevLevel = nodesByLevel.get(level - 1) ?? [];
-						const parentIndices = parents
-							.map((p) => prevLevel.indexOf(p))
-							.filter((idx) => idx !== -1)
-							.sort((a, b) => a - b);
-
-						if (parentIndices.length > 0) {
-							// Use weighted average for better results with multiple connections
-							const avg =
-								parentIndices.reduce((sum, idx) => sum + idx, 0) /
-								parentIndices.length;
-							priorities.push({ slug, value: avg, weight });
-						} else {
-							priorities.push({
-								slug,
-								value: slugs.indexOf(slug),
-								weight: 0,
-							});
-						}
-					} else {
-						priorities.push({ slug, value: slugs.indexOf(slug), weight: 0 });
-					}
-				}
-
-				// Sort by priority value, then by weight (more connections = higher priority), then by slug
-				priorities.sort((a, b) => {
-					const diff = a.value - b.value;
-					if (Math.abs(diff) > 0.5) return diff;
-					// If very close in position, prioritize nodes with more connections
-					const weightDiff = b.weight - a.weight;
-					return weightDiff !== 0 ? weightDiff : a.slug.localeCompare(b.slug);
-				});
-				nodesByLevel.set(
-					level,
-					priorities.map((p) => p.slug),
-				);
-			}
-
-			// Bottom-up pass
-			for (let level = maxLevel - 1; level >= 0; level--) {
-				const slugs = nodesByLevel.get(level) ?? [];
-				if (slugs.length <= 1) continue;
-
-				const priorities: Array<{
-					slug: TSlug;
-					value: number;
-					weight: number;
-				}> = [];
-
-				for (const slug of slugs) {
-					const children = childrenMap.get(slug) ?? [];
-					const weight = children.length;
-
-					if (children.length > 0) {
-						const nextLevel = nodesByLevel.get(level + 1) ?? [];
-						const childIndices = children
-							.map((c) => nextLevel.indexOf(c))
-							.filter((idx) => idx !== -1)
-							.sort((a, b) => a - b);
-
-						if (childIndices.length > 0) {
-							// Use weighted average for better results with multiple connections
-							const avg =
-								childIndices.reduce((sum, idx) => sum + idx, 0) /
-								childIndices.length;
-							priorities.push({ slug, value: avg, weight });
-						} else {
-							priorities.push({
-								slug,
-								value: slugs.indexOf(slug),
-								weight: 0,
-							});
-						}
-					} else {
-						priorities.push({ slug, value: slugs.indexOf(slug), weight: 0 });
-					}
-				}
-
-				// Sort by priority value, then by weight (more connections = higher priority), then by slug
-				priorities.sort((a, b) => {
-					const diff = a.value - b.value;
-					if (Math.abs(diff) > 0.5) return diff;
-					// If very close in position, prioritize nodes with more connections
-					const weightDiff = b.weight - a.weight;
-					return weightDiff !== 0 ? weightDiff : a.slug.localeCompare(b.slug);
-				});
-				nodesByLevel.set(
-					level,
-					priorities.map((p) => p.slug),
-				);
-			}
-		}
+	// Crossing reduction: weighted median heuristic, 24 bi-directional passes
+	const median = (indices: number[]) => {
+		if (indices.length === 0) return -1;
+		const s = [...indices].sort((a, b) => a - b);
+		const m = Math.floor(s.length / 2);
+		return s.length % 2 === 1 ? s[m] : (s[m - 1] + s[m]) / 2;
 	};
 
-	optimizeCrossings(20);
-
-	// Node dimensions
-	const nodeWidth = 150;
-	const nodeHeight = 100;
-	const horizontalPadding = 100; // Space between levels
-	const verticalPadding = 40; // Space between nodes in same level
-
-	// Calculate required width based on levels
-	const minLevelWidth = nodeWidth + horizontalPadding;
-	const requiredWidth = (maxLevel + 1) * minLevelWidth;
-	const actualWidth = Math.max(width, requiredWidth);
-	const levelWidth = actualWidth / (maxLevel + 1);
-
-	// Position nodes
-	const positions = new Map<TSlug, { x: number; y: number }>();
-
-	for (const [level, slugs] of nodesByLevel) {
-		const x = levelWidth * (level + 0.5); // Left to right
-
-		// Calculate required height for this level
-		const nodesHeight = slugs.length * nodeHeight;
-		const paddingHeight = (slugs.length - 1) * verticalPadding;
-		const totalRequiredHeight = nodesHeight + paddingHeight;
-		const actualHeight = Math.max(height, totalRequiredHeight);
-
-		// Center the nodes vertically if there's extra space
-		const startY = (actualHeight - totalRequiredHeight) / 2;
-		const spacing = nodeHeight + verticalPadding;
-
-		slugs.forEach((slug, index) => {
-			const y = startY + spacing * index + nodeHeight / 2;
-			positions.set(slug, { x, y });
-		});
-	}
-
-	// Calculate label positions along edges to avoid collisions
-	const edgeLabelOffsets = new Map<string, { dx: number; dy: number }>();
-	const labelCollisionThreshold = options.labelCollisionThreshold ?? 80; // Distance threshold for collision detection
-
-	// Calculate info for all edges
-	const edgeInfo: Array<{
-		key: string;
-		sourceX: number;
-		sourceY: number;
-		targetX: number;
-		targetY: number;
-		midX: number;
-		midY: number;
-	}> = [];
-
-	for (const rel of relationships) {
-		const sourcePos = positions.get(rel.sourceNodeSlug);
-		const targetPos = positions.get(rel.targetNodeSlug);
-		if (!sourcePos || !targetPos) continue;
-
-		const key = `${rel.sourceNodeSlug}-${rel.targetNodeSlug}`;
-		edgeInfo.push({
-			key,
-			sourceX: sourcePos.x,
-			sourceY: sourcePos.y,
-			targetX: targetPos.x,
-			targetY: targetPos.y,
-			midX: (sourcePos.x + targetPos.x) / 2,
-			midY: (sourcePos.y + targetPos.y) / 2,
-		});
-	}
-
-	// Sort edges by position for consistent ordering
-	edgeInfo.sort((a, b) => {
-		const xDiff = a.midX - b.midX;
-		return xDiff !== 0 ? xDiff : a.midY - b.midY;
-	});
-
-	// Track occupied label positions
-	const occupiedPositions: Array<{
-		x: number;
-		y: number;
-	}> = [];
-
-	// Assign positions along each edge to avoid collisions
-	for (const edge of edgeInfo) {
-		const positionsToTry = [0.5, 0.4, 0.6, 0.3, 0.7, 0.25, 0.75, 0.2, 0.8]; // Try different positions along the edge
-		let bestPosition = 0.5;
-		let bestDistance = 0;
-
-		for (const t of positionsToTry) {
-			const x = edge.sourceX + (edge.targetX - edge.sourceX) * t;
-			const y = edge.sourceY + (edge.targetY - edge.sourceY) * t;
-
-			// Find minimum distance to any occupied position
-			let minDist = Infinity;
-			for (const occupied of occupiedPositions) {
-				const dist = Math.sqrt((x - occupied.x) ** 2 + (y - occupied.y) ** 2);
-				minDist = Math.min(minDist, dist);
-			}
-
-			// Use this position if it's better than what we have
-			if (minDist > bestDistance) {
-				bestDistance = minDist;
-				bestPosition = t;
-			}
-
-			// If we found a position far enough away, use it
-			if (minDist > labelCollisionThreshold) {
-				bestPosition = t;
-				break;
-			}
+	for (let iter = 0; iter < 24; iter++) {
+		// Top-down pass
+		for (let level = 1; level <= maxLevel; level++) {
+			const slugs = nodesByLevel.get(level) ?? [];
+			const prev = nodesByLevel.get(level - 1) ?? [];
+			slugs.sort((a, b) => {
+				const ai = median(
+					(parentsMap.get(a) ?? [])
+						.map((p) => prev.indexOf(p))
+						.filter((i) => i !== -1),
+				);
+				const bi = median(
+					(parentsMap.get(b) ?? [])
+						.map((p) => prev.indexOf(p))
+						.filter((i) => i !== -1),
+				);
+				return ai !== bi ? ai - bi : a.localeCompare(b);
+			});
 		}
-
-		// Calculate offset from midpoint
-		const finalX = edge.sourceX + (edge.targetX - edge.sourceX) * bestPosition;
-		const finalY = edge.sourceY + (edge.targetY - edge.sourceY) * bestPosition;
-		const offsetX = finalX - edge.midX;
-		const offsetY = finalY - edge.midY;
-
-		edgeLabelOffsets.set(edge.key, { dx: offsetX, dy: offsetY });
-		occupiedPositions.push({ x: finalX, y: finalY });
+		// Bottom-up pass
+		for (let level = maxLevel - 1; level >= 0; level--) {
+			const slugs = nodesByLevel.get(level) ?? [];
+			const next = nodesByLevel.get(level + 1) ?? [];
+			slugs.sort((a, b) => {
+				const ai = median(
+					(childrenMap.get(a) ?? [])
+						.map((c) => next.indexOf(c))
+						.filter((i) => i !== -1),
+				);
+				const bi = median(
+					(childrenMap.get(b) ?? [])
+						.map((c) => next.indexOf(c))
+						.filter((i) => i !== -1),
+				);
+				return ai !== bi ? ai - bi : a.localeCompare(b);
+			});
+		}
 	}
 
-	// Return formatted result with edge label offsets
+	// Compute canvas width: enough to fit all levels with gaps
+	const levelCount = maxLevel + 1;
+	const levelSpan = nodeWidth + horizontalGap;
+	const actualWidth = Math.max(width, levelCount * levelSpan + horizontalGap);
+	const columnWidth = actualWidth / levelCount;
+
+	// Position nodes as top-left corners, centered within their column and level group
+	const positions = new Map<TSlug, { x: number; y: number }>();
+	for (const [level, slugs] of nodesByLevel) {
+		// Center node horizontally within its column
+		const x = columnWidth * level + (columnWidth - nodeWidth) / 2;
+
+		// Center the level group vertically within the canvas
+		const groupHeight =
+			slugs.length * nodeHeight + (slugs.length - 1) * verticalGap;
+		const actualHeight = Math.max(height, groupHeight + verticalGap * 2);
+		const startY = (actualHeight - groupHeight) / 2;
+
+		slugs.forEach((slug, i) => {
+			positions.set(slug, { x, y: startY + i * (nodeHeight + verticalGap) });
+		});
+	}
+
+	// Edge label collision avoidance along each edge
+	// Offsets are relative to the center of the edge (between the two node centers)
+	const nodeCenter = (slug: TSlug) => {
+		const pos = positions.get(slug);
+		if (!pos) return null;
+		return { x: pos.x + nodeWidth / 2, y: pos.y + nodeHeight / 2 };
+	};
+
+	const edgeLabelOffsets = new Map<string, { dx: number; dy: number }>();
+	const occupied: { x: number; y: number }[] = [];
+
+	const edges = relationships
+		.map((rel) => {
+			const src = nodeCenter(rel.sourceNodeSlug);
+			const tgt = nodeCenter(rel.targetNodeSlug);
+			if (!src || !tgt) return null;
+			return {
+				key: `${rel.sourceNodeSlug}-${rel.targetNodeSlug}`,
+				sx: src.x,
+				sy: src.y,
+				tx: tgt.x,
+				ty: tgt.y,
+				mx: (src.x + tgt.x) / 2,
+				my: (src.y + tgt.y) / 2,
+			};
+		})
+		.filter(Boolean) as Array<{
+		key: string;
+		sx: number;
+		sy: number;
+		tx: number;
+		ty: number;
+		mx: number;
+		my: number;
+	}>;
+
+	edges.sort((a, b) => a.mx - b.mx || a.my - b.my);
+
+	for (const edge of edges) {
+		let bestT = 0.5;
+		let bestDist = -1;
+		for (const t of [0.5, 0.4, 0.6, 0.3, 0.7, 0.25, 0.75]) {
+			const cx = edge.sx + (edge.tx - edge.sx) * t;
+			const cy = edge.sy + (edge.ty - edge.sy) * t;
+			const minDist = occupied.reduce(
+				(min, o) => Math.min(min, Math.hypot(cx - o.x, cy - o.y)),
+				Infinity,
+			);
+			if (minDist > bestDist) {
+				bestDist = minDist;
+				bestT = t;
+			}
+			if (minDist >= labelCollisionThreshold) break;
+		}
+		const fx = edge.sx + (edge.tx - edge.sx) * bestT;
+		const fy = edge.sy + (edge.ty - edge.sy) * bestT;
+		edgeLabelOffsets.set(edge.key, { dx: fx - edge.mx, dy: fy - edge.my });
+		occupied.push({ x: fx, y: fy });
+	}
+
 	return {
 		nodes: Object.fromEntries(
 			nodes.map((n) => {

@@ -8,7 +8,8 @@ type props = {
 	target: TNode;
 	layoutNodes: TLayout;
 	description: TDescription;
-	labelOffset?: { dx: number; dy: number };
+	labelOffset: { dx: number; dy: number };
+	arrowSize: number;
 };
 
 const RelationshipVisualizerDisplay = ({
@@ -16,53 +17,110 @@ const RelationshipVisualizerDisplay = ({
 	target,
 	layoutNodes,
 	description,
-	labelOffset = { dx: 0, dy: 0 },
+	labelOffset,
+	arrowSize,
 }: props) => {
 	if (!source || !target) return;
 	if (!layoutNodes[source.slug] || !layoutNodes[target.slug]) return;
 	const sourceCenterPosition = getCenterPosition(layoutNodes[source.slug]);
 	const targetCenterPosition = getCenterPosition(layoutNodes[target.slug]);
 
-	const height = targetCenterPosition.y - sourceCenterPosition.y;
-	const width = targetCenterPosition.x - sourceCenterPosition.x;
+	const dx = targetCenterPosition.x - sourceCenterPosition.x;
+	const dy = targetCenterPosition.y - sourceCenterPosition.y;
+	const diagonal = Math.sqrt(dx * dx + dy * dy);
+	if (diagonal === 0) return;
 
-	const diagonal = Math.sqrt(height * height + width * width);
+	// Unit direction vector from source to target
+	const ux = dx / diagonal;
+	const uy = dy / diagonal;
 
-	const angle = `${(width === Math.abs(width) && height === Math.abs(height)) || (width !== Math.abs(width) && height !== Math.abs(height)) ? "" : "-"}${Math.asin(Math.abs(height) / diagonal)}rad`;
+	// Exact rectangle edge intersection:
+	// t = min(halfW / |ux|, halfH / |uy|) gives the distance from center to edge along the unit vector
+	const rectEdgeDist = (halfW: number, halfH: number) =>
+		Math.min(
+			ux !== 0 ? halfW / Math.abs(ux) : Infinity,
+			uy !== 0 ? halfH / Math.abs(uy) : Infinity,
+		);
+
+	const sourceLayout = layoutNodes[source.slug];
+	const targetLayout = layoutNodes[target.slug];
+
+	const sourceDist = rectEdgeDist(
+		sourceLayout.size.width / 2,
+		sourceLayout.size.height / 2,
+	);
+	const startX = sourceCenterPosition.x + ux * sourceDist;
+	const startY = sourceCenterPosition.y + uy * sourceDist;
+
+	const targetDist = rectEdgeDist(
+		targetLayout.size.width / 2,
+		targetLayout.size.height / 2,
+	);
+	const endX = targetCenterPosition.x - ux * targetDist;
+	const endY = targetCenterPosition.y - uy * targetDist;
+
+	const svgLeft = Math.min(startX, endX);
+	const svgTop = Math.min(startY, endY);
+	const svgWidth = Math.max(Math.abs(endX - startX), 1);
+	const svgHeight = Math.max(Math.abs(endY - startY), 1);
+
+	// Coordinates relative to SVG bounding box
+	const x1 = startX - svgLeft;
+	const y1 = startY - svgTop;
+	const x2 = endX - svgLeft;
+	const y2 = endY - svgTop;
+
+	// Arrowhead at target edge
+	const angle = Math.atan2(y2 - y1, x2 - x1);
+	const arrowPoints = [
+		`${x2},${y2}`,
+		`${x2 - arrowSize * Math.cos(angle - Math.PI / 6)},${y2 - arrowSize * Math.sin(angle - Math.PI / 6)}`,
+		`${x2 - arrowSize * Math.cos(angle + Math.PI / 6)},${y2 - arrowSize * Math.sin(angle + Math.PI / 6)}`,
+	].join(" ");
+
+	// Label position relative to SVG bounding box
+	const labelX = (x1 + x2) / 2 + labelOffset.dx;
+	const labelY = (y1 + y2) / 2 + labelOffset.dy;
 
 	return (
 		<div
-			className="absolute flex"
+			className="absolute"
 			style={{
-				top: Math.min(sourceCenterPosition.y, targetCenterPosition.y),
-				left: Math.min(sourceCenterPosition.x, targetCenterPosition.x),
-				height: Math.abs(height),
-				width: Math.abs(width),
+				top: svgTop,
+				left: svgLeft,
+				width: svgWidth,
+				height: svgHeight,
+				overflow: "visible",
 			}}
 		>
-			<div className="flex size-full relative">
-				<div
-					className={`absolute bg-black ${sourceCenterPosition.x < targetCenterPosition.x ? "left-0" : "right-0"} ${sourceCenterPosition.y < targetCenterPosition.y ? "top-0" : "bottom-0"} `}
-					style={{
-						width: diagonal,
-						height: 2,
-						rotate: angle,
-						transformOrigin: `${sourceCenterPosition.x < targetCenterPosition.x ? "left" : "right"} ${sourceCenterPosition.y < targetCenterPosition.y ? "top" : "bottom"}`,
-					}}
+			<svg
+				width={svgWidth}
+				height={svgHeight}
+				aria-hidden="true"
+				style={{ position: "absolute", top: 0, left: 0, overflow: "visible" }}
+			>
+				<line
+					x1={x1}
+					y1={y1}
+					x2={x2}
+					y2={y2}
+					stroke="#94a3b8"
+					strokeWidth={1.5}
 				/>
-				{description && (
-					<span
-						className="absolute bg-white px-2 py-1 z-10 text-xs rounded border text-wrap break-words max-w-32"
-						style={{
-							left: `calc(50% + ${labelOffset.dx}px)`,
-							top: `calc(50% + ${labelOffset.dy}px)`,
-							transform: "translate(-50%, -50%)",
-						}}
-					>
-						{description}
-					</span>
-				)}
-			</div>
+				<polygon points={arrowPoints} fill="#94a3b8" />
+			</svg>
+			{description && (
+				<span
+					className="absolute z-10 px-2 py-0.5 text-xs text-gray-600 bg-white border border-gray-200 rounded-full shadow-sm text-wrap line-clamp-3 overflow-hidden text-ellipsis max-w-[8rem]"
+					style={{
+						left: labelX,
+						top: labelY,
+						transform: "translate(-50%, -50%)",
+					}}
+				>
+					{description}
+				</span>
+			)}
 		</div>
 	);
 };

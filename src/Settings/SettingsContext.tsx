@@ -15,12 +15,12 @@ const STORAGE_KEY = "structsphere-settings";
 
 const defaultSettings: TSettings = {
 	layout: {
-		iterations: 600,
-		repulsion: 5000,
-		springLength: 350,
-		springStrength: 0.1,
-		damping: 0.9,
+		nodeWidth: 150,
+		nodeHeight: 100,
+		horizontalGap: 80,
+		verticalGap: 40,
 		labelCollisionThreshold: 80,
+		arrowSize: 12,
 	},
 	chat: {
 		geminiApiKey: "",

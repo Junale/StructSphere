@@ -208,7 +208,7 @@ const SettingsDisplay = () => {
 								Layout Settings
 							</h3>
 							<p className="text-sm text-slate-600">
-								Adjust the force-directed graph layout parameters
+								Adjust node dimensions and spacing for the diagram layout
 							</p>
 						</div>
 						<div className="border-b border-slate-200" />
@@ -216,24 +216,26 @@ const SettingsDisplay = () => {
 						<div className="grid md:grid-cols-2 gap-6">
 							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 								<label
-									htmlFor="iterations"
+									htmlFor="nodeWidth"
 									className="block text-sm font-semibold text-slate-700 mb-1"
 								>
-									Iterations
+									Node Width
 								</label>
 								<p className="text-xs text-slate-500 mb-3">
-									Number of simulation steps
+									Width of each node in pixels (default: 150)
 								</p>
 								<input
 									type="number"
-									id="iterations"
-									value={tempSettings.layout.iterations}
+									id="nodeWidth"
+									min="80"
+									max="400"
+									value={tempSettings.layout.nodeWidth ?? 150}
 									onChange={(e) =>
 										setTempSettings({
 											...tempSettings,
 											layout: {
 												...tempSettings.layout,
-												iterations: parseInt(e.target.value, 10),
+												nodeWidth: parseInt(e.target.value, 10),
 											},
 										})
 									}
@@ -242,24 +244,26 @@ const SettingsDisplay = () => {
 							</div>
 							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 								<label
-									htmlFor="repulsion"
+									htmlFor="nodeHeight"
 									className="block text-sm font-semibold text-slate-700 mb-1"
 								>
-									Repulsion Force
+									Node Height
 								</label>
 								<p className="text-xs text-slate-500 mb-3">
-									Force between unconnected nodes
+									Height of each node in pixels (default: 100)
 								</p>
 								<input
 									type="number"
-									id="repulsion"
-									value={tempSettings.layout.repulsion}
+									id="nodeHeight"
+									min="50"
+									max="300"
+									value={tempSettings.layout.nodeHeight ?? 100}
 									onChange={(e) =>
 										setTempSettings({
 											...tempSettings,
 											layout: {
 												...tempSettings.layout,
-												repulsion: parseInt(e.target.value, 10),
+												nodeHeight: parseInt(e.target.value, 10),
 											},
 										})
 									}
@@ -268,24 +272,26 @@ const SettingsDisplay = () => {
 							</div>
 							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 								<label
-									htmlFor="springLength"
+									htmlFor="horizontalGap"
 									className="block text-sm font-semibold text-slate-700 mb-1"
 								>
-									Spring Length
+									Horizontal Gap
 								</label>
 								<p className="text-xs text-slate-500 mb-3">
-									Ideal distance between connected nodes
+									Gap between node columns in pixels (default: 80)
 								</p>
 								<input
 									type="number"
-									id="springLength"
-									value={tempSettings.layout.springLength}
+									id="horizontalGap"
+									min="20"
+									max="400"
+									value={tempSettings.layout.horizontalGap ?? 80}
 									onChange={(e) =>
 										setTempSettings({
 											...tempSettings,
 											layout: {
 												...tempSettings.layout,
-												springLength: parseInt(e.target.value, 10),
+												horizontalGap: parseInt(e.target.value, 10),
 											},
 										})
 									}
@@ -294,52 +300,26 @@ const SettingsDisplay = () => {
 							</div>
 							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 								<label
-									htmlFor="springStrength"
+									htmlFor="verticalGap"
 									className="block text-sm font-semibold text-slate-700 mb-1"
 								>
-									Spring Strength
+									Vertical Gap
 								</label>
 								<p className="text-xs text-slate-500 mb-3">
-									Strength of connection forces
+									Gap between nodes in the same column in pixels (default: 40)
 								</p>
 								<input
 									type="number"
-									id="springStrength"
-									step="0.01"
-									value={tempSettings.layout.springStrength}
+									id="verticalGap"
+									min="10"
+									max="200"
+									value={tempSettings.layout.verticalGap ?? 40}
 									onChange={(e) =>
 										setTempSettings({
 											...tempSettings,
 											layout: {
 												...tempSettings.layout,
-												springStrength: parseFloat(e.target.value),
-											},
-										})
-									}
-									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white font-medium text-slate-800"
-								/>
-							</div>
-							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-								<label
-									htmlFor="damping"
-									className="block text-sm font-semibold text-slate-700 mb-1"
-								>
-									Damping
-								</label>
-								<p className="text-xs text-slate-500 mb-3">
-									Stabilization factor
-								</p>
-								<input
-									type="number"
-									id="damping"
-									step="0.01"
-									value={tempSettings.layout.damping}
-									onChange={(e) =>
-										setTempSettings({
-											...tempSettings,
-											layout: {
-												...tempSettings.layout,
-												damping: parseFloat(e.target.value),
+												verticalGap: parseInt(e.target.value, 10),
 											},
 										})
 									}
@@ -354,18 +334,47 @@ const SettingsDisplay = () => {
 									Label Collision Threshold
 								</label>
 								<p className="text-xs text-slate-500 mb-3">
-									Minimum distance between edge labels
+									Minimum distance between edge labels (default: 80)
 								</p>
 								<input
 									type="number"
 									id="labelCollisionThreshold"
-									value={tempSettings.layout.labelCollisionThreshold}
+									min="0"
+									value={tempSettings.layout.labelCollisionThreshold ?? 80}
 									onChange={(e) =>
 										setTempSettings({
 											...tempSettings,
 											layout: {
 												...tempSettings.layout,
 												labelCollisionThreshold: parseInt(e.target.value, 10),
+											},
+										})
+									}
+									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white font-medium text-slate-800"
+								/>
+							</div>
+							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
+								<label
+									htmlFor="arrowSize"
+									className="block text-sm font-semibold text-slate-700 mb-1"
+								>
+									Arrow Size
+								</label>
+								<p className="text-xs text-slate-500 mb-3">
+									Size of relationship arrowheads in pixels (default: 12)
+								</p>
+								<input
+									type="number"
+									id="arrowSize"
+									min="4"
+									max="32"
+									value={tempSettings.layout.arrowSize ?? 12}
+									onChange={(e) =>
+										setTempSettings({
+											...tempSettings,
+											layout: {
+												...tempSettings.layout,
+												arrowSize: parseInt(e.target.value, 10),
 											},
 										})
 									}

@@ -1,16 +1,16 @@
 export type TLayoutSettings = {
-	iterations?: number;
-	repulsion?: number;
-	springLength?: number;
-	springStrength?: number;
-	damping?: number;
-	labelCollisionThreshold?: number;
+	nodeWidth: number;
+	nodeHeight: number;
+	horizontalGap: number;
+	verticalGap: number;
+	labelCollisionThreshold: number;
+	arrowSize: number;
 };
 
 export type TChatSettings = {
-	geminiApiKey?: string;
-	maxIterations?: number;
-	model?: string;
+	geminiApiKey: string;
+	maxIterations: number;
+	model: string;
 };
 
 export type TSettings = {

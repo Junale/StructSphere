@@ -134,6 +134,7 @@ const DiagramVisualizerDisplay = () => {
 							layoutNodes={layout.nodes}
 							description={relationship.description || ""}
 							labelOffset={labelOffset}
+							arrowSize={settings.layout.arrowSize}
 						/>
 					);
 				})}
