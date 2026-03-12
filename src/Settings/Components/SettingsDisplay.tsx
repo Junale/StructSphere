@@ -53,6 +53,75 @@ const SettingsDisplay = () => {
 					)}
 
 					<form onSubmit={handleSave} className="space-y-6">
+						{/* AI Settings Section */}
+						<div className="mb-8">
+							<div className="flex items-center gap-3 mb-2">
+								<div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center shadow-md">
+									<svg
+										className="w-6 h-6 text-white"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+										aria-hidden="true"
+									>
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											strokeWidth={2}
+											d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+										/>
+									</svg>
+								</div>
+								<div>
+									<h3 className="text-2xl font-semibold text-slate-800">
+										AI Assistant Settings
+									</h3>
+									<p className="text-sm text-slate-600">
+										Configure Gemini API for the AI chat assistant
+									</p>
+								</div>
+							</div>
+							<div className="border-b border-slate-200 mb-4" />
+
+							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
+								<label
+									htmlFor="geminiApiKey"
+									className="block text-sm font-semibold text-slate-700 mb-1"
+								>
+									Gemini API Key
+								</label>
+								<p className="text-xs text-slate-500 mb-3">
+									Get your API key from{" "}
+									<a
+										href="https://aistudio.google.com/apikey"
+										target="_blank"
+										rel="noopener noreferrer"
+										className="text-blue-600 hover:underline"
+									>
+										Google AI Studio
+									</a>
+								</p>
+								<input
+									type="password"
+									id="geminiApiKey"
+									value={tempSettings.geminiApiKey || ""}
+									onChange={(e) =>
+										setTempSettings({
+											...tempSettings,
+											geminiApiKey: e.target.value,
+										})
+									}
+									placeholder="Enter your Gemini API key"
+									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition bg-white font-mono text-sm text-slate-800"
+								/>
+								<p className="text-xs text-slate-500 mt-2">
+									Your API key is stored locally and never sent to any server
+									except Google's Gemini API
+								</p>
+							</div>
+						</div>
+
+						{/* Layout Settings Section */}
 						<div className="flex items-center gap-3 mb-2">
 							<div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-lg flex items-center justify-center shadow-md">
 								<svg

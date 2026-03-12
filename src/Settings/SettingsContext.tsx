@@ -21,6 +21,7 @@ const defaultSettings: TSettings = {
 		springStrength: 0.1,
 		damping: 0.9,
 	},
+	geminiApiKey: "",
 };
 
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({

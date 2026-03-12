@@ -3,6 +3,7 @@ import { DiagramsProvider } from "@/Diagram/DiagramsContext";
 import { EntitiesProvider } from "@/Entity/EntityContext";
 import { NodesProvider } from "@/Node/NodesContext";
 import { RelationshipsProvider } from "@/Relationship/RelationshipsContext";
+import { ChatProvider } from "./Chat/ChatContext";
 import { SettingsProvider } from "./Settings/SettingsContext";
 
 export const SystemProvider: React.FC<{
@@ -10,13 +11,15 @@ export const SystemProvider: React.FC<{
 }> = ({ children }) => {
 	return (
 		<SettingsProvider>
-			<EntitiesProvider>
-				<DiagramsProvider>
-					<NodesProvider>
-						<RelationshipsProvider>{children}</RelationshipsProvider>
-					</NodesProvider>
-				</DiagramsProvider>
-			</EntitiesProvider>
+			<ChatProvider>
+				<EntitiesProvider>
+					<DiagramsProvider>
+						<NodesProvider>
+							<RelationshipsProvider>{children}</RelationshipsProvider>
+						</NodesProvider>
+					</DiagramsProvider>
+				</EntitiesProvider>
+			</ChatProvider>
 		</SettingsProvider>
 	);
 };

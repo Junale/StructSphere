@@ -8,4 +8,5 @@ export type TLayoutSettings = {
 
 export type TSettings = {
 	layout: TLayoutSettings;
+	geminiApiKey?: string;
 };
