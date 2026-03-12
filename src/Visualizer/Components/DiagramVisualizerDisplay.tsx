@@ -3,10 +3,10 @@ import { useParams } from "react-router-dom";
 import { useDiagrams } from "@/Diagram/DiagramsContext";
 import { useNodes } from "@/Node/NodesContext";
 import { useRelationships } from "@/Relationship/RelationshipsContext";
+import { useSettings } from "@/Settings/SettingsContext";
 import { layoutDiagram } from "@/Visualizer/layoutEngine";
 import EntityVisualizerDisplay from "./EntityVisualizerDisplay";
 import RelationshipVisualizerDisplay from "./RelationshipVisualizerDisplay";
-import { useSettings } from "@/Settings/SettingsContext";
 
 const DiagramVisualizerDisplay = () => {
 	const { slug } = useParams();
