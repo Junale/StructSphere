@@ -1,18 +1,18 @@
 // Gemini AI Service with Function Calling
 // Using the @google/genai package
 
-import type {
-	Content,
-	FunctionCall as GenAIFunctionCall,
-	GenerateContentConfig,
-	Part,
-	Schema,
-	Tool,
-} from "@google/genai";
-import { GoogleGenAI } from "@google/genai";
 import type { TChatMessageRole } from "./ChatTypes";
 import { toolDefinitions } from "./toolDefinitions";
 import { toolExecutors } from "./toolExecutors";
+import type {
+	Tool,
+	Schema,
+	Content,
+	GenerateContentConfig,
+	Part,
+	FunctionCall as GenAIFunctionCall,
+} from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 
 // Get API key from settings
 const getApiKey = (): string => {
@@ -37,14 +37,16 @@ StructSphere allows users to:
 - Add Nodes to diagrams (instances of entities)
 - Create Relationships between nodes
 
-You have access to tools that let you query and explore the user's data. Use these tools when the user asks questions about their system.
+You have access to tools that let you query, create, and update the user's data. Use these tools when the user asks questions about their system or wants to create/modify things.
 
 Guidelines:
 - Be concise and helpful
 - When showing data, format it clearly
 - Use tools to get accurate information rather than guessing
-- If the user wants to create or modify data, explain that you can only read data currently, but can help them understand what to do
-- Be proactive in exploring related data when relevant`;
+- You can create and update entities, diagrams, nodes, and relationships directly using the available tools
+- After creating or updating items, confirm the action to the user
+- Be proactive in exploring related data when relevant
+- When creating items, use descriptive and clear titles and descriptions`;
 
 interface Message {
 	role: TChatMessageRole;
@@ -175,10 +177,9 @@ export async function generateChatResponse(
 		}
 
 		// If we hit max iterations, return what we have
-		return (
-			response.text ||
-			"I've completed the requested operations, but couldn't generate a final response."
-		);
+		return response.text && response.text.length > 0
+			? response.text
+			: "I've completed the requested operations, but couldn't generate a final response.";
 	} catch (error) {
 		console.error("Gemini API Error:", error);
 		if (error instanceof Error) {
