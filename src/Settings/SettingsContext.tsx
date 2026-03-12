@@ -21,7 +21,11 @@ const defaultSettings: TSettings = {
 		springStrength: 0.1,
 		damping: 0.9,
 	},
-	geminiApiKey: "",
+	chat: {
+		geminiApiKey: "",
+		maxIterations: 5,
+		model: "gemini-3-flash-preview",
+	},
 };
 
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({

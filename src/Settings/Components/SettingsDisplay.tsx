@@ -104,11 +104,14 @@ const SettingsDisplay = () => {
 								<input
 									type="password"
 									id="geminiApiKey"
-									value={tempSettings.geminiApiKey || ""}
+									value={tempSettings.chat?.geminiApiKey || ""}
 									onChange={(e) =>
 										setTempSettings({
 											...tempSettings,
-											geminiApiKey: e.target.value,
+											chat: {
+												...tempSettings.chat,
+												geminiApiKey: e.target.value,
+											},
 										})
 									}
 									placeholder="Enter your Gemini API key"
@@ -119,34 +122,94 @@ const SettingsDisplay = () => {
 									except Google's Gemini API
 								</p>
 							</div>
-						</div>
 
-						{/* Layout Settings Section */}
-						<div className="flex items-center gap-3 mb-2">
-							<div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-lg flex items-center justify-center shadow-md">
-								<svg
-									className="w-6 h-6 text-white"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-									aria-hidden="true"
+							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
+								<label
+									htmlFor="maxIterations"
+									className="block text-sm font-semibold text-slate-700 mb-1"
 								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={2}
-										d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-									/>
-								</svg>
-							</div>
-							<div>
-								<h3 className="text-2xl font-semibold text-slate-800">
-									Layout Settings
-								</h3>
-								<p className="text-sm text-slate-600">
-									Adjust the force-directed graph layout parameters
+									Max Function Call Iterations
+								</label>
+								<p className="text-xs text-slate-500 mb-3">
+									Maximum number of function calling loops (default: 5)
+								</p>
+								<input
+									type="number"
+									id="maxIterations"
+									min="1"
+									max="20"
+									value={tempSettings.chat?.maxIterations || 5}
+									onChange={(e) =>
+										setTempSettings({
+											...tempSettings,
+											chat: {
+												...tempSettings.chat,
+												maxIterations: parseInt(e.target.value, 10),
+											},
+										})
+									}
+									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition bg-white font-medium text-slate-800"
+								/>
+								<p className="text-xs text-slate-500 mt-2">
+									Controls how many times the AI can call functions before
+									returning a response
 								</p>
 							</div>
+
+							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
+								<label
+									htmlFor="model"
+									className="block text-sm font-semibold text-slate-700 mb-1"
+								>
+									AI Model
+								</label>
+								<p className="text-xs text-slate-500 mb-3">
+									Specify the Gemini model to use (e.g., gemini-3-flash-preview,
+									gemini-3.1-flash-lite-preview)
+								</p>
+								<input
+									type="text"
+									id="model"
+									value={tempSettings.chat?.model || "gemini-3-flash-preview"}
+									onChange={(e) =>
+										setTempSettings({
+											...tempSettings,
+											chat: {
+												...tempSettings.chat,
+												model: e.target.value,
+											},
+										})
+									}
+									placeholder="gemini-3-flash-preview"
+									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition bg-white font-mono text-sm text-slate-800"
+								/>
+								<p className="text-xs text-slate-500 mt-2">
+									Choose a model that supports function calling for best results
+								</p>
+							</div>
+
+							<svg
+								className="w-6 h-6 text-white"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+								aria-hidden="true"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+								/>
+							</svg>
+						</div>
+						<div>
+							<h3 className="text-2xl font-semibold text-slate-800">
+								Layout Settings
+							</h3>
+							<p className="text-sm text-slate-600">
+								Adjust the force-directed graph layout parameters
+							</p>
 						</div>
 						<div className="border-b border-slate-200" />
 

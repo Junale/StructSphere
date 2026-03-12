@@ -14,18 +14,22 @@ import type {
 } from "@google/genai";
 import { GoogleGenAI } from "@google/genai";
 
-// Get API key from settings
-const getApiKey = (): string => {
+// Get settings from localStorage
+const getSettings = () => {
 	try {
 		const settings = localStorage.getItem("structsphere-settings");
 		if (settings) {
 			const parsed = JSON.parse(settings);
-			return parsed.geminiApiKey || "";
+			return {
+				apiKey: parsed.chat?.geminiApiKey || parsed.geminiApiKey || "",
+				maxIterations: parsed.chat?.maxIterations || 5,
+				model: parsed.chat?.model || "gemini-3-flash-preview",
+			};
 		}
 	} catch (error) {
-		console.error("Failed to get API key from settings:", error);
+		console.error("Failed to get settings:", error);
 	}
-	return "";
+	return { apiKey: "", maxIterations: 5, model: "gemini-3-flash-preview" };
 };
 
 // System prompt to guide the AI agent
@@ -64,7 +68,11 @@ interface FunctionResponse {
 export async function generateChatResponse(
 	conversationHistory: Message[],
 ): Promise<string> {
-	const apiKey = getApiKey();
+	const {
+		apiKey,
+		maxIterations: configuredMaxIterations,
+		model,
+	} = getSettings();
 
 	if (!apiKey) {
 		throw new Error(
@@ -109,7 +117,7 @@ export async function generateChatResponse(
 
 		// Create chat session
 		const chat = ai.chats.create({
-			model: "gemini-3-flash-preview",
+			model,
 			config,
 			history,
 		});
@@ -122,8 +130,8 @@ export async function generateChatResponse(
 		let response = await chat.sendMessage({ message: lastMessage });
 
 		// Handle function calling loop
-		let maxIterations = 5; // Prevent infinite loops
-		while (maxIterations > 0) {
+		let iterationsLeft = configuredMaxIterations; // Prevent infinite loops
+		while (iterationsLeft > 0) {
 			// Check if there are function calls
 			const functionCalls = response.functionCalls;
 
@@ -173,7 +181,7 @@ export async function generateChatResponse(
 			// Send function results back to the model
 			response = await chat.sendMessage({ message: functionResponseParts });
 
-			maxIterations--;
+			iterationsLeft--;
 		}
 
 		// If we hit max iterations, return what we have

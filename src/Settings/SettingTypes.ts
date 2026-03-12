@@ -6,7 +6,13 @@ export type TLayoutSettings = {
 	damping?: number;
 };
 
+export type TChatSettings = {
+	geminiApiKey?: string;
+	maxIterations?: number;
+	model?: string;
+};
+
 export type TSettings = {
 	layout: TLayoutSettings;
-	geminiApiKey?: string;
+	chat: TChatSettings;
 };
