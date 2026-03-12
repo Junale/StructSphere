@@ -197,7 +197,10 @@ const Home = () => {
 					<p className="text-slate-200">
 						All your data is stored securely in your browser's local storage and
 						never leaves your device. You have complete control over your
-						information.
+						information. Only AI interactions are sent to the google gemini api,
+						and you can clear your chat history at any time. We recommend using
+						the export feature to back up your data before clearing history, as
+						this action is irreversible.
 					</p>
 				</div>
 			</div>
