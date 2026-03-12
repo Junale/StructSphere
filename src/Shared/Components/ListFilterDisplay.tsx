@@ -11,9 +11,14 @@ const ListFilterDisplay = ({ itemType, items, onFilterChange }: props) => {
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const filtered = items.filter(
 			(item) =>
-				item.title.toLowerCase().includes(e.target.value.toLowerCase()) ||
-				item.description.toLowerCase().includes(e.target.value.toLowerCase()) ||
-				item.slug.toLowerCase().includes(e.target.value.toLowerCase()),
+				("title" in item &&
+					item.title.toLowerCase().includes(e.target.value.toLowerCase())) ||
+				("description" in item &&
+					item.description
+						.toLowerCase()
+						.includes(e.target.value.toLowerCase())) ||
+				("slug" in item &&
+					item.slug.toLowerCase().includes(e.target.value.toLowerCase())),
 		);
 		onFilterChange(filtered);
 	};
