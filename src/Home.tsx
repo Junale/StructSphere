@@ -107,6 +107,20 @@ const Home = () => {
 							continue your work.
 						</p>
 					</div>
+
+					<div className="bg-white border border-slate-200 rounded-2xl shadow-md p-6 space-y-3 hover:shadow-xl transition-all transform hover:-translate-y-1">
+						<div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-rose-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
+							🤖
+						</div>
+						<h3 className="text-xl font-semibold text-slate-800">
+							AI Assistant
+						</h3>
+						<p className="text-slate-600">
+							Chat with an intelligent AI agent powered by Google Gemini that
+							can query your entities, diagrams, nodes, and relationships. Get
+							instant insights and answers about your system architecture.
+						</p>
+					</div>
 				</div>
 
 				<div className="bg-white border-2 border-green-200 rounded-2xl shadow-lg p-8 space-y-4">
@@ -153,6 +167,11 @@ const Home = () => {
 							<strong className="text-slate-800">Export & Share:</strong>{" "}
 							Download your complete project as JSON to back up or share with
 							your team
+						</li>
+						<li className="pl-2">
+							<strong className="text-slate-800">Ask the AI:</strong> Click the
+							chat button in the bottom-right corner to interact with the AI
+							assistant and get instant answers about your system architecture
 						</li>
 					</ol>
 				</div>
