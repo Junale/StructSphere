@@ -10,6 +10,7 @@ export type LayoutOptions = {
 	springLength?: number;
 	springStrength?: number;
 	damping?: number;
+	labelCollisionThreshold?: number;
 };
 
 export function layoutDiagram(
@@ -227,7 +228,7 @@ export function layoutDiagram(
 
 	// Calculate label positions along edges to avoid collisions
 	const edgeLabelOffsets = new Map<string, { dx: number; dy: number }>();
-	const labelCollisionThreshold = 80; // Distance threshold for collision detection
+	const labelCollisionThreshold = options.labelCollisionThreshold ?? 80; // Distance threshold for collision detection
 
 	// Calculate info for all edges
 	const edgeInfo: Array<{

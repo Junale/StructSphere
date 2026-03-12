@@ -240,7 +240,6 @@ const SettingsDisplay = () => {
 									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white font-medium text-slate-800"
 								/>
 							</div>
-
 							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 								<label
 									htmlFor="repulsion"
@@ -267,7 +266,6 @@ const SettingsDisplay = () => {
 									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white font-medium text-slate-800"
 								/>
 							</div>
-
 							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 								<label
 									htmlFor="springLength"
@@ -294,7 +292,6 @@ const SettingsDisplay = () => {
 									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white font-medium text-slate-800"
 								/>
 							</div>
-
 							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 								<label
 									htmlFor="springStrength"
@@ -322,7 +319,6 @@ const SettingsDisplay = () => {
 									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white font-medium text-slate-800"
 								/>
 							</div>
-
 							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 								<label
 									htmlFor="damping"
@@ -350,6 +346,32 @@ const SettingsDisplay = () => {
 									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white font-medium text-slate-800"
 								/>
 							</div>
+							<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
+								<label
+									htmlFor="labelCollisionThreshold"
+									className="block text-sm font-semibold text-slate-700 mb-1"
+								>
+									Label Collision Threshold
+								</label>
+								<p className="text-xs text-slate-500 mb-3">
+									Minimum distance between edge labels
+								</p>
+								<input
+									type="number"
+									id="labelCollisionThreshold"
+									value={tempSettings.layout.labelCollisionThreshold}
+									onChange={(e) =>
+										setTempSettings({
+											...tempSettings,
+											layout: {
+												...tempSettings.layout,
+												labelCollisionThreshold: parseInt(e.target.value, 10),
+											},
+										})
+									}
+									className="w-full border-2 border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white font-medium text-slate-800"
+								/>
+							</div>{" "}
 						</div>
 
 						<div className="flex flex-wrap gap-3 pt-6 border-t border-slate-200">

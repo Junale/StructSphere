@@ -20,6 +20,7 @@ const defaultSettings: TSettings = {
 		springLength: 350,
 		springStrength: 0.1,
 		damping: 0.9,
+		labelCollisionThreshold: 80,
 	},
 	chat: {
 		geminiApiKey: "",

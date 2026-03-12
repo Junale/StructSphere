@@ -51,8 +51,8 @@ const RelationshipVisualizerDisplay = ({
 					}}
 				/>
 				{description && (
-					<div
-						className="absolute bg-white px-2 py-1 text-xs rounded border  whitespace-nowrap"
+					<span
+						className="absolute bg-white px-2 py-1 text-xs rounded border text-wrap break-words max-w-32"
 						style={{
 							left: `calc(50% + ${labelOffset.dx}px)`,
 							top: `calc(50% + ${labelOffset.dy}px)`,
@@ -60,7 +60,7 @@ const RelationshipVisualizerDisplay = ({
 						}}
 					>
 						{description}
-					</div>
+					</span>
 				)}
 			</div>
 		</div>

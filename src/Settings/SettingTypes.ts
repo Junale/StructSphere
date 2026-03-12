@@ -4,6 +4,7 @@ export type TLayoutSettings = {
 	springLength?: number;
 	springStrength?: number;
 	damping?: number;
+	labelCollisionThreshold?: number;
 };
 
 export type TChatSettings = {
