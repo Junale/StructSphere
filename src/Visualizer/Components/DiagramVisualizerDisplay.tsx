@@ -1,14 +1,14 @@
+import { toPng } from "html-to-image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDiagrams } from "@/Diagram/DiagramsContext";
 import { useNodes } from "@/Node/NodesContext";
 import { useRelationships } from "@/Relationship/RelationshipsContext";
 import { useSettings } from "@/Settings/SettingsContext";
+import type { TConversionStatus } from "@/Visualizer/ConverterTypes";
 import { layoutDiagram } from "@/Visualizer/layoutEngine";
 import EntityVisualizerDisplay from "./EntityVisualizerDisplay";
 import RelationshipVisualizerDisplay from "./RelationshipVisualizerDisplay";
-import type { TConversionStatus } from "@/Visualizer/ConverterTypes";
-import { toPng } from "html-to-image";
 
 const DiagramVisualizerDisplay = () => {
 	const { slug } = useParams();
