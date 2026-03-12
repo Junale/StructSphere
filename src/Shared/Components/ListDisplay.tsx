@@ -169,7 +169,7 @@ const ListDisplay = ({
 													/>
 												</svg>
 												<p className="text-lg font-medium mb-2">
-													No {itemType}s found
+													Nothing here...
 												</p>
 												<p className="text-sm">
 													Try adjusting your filters or create a new {itemType}
