@@ -38,7 +38,9 @@ const ImportExportDisplay = () => {
 	};
 
 	const handleImport = (event: FormEvent<HTMLFormElement>) => {
-		const fileInput = event.currentTarget.parentElement?.querySelector(
+		event.preventDefault();
+
+		const fileInput = event.currentTarget.querySelector(
 			"input[type='file']",
 		) as HTMLInputElement | null;
 		if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
@@ -46,7 +48,7 @@ const ImportExportDisplay = () => {
 			return;
 		}
 		const options = getOptions(event, "import-");
-		const importTechnique = event.currentTarget.parentElement?.querySelector(
+		const importTechnique = event.currentTarget.querySelector(
 			"input[name='import-technique']:checked",
 		) as HTMLInputElement | null;
 		if (!importTechnique) {
@@ -126,6 +128,7 @@ const ImportExportDisplay = () => {
 					"An error occurred while parsing the JSON file. Please try again.",
 				);
 			}
+			alert("Import successful!");
 		};
 		reader.onerror = (e) => {
 			console.error("Error reading file:", e);
@@ -135,6 +138,8 @@ const ImportExportDisplay = () => {
 	};
 
 	const handleExport = (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
 		const options = getOptions(event, "export-");
 		const data = {
 			entities: options.entities ? entities : undefined,
