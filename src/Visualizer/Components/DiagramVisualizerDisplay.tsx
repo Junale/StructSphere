@@ -7,6 +7,8 @@ import { useSettings } from "@/Settings/SettingsContext";
 import { layoutDiagram } from "@/Visualizer/layoutEngine";
 import EntityVisualizerDisplay from "./EntityVisualizerDisplay";
 import RelationshipVisualizerDisplay from "./RelationshipVisualizerDisplay";
+import type { TConversionStatus } from "@/Visualizer/ConverterTypes";
+import { toPng } from "html-to-image";
 
 const DiagramVisualizerDisplay = () => {
 	const { slug } = useParams();
@@ -14,6 +16,8 @@ const DiagramVisualizerDisplay = () => {
 	const { nodes } = useNodes();
 	const { relationships } = useRelationships();
 	const { settings } = useSettings();
+	const [conversionStatus, setConversionStatus] =
+		useState<TConversionStatus>("idle");
 	const ref = useRef<HTMLDivElement>(null);
 	const [dimensions, setDimensions] = useState({ width: 800, height: 500 });
 
@@ -45,6 +49,32 @@ const DiagramVisualizerDisplay = () => {
 		[diagramNodes, diagramRelationships, dimensions, settings],
 	);
 
+	const handleConvertToPNG = async () => {
+		if (!ref.current || !slug) return;
+
+		setConversionStatus("converting");
+
+		try {
+			// Use html-to-image to convert the diagram to PNG
+			const dataUrl = await toPng(ref.current, {
+				cacheBust: true,
+				backgroundColor: "#ffffff",
+			});
+
+			const link = document.createElement("a");
+			link.download = `${diagrams[slug].title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.png`;
+			link.href = dataUrl;
+			link.click();
+
+			setConversionStatus("success");
+			setTimeout(() => setConversionStatus("idle"), 2000);
+		} catch (error) {
+			console.error("Error converting to PNG:", error);
+			setConversionStatus("error");
+			setTimeout(() => setConversionStatus("idle"), 3000);
+		}
+	};
+
 	if (!slug) return <div>Diagram slug is required.</div>;
 
 	const diagram = diagrams[slug];
@@ -53,9 +83,25 @@ const DiagramVisualizerDisplay = () => {
 	return (
 		<div className="flex flex-col size-full">
 			{/* View Info Header */}
-			<div className="flex flex-col w-full h-fit p-4 border rounded-lg shadow-md items-center justify-center">
+			<div className="flex flex-col w-full h-fit p-4 border rounded-lg shadow-md items-center justify-center relative">
 				<h1 className="text-2xl font-bold mb-2">{diagram.title}</h1>
 				<span>{diagram.description}</span>
+				<div className="flex flex-col h-full justify-center items-center absolute top-0 right-0 p-2">
+					<button
+						type="button"
+						onClick={handleConvertToPNG}
+						disabled={!slug || conversionStatus === "converting"}
+						className="px-6 py-3 text-blue-600 font-semibold rounded-lg hover:text-blue-700 hover:cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+					>
+						{conversionStatus === "converting"
+							? "Converting..."
+							: conversionStatus === "success"
+								? "✓ Downloaded!"
+								: conversionStatus === "error"
+									? "✗ Error occurred"
+									: "Export as PNG"}
+					</button>
+				</div>
 			</div>
 
 			{/* View Content Visualization */}
