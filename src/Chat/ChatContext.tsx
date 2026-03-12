@@ -15,6 +15,9 @@ type ChatContextType = {
 	setActiveSession: (sessionId: string | null) => void;
 	sendMessage: (content: string) => Promise<void>;
 	clearHistory: (sessionId: string) => void;
+	setSessions: React.Dispatch<
+		React.SetStateAction<Record<string, TChatSession>>
+	>;
 };
 
 const ChatContext = createContext<ChatContextType | null>(null);
@@ -193,6 +196,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
 				setActiveSession,
 				sendMessage,
 				clearHistory,
+				setSessions,
 			}}
 		>
 			{children}

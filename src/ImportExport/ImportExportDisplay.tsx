@@ -5,6 +5,7 @@ import { useNodes } from "@/Node/NodesContext";
 import { useRelationships } from "@/Relationship/RelationshipsContext";
 import { useSettings } from "@/Settings/SettingsContext";
 import ImportExportOptionList from "./ImportExportOptionList";
+import { useChat } from "@/Chat/ChatContext";
 
 const ImportExportDisplay = () => {
 	const { entities, setEntities } = useEntities();
@@ -12,6 +13,7 @@ const ImportExportDisplay = () => {
 	const { relationships, setRelationships } = useRelationships();
 	const { nodes, setNodes } = useNodes();
 	const { settings, setSettings } = useSettings();
+	const { sessions, setSessions } = useChat();
 
 	const getOptions = (event: FormEvent<HTMLFormElement>, prefix: string) => {
 		const options = {
@@ -20,6 +22,7 @@ const ImportExportDisplay = () => {
 			relationships: false,
 			nodes: false,
 			settings: false,
+			sessions: false,
 		};
 		event.currentTarget
 			.querySelectorAll("input[type='checkbox']")
@@ -43,7 +46,7 @@ const ImportExportDisplay = () => {
 			return;
 		}
 		const options = getOptions(event, "import-");
-		const importTechnique = event.currentTarget.querySelector(
+		const importTechnique = event.currentTarget.parentElement?.querySelector(
 			"input[name='import-technique']:checked",
 		) as HTMLInputElement | null;
 		if (!importTechnique) {
@@ -106,6 +109,17 @@ const ImportExportDisplay = () => {
 						setSettings(data.settings);
 					}
 				}
+				if (
+					data.sessions &&
+					typeof data.sessions === "object" &&
+					options.sessions
+				) {
+					if (importTechnique.value === "merge") {
+						setSessions((prev) => ({ ...prev, ...data.sessions }));
+					} else {
+						setSessions(data.sessions);
+					}
+				}
 			} catch (error) {
 				console.error("Error parsing JSON file:", error);
 				alert(
@@ -128,6 +142,7 @@ const ImportExportDisplay = () => {
 			nodes: options.nodes ? nodes : undefined,
 			relationships: options.relationships ? relationships : undefined,
 			settings: options.settings ? settings : undefined,
+			sessions: options.sessions ? sessions : undefined,
 		};
 		const json = JSON.stringify(data, null, 2);
 		const blob = new Blob([json], { type: "application/json" });
