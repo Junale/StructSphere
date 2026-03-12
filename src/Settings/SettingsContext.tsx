@@ -24,8 +24,8 @@ const defaultSettings: TSettings = {
 	},
 	chat: {
 		geminiApiKey: "",
-		maxIterations: 5,
-		model: "gemini-3-flash-preview",
+		maxIterations: 20,
+		model: "gemini-3.1-flash-lite-preview",
 	},
 };
 

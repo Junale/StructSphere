@@ -20,16 +20,26 @@ const getSettings = () => {
 		const settings = localStorage.getItem("structsphere-settings");
 		if (settings) {
 			const parsed = JSON.parse(settings);
-			return {
-				apiKey: parsed.chat?.geminiApiKey || parsed.geminiApiKey || "",
-				maxIterations: parsed.chat?.maxIterations || 5,
-				model: parsed.chat?.model || "gemini-3-flash-preview",
-			};
+			if (
+				parsed.chat.geminiApiKey &&
+				parsed.chat.model &&
+				parsed.chat.maxIterations
+			) {
+				return {
+					apiKey: parsed.chat.geminiApiKey,
+					maxIterations: parsed.chat.maxIterations,
+					model: parsed.chat.model,
+				};
+			}
 		}
 	} catch (error) {
 		console.error("Failed to get settings:", error);
 	}
-	return { apiKey: "", maxIterations: 5, model: "gemini-3-flash-preview" };
+	return {
+		apiKey: "",
+		maxIterations: 20,
+		model: "gemini-3.1-flash-lite-preview",
+	};
 };
 
 // System prompt to guide the AI agent
