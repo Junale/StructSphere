@@ -5,14 +5,14 @@ import { useDiagrams } from "@/Diagram/DiagramsContext";
 import { useNodes } from "@/Node/NodesContext";
 import { useRelationships } from "@/Relationship/RelationshipsContext";
 import { useSettings } from "@/Settings/SettingsContext";
+import CheckmarkIcon from "@/Shared/Components/Icons/CheckmarkIcon";
+import ExportIcon from "@/Shared/Components/Icons/ExportIcon";
+import LoadingSpinnerIcon from "@/Shared/Components/Icons/LoadingSpinnerIcon";
+import WarningIcon from "@/Shared/Components/Icons/WarningIcon";
 import type { TConversionStatus } from "@/Visualizer/ConverterTypes";
 import { layoutDiagram } from "@/Visualizer/layoutEngine";
 import EntityVisualizerDisplay from "./EntityVisualizerDisplay";
 import RelationshipVisualizerDisplay from "./RelationshipVisualizerDisplay";
-import LoadingSpinnerIcon from "@/Shared/Components/Icons/LoadingSpinnerIcon";
-import CheckmarkIcon from "@/Shared/Components/Icons/CheckmarkIcon";
-import WarningIcon from "@/Shared/Components/Icons/WarningIcon";
-import ExportIcon from "@/Shared/Components/Icons/ExportIcon";
 
 const DiagramVisualizerDisplay = () => {
 	const { slug } = useParams();
