@@ -6,6 +6,7 @@ import { useNodes } from "@/Node/NodesContext";
 import { useRelationships } from "@/Relationship/RelationshipsContext";
 import { useSettings } from "@/Settings/SettingsContext";
 import ImportExportOptionList from "./ImportExportOptionList";
+import WarningIcon from "@/Shared/Components/Icons/WarningIcon";
 
 const ImportExportDisplay = () => {
 	const { entities, setEntities } = useEntities();
@@ -305,7 +306,18 @@ const ImportExportDisplay = () => {
 									nodes, relationships, and settings to a JSON file for backup
 									or sharing.
 								</p>
-
+								<div className="bg-yellow-100 border-l-4 border-yellow-500 p-4">
+									<div className="flex">
+										<div className="flex-shrink-0">
+											<WarningIcon />
+										</div>
+										<div className="ml-3">
+											<p className="text-sm text-yellow-700">
+												Warning: Exporting data may include sensitive API keys.
+											</p>
+										</div>
+									</div>
+								</div>
 								<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 									<h4 className="text-sm font-semibold text-slate-700 mb-2">
 										Export options
