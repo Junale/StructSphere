@@ -1,3 +1,5 @@
+import ChatIcon from "@/Shared/Components/Icons/ChatIcon";
+import CloseIcon from "@/Shared/Components/Icons/CloseIcon";
 import { useChat } from "../ChatContext";
 import ChatList from "./ChatList";
 import ChatWindow from "./ChatWindow";
@@ -22,23 +24,8 @@ const ChatModal = () => {
 				{/* Header */}
 				<div className="flex items-center justify-between p-4 border-b border-gray-300">
 					<div className="flex items-center gap-3">
-						<div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="18"
-								height="18"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="white"
-								strokeWidth="2"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							>
-								<title>AI</title>
-								<path d="M12 2L2 7l10 5 10-5-10-5z" />
-								<path d="M2 17l10 5 10-5" />
-								<path d="M2 12l10 5 10-5" />
-							</svg>
+						<div className="size-8 p-2 rounded-full bg-blue-600  text-white  flex items-center justify-center">
+							<ChatIcon />
 						</div>
 						<div>
 							<h2 className="text-lg font-semibold">AI Assistant</h2>
@@ -53,21 +40,7 @@ const ChatModal = () => {
 						className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
 						aria-label="Close chat"
 					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						>
-							<title>Close</title>
-							<line x1="18" y1="6" x2="6" y2="18" />
-							<line x1="6" y1="6" x2="18" y2="18" />
-						</svg>
+						<CloseIcon />
 					</button>
 				</div>
 

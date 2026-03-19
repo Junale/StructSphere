@@ -9,6 +9,10 @@ import type { TConversionStatus } from "@/Visualizer/ConverterTypes";
 import { layoutDiagram } from "@/Visualizer/layoutEngine";
 import EntityVisualizerDisplay from "./EntityVisualizerDisplay";
 import RelationshipVisualizerDisplay from "./RelationshipVisualizerDisplay";
+import LoadingSpinnerIcon from "@/Shared/Components/Icons/LoadingSpinnerIcon";
+import CheckmarkIcon from "@/Shared/Components/Icons/CheckmarkIcon";
+import WarningIcon from "@/Shared/Components/Icons/WarningIcon";
+import ExportIcon from "@/Shared/Components/Icons/ExportIcon";
 
 const DiagramVisualizerDisplay = () => {
 	const { slug } = useParams();
@@ -91,15 +95,40 @@ const DiagramVisualizerDisplay = () => {
 						type="button"
 						onClick={handleConvertToPNG}
 						disabled={!slug || conversionStatus === "converting"}
-						className="px-6 py-3 text-blue-600 font-semibold rounded-lg hover:text-blue-700 hover:cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+						className="px-6 py-3 flex gap-2 text-blue-600 font-semibold rounded-lg hover:text-blue-700 hover:cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
 					>
-						{conversionStatus === "converting"
-							? "Converting..."
-							: conversionStatus === "success"
-								? "✓ Downloaded!"
-								: conversionStatus === "error"
-									? "✗ Error occurred"
-									: "Export as PNG"}
+						{conversionStatus === "converting" && (
+							<>
+								<div className="size-6">
+									<LoadingSpinnerIcon />
+								</div>
+								<p>Converting...</p>
+							</>
+						)}
+						{conversionStatus === "success" && (
+							<>
+								<div className="size-6">
+									<CheckmarkIcon />
+								</div>
+								<p>Downloaded</p>
+							</>
+						)}
+						{conversionStatus === "error" && (
+							<>
+								<div className="size-6">
+									<WarningIcon />
+								</div>
+								<p>Error occurred</p>
+							</>
+						)}
+						{conversionStatus === "idle" && (
+							<>
+								<div className="size-6">
+									<ExportIcon />
+								</div>
+								<p>Export as PNG</p>
+							</>
+						)}
 					</button>
 				</div>
 			</div>

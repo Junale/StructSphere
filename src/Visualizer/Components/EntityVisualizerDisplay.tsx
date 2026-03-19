@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEntities } from "@/Entity/EntityContext";
 import type { TNode } from "@/Node/NodeTypes";
 import type { TLayoutNode } from "@/Visualizer/layoutTypes";
+import LinkIcon from "../../Shared/Components/Icons/LinkIcon";
 
 type props = {
 	node: TNode;
@@ -48,22 +49,11 @@ const EntityVisualizerDisplay = ({ node, layoutNode }: props) => {
 				</p>
 			</div>
 			{node.subDiagramSlug && (
-				<div className="px-3 pb-1.5 flex items-center gap-1">
-					<svg
-						className="w-3 h-3 text-blue-400"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24"
-						aria-hidden="true"
-					>
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							strokeWidth={2}
-							d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-						/>
-					</svg>
-					<span className="text-xs text-blue-400">Open sub-diagram</span>
+				<div className="px-3 pb-1.5 flex items-center gap-1 text-blue-400">
+					<div className="size-4">
+						<LinkIcon />
+					</div>
+					<span className="text-xs ">Open sub-diagram</span>
 				</div>
 			)}
 		</button>

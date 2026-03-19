@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import ChatIcon from "@/Shared/Components/Icons/ChatIcon";
 import { useChat } from "../ChatContext";
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
@@ -17,22 +18,10 @@ const ChatWindow = () => {
 	if (!activeSession) {
 		return (
 			<div className="flex-1 flex items-center justify-center text-gray-500">
-				<div className="text-center">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="64"
-						height="64"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth="1"
-						strokeLinecap="round"
-						strokeLinejoin="round"
-						className="mx-auto mb-4 text-gray-400"
-					>
-						<title>Chat</title>
-						<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-					</svg>
+				<div className="flex flex-col text-center items-center ">
+					<div className="size-24 flex items-center justify-center">
+						<ChatIcon />
+					</div>
 					<p>Select or create a chat to get started</p>
 				</div>
 			</div>
@@ -94,13 +83,13 @@ const ChatWindow = () => {
 							<div className="flex justify-start mb-4">
 								<div className="bg-gray-200 text-gray-900 rounded-lg px-4 py-2">
 									<div className="flex gap-1">
-										<span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" />
+										<span className="size-2 bg-gray-500 rounded-full animate-bounce" />
 										<span
-											className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+											className="size-2 bg-gray-500 rounded-full animate-bounce"
 											style={{ animationDelay: "0.1s" }}
 										/>
 										<span
-											className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+											className="size-2 bg-gray-500 rounded-full animate-bounce"
 											style={{ animationDelay: "0.2s" }}
 										/>
 									</div>

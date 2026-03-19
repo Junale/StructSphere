@@ -1,3 +1,5 @@
+import LockIcon from "@/Shared/Components/Icons/LockIcon";
+
 const Home = () => {
 	return (
 		<div className="flex flex-col w-full overflow-y-auto bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
@@ -25,7 +27,7 @@ const Home = () => {
 
 				<div className="grid md:grid-cols-2 gap-6">
 					<div className="bg-white border border-slate-200 rounded-2xl shadow-md p-6 space-y-3 hover:shadow-xl transition-all transform hover:-translate-y-1">
-						<div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
+						<div className="size-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
 							📦
 						</div>
 						<h3 className="text-xl font-semibold text-slate-800">
@@ -39,7 +41,7 @@ const Home = () => {
 					</div>
 
 					<div className="bg-white border border-slate-200 rounded-2xl shadow-md p-6 space-y-3 hover:shadow-xl transition-all transform hover:-translate-y-1">
-						<div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
+						<div className="size-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
 							🗂️
 						</div>
 						<h3 className="text-xl font-semibold text-slate-800">
@@ -53,7 +55,7 @@ const Home = () => {
 					</div>
 
 					<div className="bg-white border border-slate-200 rounded-2xl shadow-md p-6 space-y-3 hover:shadow-xl transition-all transform hover:-translate-y-1">
-						<div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
+						<div className="size-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
 							🔗
 						</div>
 						<h3 className="text-xl font-semibold text-slate-800">
@@ -67,7 +69,7 @@ const Home = () => {
 					</div>
 
 					<div className="bg-white border border-slate-200 rounded-2xl shadow-md p-6 space-y-3 hover:shadow-xl transition-all transform hover:-translate-y-1">
-						<div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
+						<div className="size-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
 							🎨
 						</div>
 						<h3 className="text-xl font-semibold text-slate-800">
@@ -81,7 +83,7 @@ const Home = () => {
 					</div>
 
 					<div className="bg-white border border-slate-200 rounded-2xl shadow-md p-6 space-y-3 hover:shadow-xl transition-all transform hover:-translate-y-1">
-						<div className="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
+						<div className="size-12 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
 							⚙️
 						</div>
 						<h3 className="text-xl font-semibold text-slate-800">
@@ -95,7 +97,7 @@ const Home = () => {
 					</div>
 
 					<div className="bg-white border border-slate-200 rounded-2xl shadow-md p-6 space-y-3 hover:shadow-xl transition-all transform hover:-translate-y-1">
-						<div className="w-12 h-12 bg-gradient-to-br from-violet-400 to-purple-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
+						<div className="size-12 bg-gradient-to-br from-violet-400 to-purple-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
 							💾
 						</div>
 						<h3 className="text-xl font-semibold text-slate-800">
@@ -109,7 +111,7 @@ const Home = () => {
 					</div>
 
 					<div className="bg-white border border-slate-200 rounded-2xl shadow-md p-6 space-y-3 hover:shadow-xl transition-all transform hover:-translate-y-1">
-						<div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-rose-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
+						<div className="size-12 bg-gradient-to-br from-pink-400 to-rose-500 rounded-xl flex items-center justify-center text-2xl shadow-md">
 							🤖
 						</div>
 						<h3 className="text-xl font-semibold text-slate-800">
@@ -125,7 +127,7 @@ const Home = () => {
 
 				<div className="bg-white border-2 border-green-200 rounded-2xl shadow-lg p-8 space-y-4">
 					<div className="flex items-center gap-3 mb-2">
-						<div className="w-10 h-10 bg-gradient-to-br from-green-400 to-emerald-500 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+						<div className="size-10 bg-gradient-to-br from-green-400 to-emerald-500 rounded-lg flex items-center justify-center text-white font-bold text-xl">
 							→
 						</div>
 						<h2 className="text-2xl font-semibold text-slate-800">
@@ -178,20 +180,9 @@ const Home = () => {
 
 				<div className="bg-gradient-to-r from-slate-700 to-slate-800 text-white rounded-xl shadow-lg p-6 text-center">
 					<div className="flex items-center justify-center gap-2 mb-2">
-						<svg
-							className="w-6 h-6"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-							aria-hidden="true"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-							/>
-						</svg>
+						<div className="size-6">
+							<LockIcon />
+						</div>
 						<p className="font-semibold text-lg">Privacy First</p>
 					</div>
 					<p className="text-slate-200">

@@ -5,8 +5,10 @@ import { useEntities } from "@/Entity/EntityContext";
 import { useNodes } from "@/Node/NodesContext";
 import { useRelationships } from "@/Relationship/RelationshipsContext";
 import { useSettings } from "@/Settings/SettingsContext";
-import ImportExportOptionList from "./ImportExportOptionList";
+import ExportIcon from "@/Shared/Components/Icons/ExportIcon";
+import ImportIcon from "@/Shared/Components/Icons/ImportIcon";
 import WarningIcon from "@/Shared/Components/Icons/WarningIcon";
+import ImportExportOptionList from "./ImportExportOptionList";
 
 const ImportExportDisplay = () => {
 	const { entities, setEntities } = useEntities();
@@ -178,21 +180,8 @@ const ImportExportDisplay = () => {
 					{/* Import Section */}
 					<div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 hover:shadow-xl transition-shadow">
 						<div className="flex items-center mb-6">
-							<div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center mr-4 shadow-md">
-								<svg
-									className="w-6 h-6 text-white"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-									aria-hidden="true"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={2}
-										d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-									/>
-								</svg>
+							<div className="size-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl text-white p-2 flex items-center justify-center mr-4 shadow-md">
+								<ImportIcon />
 							</div>
 							<div>
 								<h3 className="text-2xl font-bold text-slate-800">Import</h3>
@@ -278,21 +267,8 @@ const ImportExportDisplay = () => {
 					<div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 hover:shadow-xl transition-shadow">
 						<form onSubmit={handleExport}>
 							<div className="flex items-center mb-6">
-								<div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-xl flex items-center justify-center mr-4 shadow-md">
-									<svg
-										className="w-6 h-6 text-white"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-										aria-hidden="true"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={2}
-											d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
-										/>
-									</svg>
+								<div className="size-12 bg-gradient-to-br text-white p-2 from-blue-400 to-indigo-500 rounded-xl flex items-center justify-center mr-4 shadow-md">
+									<ExportIcon />
 								</div>
 								<div>
 									<h3 className="text-2xl font-bold text-slate-800">Export</h3>
@@ -306,13 +282,13 @@ const ImportExportDisplay = () => {
 									nodes, relationships, and settings to a JSON file for backup
 									or sharing.
 								</p>
-								<div className="bg-yellow-100 border-l-4 border-yellow-500 p-4">
+								<div className="bg-yellow-100 border-l-4 text-yellow-700 flex items-center justify-center border-yellow-500 p-4">
 									<div className="flex">
-										<div className="flex-shrink-0">
+										<div className="size-6">
 											<WarningIcon />
 										</div>
 										<div className="ml-3">
-											<p className="text-sm text-yellow-700">
+											<p className="text-sm ">
 												Warning: Exporting data may include sensitive API keys.
 											</p>
 										</div>

@@ -1,3 +1,4 @@
+import DeleteIcon from "../../Shared/Components/Icons/DeleteIcon";
 import { useChat } from "../ChatContext";
 
 const ChatList = () => {
@@ -62,22 +63,9 @@ const ChatList = () => {
 								className="absolute right-2 top-1/2 -translate-y-1/2 p-1 opacity-0 group-hover:opacity-100 hover:bg-red-100 rounded transition-opacity"
 								aria-label="Delete chat"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="16"
-									height="16"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									strokeWidth="2"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									className="text-red-600"
-								>
-									<title>Delete</title>
-									<polyline points="3 6 5 6 21 6" />
-									<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-								</svg>
+								<div className="size-6">
+									<DeleteIcon />
+								</div>
 							</button>
 						</div>
 					))
