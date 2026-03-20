@@ -28,11 +28,7 @@ const RelationshipViewDisplay = () => {
 		: relationship.targetNodeSlug;
 
 	return (
-		<ViewDisplay
-			itemType="relationship"
-			updateTo={`/relationship/${slug}/update`}
-			backTo="/relationship"
-		>
+		<ViewDisplay itemType="relationship">
 			<div className="flex flex-col size-full p-4">
 				<div className="mb-4">
 					<p className="mb-2 font-semibold text-slate-700">Slug:</p>

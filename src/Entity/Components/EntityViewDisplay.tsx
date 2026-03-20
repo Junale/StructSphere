@@ -11,11 +11,7 @@ const EntityViewDisplay = () => {
 	if (!entity) return <div>Entity not found</div>;
 
 	return (
-		<ViewDisplay
-			itemType="entity"
-			updateTo={`/entity/${slug}/update`}
-			backTo="/entity"
-		>
+		<ViewDisplay itemType="entity">
 			<div className="flex flex-col size-full p-4">
 				<div className="mb-4">
 					<p className="mb-2 font-semibold text-slate-700">Slug:</p>
