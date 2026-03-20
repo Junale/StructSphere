@@ -11,7 +11,7 @@ import LoadingSpinnerIcon from "@/Shared/Components/Icons/LoadingSpinnerIcon";
 import WarningIcon from "@/Shared/Components/Icons/WarningIcon";
 import type { TConversionStatus } from "@/Visualizer/ConverterTypes";
 import { layoutDiagram } from "@/Visualizer/layoutEngine";
-import EntityVisualizerDisplay from "./EntityVisualizerDisplay";
+import NodeVisualizerDisplay from "./NodeVisualizerDisplay";
 import RelationshipVisualizerDisplay from "./RelationshipVisualizerDisplay";
 
 const DiagramVisualizerDisplay = () => {
@@ -142,7 +142,7 @@ const DiagramVisualizerDisplay = () => {
 				{diagramNodes.map(
 					(node) =>
 						layout.nodes[node.slug] && (
-							<EntityVisualizerDisplay
+							<NodeVisualizerDisplay
 								key={node.slug}
 								node={node}
 								layoutNode={layout.nodes[node.slug]}

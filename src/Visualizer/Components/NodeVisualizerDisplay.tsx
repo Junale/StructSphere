@@ -9,7 +9,7 @@ type props = {
 	layoutNode: TLayoutNode;
 };
 
-const EntityVisualizerDisplay = ({ node, layoutNode }: props) => {
+const NodeVisualizerDisplay = ({ node, layoutNode }: props) => {
 	const { entities } = useEntities();
 	const navigate = useNavigate();
 	const entity = entities[node.entitySlug];
@@ -60,4 +60,4 @@ const EntityVisualizerDisplay = ({ node, layoutNode }: props) => {
 	);
 };
 
-export default EntityVisualizerDisplay;
+export default NodeVisualizerDisplay;
