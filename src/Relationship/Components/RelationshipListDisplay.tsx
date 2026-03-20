@@ -7,6 +7,7 @@ const RelationshipListDisplay = () => {
 		<ListDisplay
 			itemType="relationship"
 			items={Object.values(relationships)}
+			enableView={true}
 			onDelete={removeRelationship}
 		/>
 	);

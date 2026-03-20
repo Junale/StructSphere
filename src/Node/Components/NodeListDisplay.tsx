@@ -7,6 +7,7 @@ const NodeListDisplay = () => {
 		<ListDisplay
 			itemType="node"
 			items={Object.values(nodes)}
+			enableView={true}
 			onDelete={removeNode}
 		/>
 	);

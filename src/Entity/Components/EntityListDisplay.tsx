@@ -8,6 +8,7 @@ const EntityListDisplay = () => {
 		<ListDisplay
 			itemType="entity"
 			items={Object.values(entities)}
+			enableView={true}
 			onDelete={removeEntity}
 		/>
 	);
