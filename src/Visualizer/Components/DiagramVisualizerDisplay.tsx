@@ -158,6 +158,7 @@ const DiagramVisualizerDisplay = () => {
 					return (
 						<RelationshipVisualizerDisplay
 							key={edgeKey}
+							relationshipSlug={relationship.slug}
 							source={nodes[relationship.sourceNodeSlug]}
 							target={nodes[relationship.targetNodeSlug]}
 							layoutNodes={layout.nodes}

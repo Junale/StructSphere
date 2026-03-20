@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEntities } from "@/Entity/EntityContext";
 import type { TNode } from "@/Node/NodeTypes";
+import EyeIcon from "@/Shared/Components/Icons/EyeIcon";
 import type { TLayoutNode } from "@/Visualizer/layoutTypes";
 import LinkIcon from "../../Shared/Components/Icons/LinkIcon";
 
@@ -21,42 +22,61 @@ const NodeVisualizerDisplay = ({ node, layoutNode }: props) => {
 		}
 	};
 
+	const handleViewEntity = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.stopPropagation();
+		navigate(`/entity/${node.entitySlug}`);
+	};
+
 	return (
-		<button
-			type="button"
-			className={`flex flex-col overflow-hidden z-10 bg-white border border-gray-200 rounded-lg shadow-md transition-all duration-150 text-left ${node.subDiagramSlug ? "cursor-pointer hover:shadow-lg hover:-translate-y-px hover:border-blue-400" : "cursor-default"}`}
+		<div
+			className="absolute z-10 text-slate-500"
 			style={{
 				width: layoutNode.size.width,
 				height: layoutNode.size.height,
-				position: "absolute",
 				left: layoutNode.position.x,
 				top: layoutNode.position.y,
 			}}
-			onClick={handleOnClick}
 		>
-			<div
-				className={`px-3 py-1.5 w-full border-b ${node.subDiagramSlug ? "bg-blue-50 border-blue-200" : "bg-gray-50 border-gray-200"}`}
-			>
-				<h2
-					className={`text-sm font-semibold truncate ${node.subDiagramSlug ? "text-blue-700" : "text-gray-800"}`}
+			<div className="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white/95 shadow-sm backdrop-blur-[1px]">
+				<div
+					className={`flex items-center justify-between gap-2 px-3 py-2 border-b bg-slate-50 border-slate-200`}
 				>
-					{entity.title}
-				</h2>
-			</div>
-			<div className="px-3 py-2 flex-1 overflow-hidden">
-				<p className="text-xs text-gray-500 line-clamp-3 leading-relaxed">
-					{entity.description}
-				</p>
-			</div>
-			{node.subDiagramSlug && (
-				<div className="px-3 pb-1.5 flex items-center gap-1 text-blue-400">
-					<div className="size-4">
-						<LinkIcon />
+					<h2 className={`text-sm font-semibold truncate`}>{entity.title}</h2>
+					<div className="flex justify-center items-center gap-1">
+						<button
+							type="button"
+							onClick={handleViewEntity}
+							title="View entity"
+							aria-label="View entity"
+							className="flex size-6 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:cursor-pointer hover:bg-slate-50 hover:text-gray-700"
+						>
+							<span className="size-4">
+								<EyeIcon />
+							</span>
+						</button>
+						{node.subDiagramSlug && (
+							<button
+								type="button"
+								onClick={handleOnClick}
+								title="Open sub-diagram"
+								aria-label="Open sub-diagram"
+								className="inline-flex hover:cursor-pointer items-center gap-1.5 rounded-md border border-sky-200 bg-sky-50/80 px-2 py-1 text-[11px] font-medium text-sky-600 transition hover:bg-sky-100 hover:text-sky-700"
+							>
+								<div className="size-3.5">
+									<LinkIcon />
+								</div>
+							</button>
+						)}
 					</div>
-					<span className="text-xs ">Open sub-diagram</span>
 				</div>
-			)}
-		</button>
+
+				<div className="flex-1 px-3 py-2.5">
+					<p className="text-xs text-slate-500 line-clamp-2 ">
+						{entity.description}
+					</p>
+				</div>
+			</div>
+		</div>
 	);
 };
 

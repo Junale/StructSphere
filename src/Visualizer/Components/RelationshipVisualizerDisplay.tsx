@@ -1,9 +1,12 @@
 import type { TNode } from "@/Node/NodeTypes";
+import EyeIcon from "@/Shared/Components/Icons/EyeIcon";
 import type { TDescription } from "@/Shared/SharedTypes";
 import { getCenterPosition } from "@/Shared/SharedUtil";
 import type { TLayout } from "@/Visualizer/layoutTypes";
+import { useNavigate } from "react-router-dom";
 
 type props = {
+	relationshipSlug: string;
 	source: TNode;
 	target: TNode;
 	layoutNodes: TLayout;
@@ -13,6 +16,7 @@ type props = {
 };
 
 const RelationshipVisualizerDisplay = ({
+	relationshipSlug,
 	source,
 	target,
 	layoutNodes,
@@ -20,6 +24,7 @@ const RelationshipVisualizerDisplay = ({
 	labelOffset,
 	arrowSize,
 }: props) => {
+	const navigate = useNavigate();
 	if (!source || !target) return;
 	if (!layoutNodes[source.slug] || !layoutNodes[target.slug]) return;
 	const sourceCenterPosition = getCenterPosition(layoutNodes[source.slug]);
@@ -82,6 +87,11 @@ const RelationshipVisualizerDisplay = ({
 	const labelX = (x1 + x2) / 2 + labelOffset.dx;
 	const labelY = (y1 + y2) / 2 + labelOffset.dy;
 
+	const handleViewRelationship = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.stopPropagation();
+		navigate(`/relationship/${relationshipSlug}`);
+	};
+
 	return (
 		<div
 			className="absolute"
@@ -109,18 +119,28 @@ const RelationshipVisualizerDisplay = ({
 				/>
 				<polygon points={arrowPoints} fill="#94a3b8" />
 			</svg>
-			{description && (
-				<span
-					className="absolute z-10 px-2 py-0.5 text-xs text-gray-600 bg-white border border-gray-200 rounded-full shadow-sm text-wrap line-clamp-3 overflow-hidden text-ellipsis max-w-[8rem]"
-					style={{
-						left: labelX,
-						top: labelY,
-						transform: "translate(-50%, -50%)",
-					}}
+
+			<span
+				className="absolute flex justify-between items-center gap-2 z-10 px-2 py-0.5 text-xs text-gray-600 bg-white border border-gray-200 rounded-full shadow-sm text-wrap line-clamp-3 overflow-hidden text-ellipsis max-w-[8rem]"
+				style={{
+					left: labelX,
+					top: labelY,
+					transform: "translate(-50%, -50%)",
+				}}
+			>
+				<p className="text-xs text-slate-500 line-clamp-2 ">{description}</p>
+				<button
+					type="button"
+					onClick={handleViewRelationship}
+					title="View relationship"
+					aria-label="View relationship"
+					className="flex size-6 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:cursor-pointer hover:bg-slate-50 hover:text-gray-700"
 				>
-					{description}
-				</span>
-			)}
+					<span className="size-4">
+						<EyeIcon />
+					</span>
+				</button>
+			</span>
 		</div>
 	);
 };
