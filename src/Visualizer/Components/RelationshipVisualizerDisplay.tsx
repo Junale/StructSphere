@@ -1,9 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import type { TNode } from "@/Node/NodeTypes";
 import EyeIcon from "@/Shared/Components/Icons/EyeIcon";
 import type { TDescription } from "@/Shared/SharedTypes";
 import { getCenterPosition } from "@/Shared/SharedUtil";
 import type { TLayout } from "@/Visualizer/layoutTypes";
-import { useNavigate } from "react-router-dom";
 
 type props = {
 	relationshipSlug: string;
