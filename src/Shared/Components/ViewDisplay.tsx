@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { upperFirstChar } from "@/Shared/SharedUtil";
 
 type props = {
@@ -8,6 +8,7 @@ type props = {
 };
 
 const ViewDisplay = ({ itemType, children }: props) => {
+	const { slug } = useParams();
 	const itemTypeCapitalized = upperFirstChar(itemType);
 
 	return (
@@ -26,7 +27,7 @@ const ViewDisplay = ({ itemType, children }: props) => {
 
 						<div className="flex gap-3 pt-6 border-t border-slate-200">
 							<Link
-								to={`/${itemType}/update`}
+								to={`/${itemType}/${slug}/update`}
 								className="flex-1 px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-lg hover:from-emerald-600 hover:to-teal-600 transition shadow-md hover:shadow-lg text-center"
 							>
 								Update {itemTypeCapitalized}
