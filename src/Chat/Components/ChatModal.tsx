@@ -37,7 +37,7 @@ const ChatModal = () => {
 					<button
 						type="button"
 						onClick={() => setIsOpen(false)}
-						className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+						className="p-2 size-8 hover:bg-gray-100 rounded-lg transition-colors"
 						aria-label="Close chat"
 					>
 						<CloseIcon />
