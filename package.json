@@ -7,7 +7,9 @@
 		"dev": "vite",
 		"build": "tsc -b && vite build",
 		"lint": "biome check .",
-		"format": "biome format ."
+		"format": "biome format .",
+		"check": "biome format . && biome check . && tsc --noEmit",
+		"fix": "biome format . --write && biome check . --write"
 	},
 	"dependencies": {
 		"@google/genai": "^1.44.0",
