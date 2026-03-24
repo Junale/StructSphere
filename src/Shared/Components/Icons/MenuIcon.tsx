@@ -1,4 +1,4 @@
-export default (isMenuOpen: boolean) => (
+export default ({ isMenuOpen }: { isMenuOpen: boolean }) => (
 	<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 		{isMenuOpen ? (
 			<path
