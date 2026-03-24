@@ -1,4 +1,5 @@
 import type { FormEvent } from "react";
+import { useRef, useState } from "react";
 import { useChat } from "@/Chat/ChatContext";
 import { useDiagrams } from "@/Diagram/DiagramsContext";
 import { useEntities } from "@/Entity/EntityContext";
@@ -8,6 +9,7 @@ import { useSettings } from "@/Settings/SettingsContext";
 import ExportIcon from "@/Shared/Components/Icons/ExportIcon";
 import ImportIcon from "@/Shared/Components/Icons/ImportIcon";
 import WarningIcon from "@/Shared/Components/Icons/WarningIcon";
+import SuccessMessage from "@/Shared/Components/SuccessMessage";
 import ImportExportOptionList from "./ImportExportOptionList";
 
 const ImportExportDisplay = () => {
@@ -17,6 +19,17 @@ const ImportExportDisplay = () => {
 	const { nodes, setNodes } = useNodes();
 	const { settings, setSettings } = useSettings();
 	const { sessions, setSessions } = useChat();
+	const containerRef = useRef<HTMLDivElement>(null);
+	const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+	const scrollToTop = () => {
+		containerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+	};
+
+	const showSuccessMessage = (message: string) => {
+		setSuccessMessage(message);
+		setTimeout(() => setSuccessMessage(null), 3000);
+	};
 
 	const getOptions = (event: FormEvent<HTMLFormElement>, prefix: string) => {
 		const options = {
@@ -131,7 +144,8 @@ const ImportExportDisplay = () => {
 					"An error occurred while parsing the JSON file. Please try again.",
 				);
 			}
-			alert("Import successful!");
+			showSuccessMessage("Data imported successfully!");
+			scrollToTop();
 		};
 		reader.onerror = (e) => {
 			console.error("Error reading file:", e);
@@ -162,10 +176,15 @@ const ImportExportDisplay = () => {
 		link.click();
 		document.body.removeChild(link);
 		URL.revokeObjectURL(url);
+		showSuccessMessage("Data exported successfully!");
+		scrollToTop();
 	};
 
 	return (
-		<div className="flex flex-col flex-1 w-full overflow-y-auto bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-8">
+		<div
+			ref={containerRef}
+			className="flex flex-col flex-1 w-full overflow-y-auto bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-8"
+		>
 			<div className="max-w-5xl mx-auto w-full">
 				<div className="text-center mb-10">
 					<h2 className="text-4xl font-bold mb-3 text-slate-800">
@@ -195,6 +214,7 @@ const ImportExportDisplay = () => {
 									Import your entities, diagrams, nodes, relationships, and
 									settings from a JSON file to restore or merge data.
 								</p>
+								{successMessage && <SuccessMessage message={successMessage} />}
 								<div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
 									<h4 className="text-sm font-semibold text-slate-700 mb-2">
 										Import options

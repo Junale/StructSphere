@@ -1,30 +1,44 @@
 import type { FormEvent } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ChatIcon from "@/Shared/Components/Icons/ChatIcon";
 import CheckmarkIcon from "@/Shared/Components/Icons/CheckmarkIcon";
 import ResetIcon from "@/Shared/Components/Icons/ResetIcon";
 import WarningIcon from "@/Shared/Components/Icons/WarningIcon";
+import SuccessMessage from "@/Shared/Components/SuccessMessage";
 import { useSettings } from "../SettingsContext";
 import type { TSettings } from "../SettingTypes";
 
 const SettingsDisplay = () => {
 	const { settings, setSettings, resetSettings } = useSettings();
 	const [tempSettings, setTempSettings] = useState<TSettings>({ ...settings });
-	const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+	const [successMessage, setSuccessMessage] = useState<string | null>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		setTempSettings({ ...settings });
 	}, [settings]);
 
+	const scrollToTop = () => {
+		containerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+	};
+
+	const showSuccessMessage = (message: string) => {
+		setSuccessMessage(message);
+		setTimeout(() => setSuccessMessage(null), 3000);
+	};
+
 	const handleSave = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setSettings({ ...tempSettings });
-		setShowSuccessMessage(true);
-		setTimeout(() => setShowSuccessMessage(false), 3000);
+		showSuccessMessage("Settings saved successfully!");
+		scrollToTop();
 	};
 
 	return (
-		<div className="flex flex-col flex-1 overflow-y-auto w-full bg-gradient-to-br from-slate-50 to-slate-100 p-8">
+		<div
+			ref={containerRef}
+			className="flex flex-col flex-1 overflow-y-auto w-full bg-gradient-to-br from-slate-50 to-slate-100 p-8"
+		>
 			<div className="flex flex-col max-w-2xl mx-auto w-full">
 				<div className=" flex flex-col text-center mb-8">
 					<h2 className="text-4xl font-bold mb-2 text-slate-800">Settings</h2>
@@ -34,14 +48,7 @@ const SettingsDisplay = () => {
 				</div>
 
 				<div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 flex-1 flex flex-col ">
-					{showSuccessMessage && (
-						<div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3 animate-fade-in">
-							<CheckmarkIcon />
-							<span className="text-green-700 font-medium">
-								Settings saved successfully!
-							</span>
-						</div>
-					)}
+					<SuccessMessage message={successMessage} />
 
 					<form onSubmit={handleSave} className="space-y-6">
 						{/* AI Settings Section */}
@@ -346,10 +353,10 @@ const SettingsDisplay = () => {
 							</div>{" "}
 						</div>
 
-						<div className="flex flex-wrap gap-3 pt-6 border-t border-slate-200">
+						<div className="flex items-center justify-center flex-wrap gap-3 pt-6 border-t border-slate-200">
 							<button
 								type="submit"
-								className="flex-1 min-w-[200px] px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-lg hover:from-green-600 hover:to-emerald-600 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+								className="flex-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-lg hover:from-green-600 hover:to-emerald-600 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
 							>
 								<div className="h-6 w-6">
 									<CheckmarkIcon />
@@ -358,8 +365,12 @@ const SettingsDisplay = () => {
 							</button>
 							<button
 								type="button"
-								className="px-6 py-3 bg-slate-500 text-white font-semibold rounded-lg hover:bg-slate-600 transition shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-								onClick={() => setTempSettings({ ...settings })}
+								className="flex-1 px-6 py-3 bg-slate-500 text-white font-semibold rounded-lg hover:bg-slate-600 transition shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+								onClick={() => {
+									setTempSettings({ ...settings });
+									showSuccessMessage("Settings reset to current values!");
+									scrollToTop();
+								}}
 							>
 								<div className="h-6 w-6">
 									<ResetIcon />
@@ -368,8 +379,12 @@ const SettingsDisplay = () => {
 							</button>
 							<button
 								type="button"
-								className="px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-								onClick={resetSettings}
+								className="flex-1 px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+								onClick={() => {
+									resetSettings();
+									showSuccessMessage("Settings reset to defaults!");
+									scrollToTop();
+								}}
 							>
 								<div className="h-6 w-6">
 									<WarningIcon />
