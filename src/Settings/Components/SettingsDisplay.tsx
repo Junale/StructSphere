@@ -122,7 +122,6 @@ const SettingsDisplay = () => {
 									type="number"
 									id="maxIterations"
 									min="1"
-									max="20"
 									value={tempSettings.chat?.maxIterations || 5}
 									onChange={(e) =>
 										setTempSettings({
