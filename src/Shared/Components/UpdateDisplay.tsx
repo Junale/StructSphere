@@ -34,9 +34,9 @@ const UpdateDisplay = ({ itemType, onSubmit, children }: props) => {
 					</p>
 				</div>
 
-				<div className="flex-1 overflow-y-auto">
+				<div className="flex-1 overflow-hidden bg-white rounded-2xl border border-slate-200 p-4">
 					<form
-						className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 space-y-6"
+						className=" size-full overflow-y-auto flex flex-col p-4"
 						onSubmit={handleSubmit}
 					>
 						{error && (

@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useDiagrams } from "@/Diagram/DiagramsContext";
 import { useEntities } from "@/Entity/EntityContext";
+import LabeledSelectField from "@/Shared/Components/LabeledSelectField";
+import LabeledTextField from "@/Shared/Components/LabeledTextField";
 import UpdateDisplay from "@/Shared/Components/UpdateDisplay";
 import { useNodes } from "../NodesContext";
 
@@ -48,60 +50,53 @@ const NodeUpdateDisplay = () => {
 	return (
 		<UpdateDisplay itemType="node" onSubmit={onSubmit}>
 			<div className="flex flex-col size-full p-4">
-				<label htmlFor="slug" className="mb-2 font-semibold">
-					Slug:
-				</label>
-				<input
+				<LabeledTextField
 					id="slug"
-					type="text"
+					label="Slug"
 					placeholder="Enter slug"
 					value={slug}
 					disabled
-					className="bg-gray-200 cursor-not-allowed"
 				/>
-				<label htmlFor="diagramSlug" className="mb-2 mt-4 font-semibold">
-					Diagram:
-				</label>
-				<select
-					id="diagramSlug"
-					className="border rounded-md p-2"
-					defaultValue={node.diagramSlug}
-				>
-					{Object.values(diagrams).map((diagram) => (
-						<option key={diagram.slug} value={diagram.slug}>
-							{diagram.title}
-						</option>
-					))}
-				</select>
-				<label htmlFor="entitySlug" className="mb-2 mt-4 font-semibold">
-					Entity:
-				</label>
-				<select
-					id="entitySlug"
-					className="border rounded-md p-2"
-					defaultValue={node.entitySlug}
-				>
-					{Object.values(entities).map((entity) => (
-						<option key={entity.slug} value={entity.slug}>
-							{entity.title}
-						</option>
-					))}
-				</select>
-				<label htmlFor="subDiagramSlug" className="mb-2 mt-4 font-semibold">
-					Sub-diagram:
-				</label>
-				<select
-					id="subDiagramSlug"
-					className="border rounded-md p-2"
-					defaultValue={node.subDiagramSlug || ""}
-				>
-					<option value="">Select sub-diagram</option>
-					{Object.values(diagrams).map((diagram) => (
-						<option key={diagram.slug} value={diagram.slug}>
-							{diagram.title}
-						</option>
-					))}
-				</select>
+				<div className="mt-4">
+					<LabeledSelectField
+						id="diagramSlug"
+						label="Diagram"
+						defaultValue={node.diagramSlug}
+					>
+						{Object.values(diagrams).map((diagram) => (
+							<option key={diagram.slug} value={diagram.slug}>
+								{diagram.title}
+							</option>
+						))}
+					</LabeledSelectField>
+				</div>
+				<div className="mt-4">
+					<LabeledSelectField
+						id="entitySlug"
+						label="Entity"
+						defaultValue={node.entitySlug}
+					>
+						{Object.values(entities).map((entity) => (
+							<option key={entity.slug} value={entity.slug}>
+								{entity.title}
+							</option>
+						))}
+					</LabeledSelectField>
+				</div>
+				<div className="mt-4">
+					<LabeledSelectField
+						id="subDiagramSlug"
+						label="Sub-diagram"
+						defaultValue={node.subDiagramSlug || ""}
+					>
+						<option value="">Select sub-diagram</option>
+						{Object.values(diagrams).map((diagram) => (
+							<option key={diagram.slug} value={diagram.slug}>
+								{diagram.title}
+							</option>
+						))}
+					</LabeledSelectField>
+				</div>
 			</div>
 		</UpdateDisplay>
 	);

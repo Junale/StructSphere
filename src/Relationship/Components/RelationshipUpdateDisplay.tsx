@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import { useDiagrams } from "@/Diagram/DiagramsContext";
 import { useEntities } from "@/Entity/EntityContext";
 import { useNodes } from "@/Node/NodesContext";
+import LabeledSelectField from "@/Shared/Components/LabeledSelectField";
+import LabeledTextAreaField from "@/Shared/Components/LabeledTextAreaField";
+import LabeledTextField from "@/Shared/Components/LabeledTextField";
 import UpdateDisplay from "@/Shared/Components/UpdateDisplay";
 import { useRelationships } from "../RelationshipsContext";
 
@@ -67,75 +70,63 @@ const RelationshipUpdateDisplay = () => {
 	return (
 		<UpdateDisplay itemType="relationship" onSubmit={onSubmit}>
 			<div className="flex flex-col size-full p-4">
-				<label htmlFor="slug" className="mb-2 font-semibold">
-					Slug:
-				</label>
-				<input
+				<LabeledTextField
 					id="slug"
-					type="text"
+					label="Slug"
 					placeholder="Enter slug"
 					value={slug}
 					disabled
-					className="bg-gray-200 cursor-not-allowed"
 				/>
-				<label htmlFor="diagramSlug" className="mb-2 mt-4 font-semibold">
-					Diagram:
-				</label>
-				<select
-					id="diagramSlug"
-					className="border rounded-md p-2"
-					defaultValue={relationship.diagramSlug}
-					onChange={(e) => setSelectedDiagram(e.target.value)}
-				>
-					{Object.values(diagrams).map((diagram) => (
-						<option key={diagram.slug} value={diagram.slug}>
-							{diagram.title}
-						</option>
-					))}
-				</select>
-				<label htmlFor="sourceNodeSlug" className="mb-2 mt-4 font-semibold">
-					Source Node:
-				</label>
-				<select
-					id="sourceNodeSlug"
-					className="border rounded-md p-2"
-					disabled={!selectedDiagram}
-					defaultValue={relationship.sourceNodeSlug}
-				>
-					{nodesForSelectedDiagram.map((node) => (
-						<option key={node.slug} value={node.slug}>
-							{entities[node.entitySlug]?.title || node.entitySlug}
-						</option>
-					))}
-				</select>
-				<label htmlFor="targetNodeSlug" className="mb-2 mt-4 font-semibold">
-					Target Node:
-				</label>
-				<select
-					id="targetNodeSlug"
-					className="border rounded-md p-2"
-					disabled={!selectedDiagram}
-					defaultValue={relationship.targetNodeSlug}
-				>
-					{nodesForSelectedDiagram.map((node) => (
-						<option
-							key={node.slug}
-							value={node.slug}
-							defaultChecked={node.slug === relationship.targetNodeSlug}
-						>
-							{entities[node.entitySlug]?.title || node.entitySlug}
-						</option>
-					))}
-				</select>
-				<label htmlFor="description" className="mb-2 mt-4 font-semibold">
-					Description:
-				</label>
-				<input
-					id="description"
-					type="text"
-					placeholder="Enter description"
-					defaultValue={relationship.description || ""}
-				/>
+				<div className="mt-4">
+					<LabeledSelectField
+						id="diagramSlug"
+						label="Diagram"
+						defaultValue={relationship.diagramSlug}
+						onChange={(e) => setSelectedDiagram(e.target.value)}
+					>
+						{Object.values(diagrams).map((diagram) => (
+							<option key={diagram.slug} value={diagram.slug}>
+								{diagram.title}
+							</option>
+						))}
+					</LabeledSelectField>
+				</div>
+				<div className="mt-4">
+					<LabeledSelectField
+						id="sourceNodeSlug"
+						label="Source Node"
+						disabled={!selectedDiagram}
+						defaultValue={relationship.sourceNodeSlug}
+					>
+						{nodesForSelectedDiagram.map((node) => (
+							<option key={node.slug} value={node.slug}>
+								{entities[node.entitySlug]?.title || node.entitySlug}
+							</option>
+						))}
+					</LabeledSelectField>
+				</div>
+				<div className="mt-4">
+					<LabeledSelectField
+						id="targetNodeSlug"
+						label="Target Node"
+						disabled={!selectedDiagram}
+						defaultValue={relationship.targetNodeSlug}
+					>
+						{nodesForSelectedDiagram.map((node) => (
+							<option key={node.slug} value={node.slug}>
+								{entities[node.entitySlug]?.title || node.entitySlug}
+							</option>
+						))}
+					</LabeledSelectField>
+				</div>
+				<div className="mt-4">
+					<LabeledTextAreaField
+						id="description"
+						label="Description"
+						placeholder="Enter description"
+						defaultValue={relationship.description || ""}
+					/>
+				</div>
 			</div>
 		</UpdateDisplay>
 	);

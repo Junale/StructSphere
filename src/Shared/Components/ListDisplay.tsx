@@ -77,11 +77,7 @@ const ListDisplay = ({
 				</div>
 
 				<div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
-					<ListFilterDisplay
-						itemType={itemType}
-						items={items}
-						onFilterChange={setFilteredItems}
-					/>
+					<ListFilterDisplay items={items} onFilterChange={setFilteredItems} />
 					<Link
 						to={`/${itemType}/add`}
 						className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-indigo-600 transition shadow-md hover:shadow-lg whitespace-nowrap"
@@ -105,7 +101,7 @@ const ListDisplay = ({
 													{upperFirstChar(removeStringFromKey(key, "Slug"))}
 												</th>
 											))}
-										<th className="border-b-2 border-slate-200 px-4 py-3 text-left text-sm font-semibold text-slate-700">
+										<th className="flex justify-center border-b-2 border-slate-200 px-4 py-3 text-left text-sm font-semibold text-slate-700">
 											Actions
 										</th>
 									</tr>
@@ -127,7 +123,7 @@ const ListDisplay = ({
 												</td>
 											))}
 											<td className="px-4 py-3">
-												<div className="flex items-center gap-2">
+												<div className="flex items-center justify-center gap-2">
 													{enableView && (
 														<Link
 															to={`/${itemType}/${item.slug}`}

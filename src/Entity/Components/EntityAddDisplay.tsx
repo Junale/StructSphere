@@ -1,4 +1,6 @@
 import AddDisplay from "@/Shared/Components/AddDisplay";
+import LabeledTextAreaField from "@/Shared/Components/LabeledTextAreaField";
+import LabeledTextField from "@/Shared/Components/LabeledTextField";
 import { getSlug } from "@/Shared/SharedUtil";
 import { useEntities } from "../EntityContext";
 
@@ -27,23 +29,26 @@ const EntityAddDisplay = () => {
 	return (
 		<AddDisplay itemType="entity" onSubmit={handleSubmit}>
 			<div className="flex flex-col size-full p-4">
-				<label htmlFor="slug" className="mb-2 font-semibold">
-					Slug:
-				</label>
-				<input
+				<LabeledTextField
 					id="slug"
-					type="text"
+					label="Slug"
 					placeholder="Enter slug"
 					defaultValue={`entity-${getSlug()}`}
 				/>
-				<label htmlFor="title" className="mb-2 mt-4 font-semibold">
-					Title:
-				</label>
-				<input id="title" type="text" placeholder="Enter title" />
-				<label htmlFor="description" className="mb-2 mt-4 font-semibold">
-					Description:
-				</label>
-				<input id="description" type="text" placeholder="Enter description" />
+				<div className="mt-4">
+					<LabeledTextField
+						id="title"
+						label="Title"
+						placeholder="Enter title"
+					/>
+				</div>
+				<div className="mt-4">
+					<LabeledTextAreaField
+						id="description"
+						label="Description"
+						placeholder="Enter description"
+					/>
+				</div>
 			</div>
 		</AddDisplay>
 	);

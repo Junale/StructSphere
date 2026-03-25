@@ -1,4 +1,6 @@
 import { useParams } from "react-router-dom";
+import LabeledTextAreaField from "@/Shared/Components/LabeledTextAreaField";
+import LabeledTextField from "@/Shared/Components/LabeledTextField";
 import UpdateDisplay from "@/Shared/Components/UpdateDisplay";
 import { useDiagrams } from "../DiagramsContext";
 
@@ -30,35 +32,29 @@ const DiagramUpdateDisplay = () => {
 	return (
 		<UpdateDisplay itemType="diagram" onSubmit={handleSubmit}>
 			<div className="flex flex-col size-full p-4">
-				<label htmlFor="slug" className="mb-2 font-semibold">
-					Slug:
-				</label>
-				<input
+				<LabeledTextField
 					id="slug"
-					type="text"
+					label="Slug"
 					placeholder="Enter slug"
 					value={slug}
 					disabled
-					className="bg-gray-200 cursor-not-allowed"
 				/>
-				<label htmlFor="title" className="mb-2 mt-4 font-semibold">
-					Title:
-				</label>
-				<input
-					id="title"
-					type="text"
-					placeholder="Enter title"
-					defaultValue={diagram.title}
-				/>
-				<label htmlFor="description" className="mb-2 mt-4 font-semibold">
-					Description:
-				</label>
-				<input
-					id="description"
-					type="text"
-					placeholder="Enter description"
-					defaultValue={diagram.description}
-				/>
+				<div className="mt-4">
+					<LabeledTextField
+						id="title"
+						label="Title"
+						placeholder="Enter title"
+						defaultValue={diagram.title}
+					/>
+				</div>
+				<div className="mt-4">
+					<LabeledTextAreaField
+						id="description"
+						label="Description"
+						placeholder="Enter description"
+						defaultValue={diagram.description}
+					/>
+				</div>
 			</div>
 		</UpdateDisplay>
 	);

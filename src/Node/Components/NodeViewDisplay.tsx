@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useDiagrams } from "@/Diagram/DiagramsContext";
 import { useEntities } from "@/Entity/EntityContext";
+import LabeledTextField from "@/Shared/Components/LabeledTextField";
 import ViewDisplay from "@/Shared/Components/ViewDisplay";
 import { useNodes } from "../NodesContext";
 
@@ -23,32 +24,30 @@ const NodeViewDisplay = () => {
 	return (
 		<ViewDisplay itemType="node">
 			<div className="flex flex-col size-full p-4">
-				<div className="mb-4">
-					<p className="mb-2 font-semibold text-slate-700">Slug:</p>
-					<p className="px-4 py-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800 break-all">
-						{node.slug}
-					</p>
+				<LabeledTextField id="slug" label="Slug" value={node.slug} disabled />
+				<div className="mt-4">
+					<LabeledTextField
+						id="diagram"
+						label="Diagram"
+						value={diagramTitle}
+						disabled
+					/>
 				</div>
-
-				<div className="mb-4">
-					<p className="mb-2 font-semibold text-slate-700">Diagram:</p>
-					<p className="px-4 py-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800">
-						{diagramTitle}
-					</p>
+				<div className="mt-4">
+					<LabeledTextField
+						id="entity"
+						label="Entity"
+						value={entityTitle}
+						disabled
+					/>
 				</div>
-
-				<div className="mb-4">
-					<p className="mb-2 font-semibold text-slate-700">Entity:</p>
-					<p className="px-4 py-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800">
-						{entityTitle}
-					</p>
-				</div>
-
-				<div>
-					<p className="mb-2 font-semibold text-slate-700">Sub-diagram:</p>
-					<p className="px-4 py-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800">
-						{subDiagramTitle}
-					</p>
+				<div className="mt-4">
+					<LabeledTextField
+						id="subDiagram"
+						label="Sub-diagram"
+						value={subDiagramTitle}
+						disabled
+					/>
 				</div>
 			</div>
 		</ViewDisplay>

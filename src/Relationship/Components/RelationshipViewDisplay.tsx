@@ -2,6 +2,8 @@ import { useParams } from "react-router-dom";
 import { useDiagrams } from "@/Diagram/DiagramsContext";
 import { useEntities } from "@/Entity/EntityContext";
 import { useNodes } from "@/Node/NodesContext";
+import LabeledTextAreaField from "@/Shared/Components/LabeledTextAreaField";
+import LabeledTextField from "@/Shared/Components/LabeledTextField";
 import ViewDisplay from "@/Shared/Components/ViewDisplay";
 import { useRelationships } from "../RelationshipsContext";
 
@@ -30,39 +32,43 @@ const RelationshipViewDisplay = () => {
 	return (
 		<ViewDisplay itemType="relationship">
 			<div className="flex flex-col size-full p-4">
-				<div className="mb-4">
-					<p className="mb-2 font-semibold text-slate-700">Slug:</p>
-					<p className="px-4 py-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800 break-all">
-						{relationship.slug}
-					</p>
+				<LabeledTextField
+					id="slug"
+					label="Slug"
+					value={relationship.slug}
+					disabled
+				/>
+				<div className="mt-4">
+					<LabeledTextField
+						id="diagram"
+						label="Diagram"
+						value={diagramTitle}
+						disabled
+					/>
 				</div>
-
-				<div className="mb-4">
-					<p className="mb-2 font-semibold text-slate-700">Diagram:</p>
-					<p className="px-4 py-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800">
-						{diagramTitle}
-					</p>
+				<div className="mt-4">
+					<LabeledTextField
+						id="sourceNode"
+						label="Source Node"
+						value={sourceNodeTitle}
+						disabled
+					/>
 				</div>
-
-				<div className="mb-4">
-					<p className="mb-2 font-semibold text-slate-700">Source Node:</p>
-					<p className="px-4 py-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800">
-						{sourceNodeTitle}
-					</p>
+				<div className="mt-4">
+					<LabeledTextField
+						id="targetNode"
+						label="Target Node"
+						value={targetNodeTitle}
+						disabled
+					/>
 				</div>
-
-				<div className="mb-4">
-					<p className="mb-2 font-semibold text-slate-700">Target Node:</p>
-					<p className="px-4 py-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800">
-						{targetNodeTitle}
-					</p>
-				</div>
-
-				<div>
-					<p className="mb-2 font-semibold text-slate-700">Description:</p>
-					<p className="px-4 py-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800 whitespace-pre-wrap break-words">
-						{relationship.description || "No description"}
-					</p>
+				<div className="mt-4">
+					<LabeledTextAreaField
+						id="description"
+						label="Description"
+						value={relationship.description || "No description"}
+						disabled
+					/>
 				</div>
 			</div>
 		</ViewDisplay>

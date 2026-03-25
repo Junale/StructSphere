@@ -1,4 +1,6 @@
 import { useParams } from "react-router-dom";
+import LabeledTextAreaField from "@/Shared/Components/LabeledTextAreaField";
+import LabeledTextField from "@/Shared/Components/LabeledTextField";
 import ViewDisplay from "@/Shared/Components/ViewDisplay";
 import { useEntities } from "../EntityContext";
 
@@ -13,25 +15,22 @@ const EntityViewDisplay = () => {
 	return (
 		<ViewDisplay itemType="entity">
 			<div className="flex flex-col size-full p-4">
-				<div className="mb-4">
-					<p className="mb-2 font-semibold text-slate-700">Slug:</p>
-					<p className="px-4 py-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800 break-all">
-						{entity.slug}
-					</p>
+				<LabeledTextField id="slug" label="Slug" value={entity.slug} disabled />
+				<div className="mt-4">
+					<LabeledTextField
+						id="title"
+						label="Title"
+						value={entity.title}
+						disabled
+					/>
 				</div>
-
-				<div className="mb-4">
-					<p className="mb-2 font-semibold text-slate-700">Title:</p>
-					<p className="px-4 py-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800">
-						{entity.title}
-					</p>
-				</div>
-
-				<div>
-					<p className="mb-2 font-semibold text-slate-700">Description:</p>
-					<p className="px-4 py-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800 whitespace-pre-wrap break-words">
-						{entity.description}
-					</p>
+				<div className="mt-4">
+					<LabeledTextAreaField
+						id="description"
+						label="Description"
+						value={entity.description}
+						disabled
+					/>
 				</div>
 			</div>
 		</ViewDisplay>

@@ -3,6 +3,9 @@ import { useDiagrams } from "@/Diagram/DiagramsContext";
 import { useEntities } from "@/Entity/EntityContext";
 import { useNodes } from "@/Node/NodesContext";
 import AddDisplay from "@/Shared/Components/AddDisplay";
+import LabeledSelectField from "@/Shared/Components/LabeledSelectField";
+import LabeledTextAreaField from "@/Shared/Components/LabeledTextAreaField";
+import LabeledTextField from "@/Shared/Components/LabeledTextField";
 import { getSlug } from "@/Shared/SharedUtil";
 import { useRelationships } from "../RelationshipsContext";
 
@@ -61,64 +64,61 @@ const RelationshipAddDisplay = () => {
 	return (
 		<AddDisplay itemType="relationship" onSubmit={onSubmit}>
 			<div className="flex flex-col size-full p-4">
-				<label htmlFor="slug" className="mb-2 font-semibold">
-					Slug:
-				</label>
-				<input
+				<LabeledTextField
 					id="slug"
-					type="text"
+					label="Slug"
 					placeholder="Enter slug"
 					defaultValue={`relationship-${getSlug()}`}
 				/>
-				<label htmlFor="diagramSlug" className="mb-2 mt-4 font-semibold">
-					Diagram:
-				</label>
-				<select
-					id="diagramSlug"
-					className="border rounded-md p-2"
-					onChange={(e) => setSelectedDiagram(e.target.value)}
-				>
-					<option value="">Select Diagram</option>
-					{Object.values(diagrams).map((diagram) => (
-						<option key={diagram.slug} value={diagram.slug}>
-							{diagram.title}
-						</option>
-					))}
-				</select>
-				<label htmlFor="sourceNodeSlug" className="mb-2 mt-4 font-semibold">
-					Source Node:
-				</label>
-				<select
-					id="sourceNodeSlug"
-					className="border rounded-md p-2"
-					disabled={!selectedDiagram}
-				>
-					<option value="">Select Source Node</option>
-					{nodesForSelectedDiagram.map((node) => (
-						<option key={node.slug} value={node.slug}>
-							{entities[node.entitySlug]?.title || node.entitySlug}
-						</option>
-					))}
-				</select>
-				<label htmlFor="targetNodeSlug" className="mb-2 mt-4 font-semibold">
-					Target Node:
-				</label>
-				<select
-					id="targetNodeSlug"
-					className="border rounded-md p-2"
-					disabled={!selectedDiagram}
-				>
-					<option value="">Select Target Node</option>
-					{nodesForSelectedDiagram.map((node) => (
-						<option key={node.slug} value={node.slug}>
-							{entities[node.entitySlug]?.title || node.entitySlug}
-						</option>
-					))}
-				</select>
-				<label htmlFor="description" className="mb-2 mt-4 font-semibold">
-					Description:
-				</label>
-				<input id="description" type="text" placeholder="Enter description" />
+				<div className="mt-4">
+					<LabeledSelectField
+						id="diagramSlug"
+						label="Diagram"
+						onChange={(e) => setSelectedDiagram(e.target.value)}
+					>
+						<option value="">Select Diagram</option>
+						{Object.values(diagrams).map((diagram) => (
+							<option key={diagram.slug} value={diagram.slug}>
+								{diagram.title}
+							</option>
+						))}
+					</LabeledSelectField>
+				</div>
+				<div className="mt-4">
+					<LabeledSelectField
+						id="sourceNodeSlug"
+						label="Source Node"
+						disabled={!selectedDiagram}
+					>
+						<option value="">Select Source Node</option>
+						{nodesForSelectedDiagram.map((node) => (
+							<option key={node.slug} value={node.slug}>
+								{entities[node.entitySlug]?.title || node.entitySlug}
+							</option>
+						))}
+					</LabeledSelectField>
+				</div>
+				<div className="mt-4">
+					<LabeledSelectField
+						id="targetNodeSlug"
+						label="Target Node"
+						disabled={!selectedDiagram}
+					>
+						<option value="">Select Target Node</option>
+						{nodesForSelectedDiagram.map((node) => (
+							<option key={node.slug} value={node.slug}>
+								{entities[node.entitySlug]?.title || node.entitySlug}
+							</option>
+						))}
+					</LabeledSelectField>
+				</div>
+				<div className="mt-4">
+					<LabeledTextAreaField
+						id="description"
+						label="Description"
+						placeholder="Enter description"
+					/>
+				</div>
 			</div>
 		</AddDisplay>
 	);

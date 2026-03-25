@@ -3,12 +3,11 @@ import SearchIcon from "./Icons/SearchIcon";
 import type { TItem } from "./ListDisplay";
 
 type props = {
-	itemType: string;
 	items: TItem[];
 	onFilterChange: (filteredItems: TItem[]) => void;
 };
 
-const ListFilterDisplay = ({ itemType, items, onFilterChange }: props) => {
+const ListFilterDisplay = ({ items, onFilterChange }: props) => {
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const filtered = items.filter(
 			(item) =>
@@ -35,7 +34,7 @@ const ListFilterDisplay = ({ itemType, items, onFilterChange }: props) => {
 				type="text"
 				id="search-filter"
 				className="flex-1 outline-none text-slate-700 placeholder-slate-400 bg-transparent min-w-[200px]"
-				placeholder={`Search ${itemType}s...`}
+				placeholder={`Search...`}
 				onChange={onChange}
 			/>
 		</div>
