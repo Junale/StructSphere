@@ -3,6 +3,7 @@ import { useEntities } from "@/Entity/EntityContext";
 import AddDisplay from "@/Shared/Components/AddDisplay";
 import LabeledSelectField from "@/Shared/Components/LabeledSelectField";
 import LabeledTextField from "@/Shared/Components/LabeledTextField";
+import { getSlug } from "@/Shared/SharedUtil";
 import { useNodes } from "../NodesContext";
 
 const NodeAddDisplay = () => {
@@ -45,7 +46,12 @@ const NodeAddDisplay = () => {
 	return (
 		<AddDisplay itemType="node" onSubmit={onSubmit}>
 			<div className="flex flex-col size-full p-4">
-				<LabeledTextField id="slug" label="Slug" placeholder="Enter slug" />
+				<LabeledTextField
+					id="slug"
+					label="Slug"
+					placeholder="Enter slug"
+					defaultValue={getSlug()}
+				/>
 				<div className="mt-4">
 					<LabeledSelectField id="diagramSlug" label="Diagram">
 						<option value="">Select diagram</option>
