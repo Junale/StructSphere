@@ -3,11 +3,11 @@ import { Link, useParams } from "react-router-dom";
 import { useEntities } from "@/Entity/EntityContext";
 import { useNodes } from "@/Node/NodesContext";
 import { useRelationships } from "@/Relationship/RelationshipsContext";
+import CloseIcon from "@/Shared/Components/Icons/CloseIcon";
 import LabeledSelectField from "@/Shared/Components/LabeledSelectField";
 import LabeledTextField from "@/Shared/Components/LabeledTextField";
 import { getSlug } from "@/Shared/SharedUtil";
 import { useDiagrams } from "../DiagramsContext";
-import CloseIcon from "@/Shared/Components/Icons/CloseIcon";
 
 const DiagramQuickBuildDisplay = () => {
 	const { slug } = useParams();
