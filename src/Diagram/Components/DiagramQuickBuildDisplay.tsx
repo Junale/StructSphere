@@ -4,17 +4,18 @@ import { useEntities } from "@/Entity/EntityContext";
 import { useNodes } from "@/Node/NodesContext";
 import { useRelationships } from "@/Relationship/RelationshipsContext";
 import LabeledSelectField from "@/Shared/Components/LabeledSelectField";
-import LabeledTextAreaField from "@/Shared/Components/LabeledTextAreaField";
 import LabeledTextField from "@/Shared/Components/LabeledTextField";
 import { getSlug } from "@/Shared/SharedUtil";
 import { useDiagrams } from "../DiagramsContext";
+import CloseIcon from "@/Shared/Components/Icons/CloseIcon";
 
 const DiagramQuickBuildDisplay = () => {
 	const { slug } = useParams();
 	const { diagrams } = useDiagrams();
 	const { entities } = useEntities();
-	const { nodes, addNode } = useNodes();
-	const { relationships, addRelationship } = useRelationships();
+	const { nodes, addNode, removeNode } = useNodes();
+	const { relationships, addRelationship, removeRelationship } =
+		useRelationships();
 
 	const [nodeFormKey, setNodeFormKey] = useState(0);
 	const [relationshipFormKey, setRelationshipFormKey] = useState(0);
@@ -53,7 +54,6 @@ const DiagramQuickBuildDisplay = () => {
 		const elements = e.currentTarget.elements;
 		const nodeSlug = elements.namedItem("nodeSlug");
 		const entitySlug = elements.namedItem("entitySlug");
-		const subDiagramSlug = elements.namedItem("subDiagramSlug");
 
 		if (!nodeSlug || !("value" in nodeSlug)) {
 			setError("Could not read node slug.");
@@ -62,11 +62,6 @@ const DiagramQuickBuildDisplay = () => {
 
 		if (!entitySlug || !("value" in entitySlug) || !entitySlug.value) {
 			setError("Please choose an entity.");
-			return;
-		}
-
-		if (!subDiagramSlug || !("value" in subDiagramSlug)) {
-			setError("Could not read sub-diagram.");
 			return;
 		}
 
@@ -89,7 +84,7 @@ const DiagramQuickBuildDisplay = () => {
 			slug: nodeSlug.value,
 			diagramSlug: slug,
 			entitySlug: entitySlug.value,
-			subDiagramSlug: subDiagramSlug.value || undefined,
+			subDiagramSlug: undefined,
 		});
 
 		setMessage("Node added.");
@@ -239,20 +234,6 @@ const DiagramQuickBuildDisplay = () => {
 										</option>
 									))}
 								</LabeledSelectField>
-								<LabeledSelectField
-									id="subDiagramSlug"
-									label="Sub-diagram"
-									defaultValue=""
-								>
-									<option value="">None</option>
-									{Object.values(diagrams)
-										.filter((d) => d.slug !== slug)
-										.map((d) => (
-											<option key={d.slug} value={d.slug}>
-												{d.title}
-											</option>
-										))}
-								</LabeledSelectField>
 								<button
 									type="submit"
 									className="w-full px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md transition"
@@ -311,12 +292,6 @@ const DiagramQuickBuildDisplay = () => {
 											</option>
 										))}
 								</LabeledSelectField>
-								<LabeledTextAreaField
-									id="description"
-									label="Description"
-									placeholder="Optional description"
-									rows={3}
-								/>
 								<button
 									type="submit"
 									className="w-full px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition"
@@ -338,9 +313,16 @@ const DiagramQuickBuildDisplay = () => {
 								diagramNodes.map((node) => (
 									<li
 										key={node.slug}
-										className="rounded-md border border-slate-200 px-3 py-2"
+										className="rounded-md border flex justify-between border-slate-200 px-3 py-2"
 									>
 										{entities[node.entitySlug]?.title || node.entitySlug}
+										<button
+											type="button"
+											className=" size-4 text-red-500 hover:text-red-700 text-sm"
+											onClick={() => removeNode(node.slug)}
+										>
+											<CloseIcon />
+										</button>
 									</li>
 								))
 							) : (
@@ -358,15 +340,24 @@ const DiagramQuickBuildDisplay = () => {
 								diagramRelationships.map((relationship) => (
 									<li
 										key={relationship.slug}
-										className="rounded-md border border-slate-200 px-3 py-2"
+										className="rounded-md flex justify-between border border-slate-200 px-3 py-2"
 									>
-										{entities[
-											nodes[relationship.sourceNodeSlug]?.entitySlug || ""
-										]?.title || relationship.sourceNodeSlug}
-										{" -> "}
-										{entities[
-											nodes[relationship.targetNodeSlug]?.entitySlug || ""
-										]?.title || relationship.targetNodeSlug}
+										<span>
+											{entities[
+												nodes[relationship.sourceNodeSlug]?.entitySlug || ""
+											]?.title || relationship.sourceNodeSlug}
+											{" -> "}
+											{entities[
+												nodes[relationship.targetNodeSlug]?.entitySlug || ""
+											]?.title || relationship.targetNodeSlug}
+										</span>
+										<button
+											type="button"
+											className=" size-4 text-red-500 hover:text-red-700 text-sm"
+											onClick={() => removeRelationship(relationship.slug)}
+										>
+											<CloseIcon />
+										</button>
 									</li>
 								))
 							) : (
