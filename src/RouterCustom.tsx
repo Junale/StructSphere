@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import DiagramAddDisplay from "@/Diagram/Components/DiagramAddDisplay";
 import DiagramListDisplay from "@/Diagram/Components/DiagramListDisplay";
+import DiagramQuickBuildDisplay from "@/Diagram/Components/DiagramQuickBuildDisplay";
 import DiagramUpdateDisplay from "@/Diagram/Components/DiagramUpdateDisplay";
 import EntityAddDisplay from "@/Entity/Components/EntityAddDisplay";
 import EntityListDisplay from "@/Entity/Components/EntityListDisplay";
@@ -30,6 +31,10 @@ const RouterCustom = () => {
 			<Route path="entity/:slug/update" element={<EntityUpdateDisplay />} />
 
 			<Route path="diagram/:slug" element={<DiagramVisualizerDisplay />} />
+			<Route
+				path="diagram/:slug/quick-build"
+				element={<DiagramQuickBuildDisplay />}
+			/>
 			<Route path="diagram" element={<DiagramListDisplay />} />
 			<Route path="diagram/add" element={<DiagramAddDisplay />} />
 			<Route path="diagram/:slug/update" element={<DiagramUpdateDisplay />} />

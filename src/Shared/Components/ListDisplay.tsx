@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDiagrams } from "@/Diagram/DiagramsContext";
@@ -17,6 +18,7 @@ type props = {
 	items: TItem[];
 	enableView?: boolean;
 	onDelete?: (slug: TSlug) => void;
+	extraActions?: (item: TItem) => ReactNode;
 };
 
 const ListDisplay = ({
@@ -24,6 +26,7 @@ const ListDisplay = ({
 	items,
 	enableView = false,
 	onDelete,
+	extraActions,
 }: props) => {
 	const [filteredItems, setFilteredItems] = useState<TItem[]>(items);
 	const itemTypeCapitalized = upperFirstChar(itemType);
@@ -124,6 +127,7 @@ const ListDisplay = ({
 											))}
 											<td className="px-4 py-3">
 												<div className="flex items-center justify-center gap-2">
+													{extraActions ? extraActions(item) : null}
 													{enableView && (
 														<Link
 															to={`/${itemType}/${item.slug}`}
