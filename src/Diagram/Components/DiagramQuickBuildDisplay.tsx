@@ -102,23 +102,14 @@ const DiagramQuickBuildDisplay = () => {
 		setError(null);
 
 		const elements = e.currentTarget.elements;
-		const nodeSlug = elements.namedItem("nodeSlug");
 		const entitySlug = elements.namedItem("entitySlug");
-
-		if (!nodeSlug || !("value" in nodeSlug)) {
-			setError("Could not read node slug.");
-			return;
-		}
 
 		if (!entitySlug || !("value" in entitySlug) || !entitySlug.value) {
 			setError("Please choose an entity.");
 			return;
 		}
 
-		if (nodes[nodeSlug.value]) {
-			setError("Node slug already exists. Try another slug.");
-			return;
-		}
+		const nodeSlug = `node-${getSlug()}`;
 
 		if (
 			diagramNodes.some(
@@ -131,7 +122,7 @@ const DiagramQuickBuildDisplay = () => {
 		}
 
 		addNode({
-			slug: nodeSlug.value,
+			slug: nodeSlug,
 			diagramSlug: slug,
 			entitySlug: entitySlug.value,
 			subDiagramSlug: undefined,
@@ -147,15 +138,9 @@ const DiagramQuickBuildDisplay = () => {
 		setError(null);
 
 		const elements = e.currentTarget.elements;
-		const relationshipSlug = elements.namedItem("relationshipSlug");
 		const sourceNodeSlug = elements.namedItem("sourceNodeSlug");
 		const targetNodeSlug = elements.namedItem("targetNodeSlug");
 		const description = elements.namedItem("description");
-
-		if (!relationshipSlug || !("value" in relationshipSlug)) {
-			setError("Could not read relationship slug.");
-			return;
-		}
 
 		if (
 			!sourceNodeSlug ||
@@ -180,10 +165,7 @@ const DiagramQuickBuildDisplay = () => {
 			return;
 		}
 
-		if (relationships[relationshipSlug.value]) {
-			setError("Relationship slug already exists. Try another slug.");
-			return;
-		}
+		const relationshipSlug = `relationship-${getSlug()}`;
 
 		if (
 			diagramRelationships.some(
@@ -200,7 +182,7 @@ const DiagramQuickBuildDisplay = () => {
 			description && "value" in description ? description.value : "";
 
 		addRelationship({
-			slug: relationshipSlug.value,
+			slug: relationshipSlug,
 			diagramSlug: slug,
 			sourceNodeSlug: sourceNodeSlug.value,
 			targetNodeSlug: targetNodeSlug.value,
@@ -282,8 +264,10 @@ const DiagramQuickBuildDisplay = () => {
 				</div>
 
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-					<div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
-						<h2 className="text-lg font-semibold text-slate-800">Add Node</h2>
+					<div className="bg-white flex flex-col rounded-xl border border-slate-200 shadow-sm p-5">
+						<h2 className=" flex text-lg font-semibold text-slate-800">
+							Add Node
+						</h2>
 						{Object.values(entities).length === 0 ? (
 							<p className="text-sm text-slate-600 mt-3">
 								No entities found yet. Create one in the Entities page first.
@@ -291,14 +275,9 @@ const DiagramQuickBuildDisplay = () => {
 						) : (
 							<form
 								key={nodeFormKey}
-								className="mt-4 space-y-4"
+								className="mt-4 space-y-4 justify-between flex flex-col h-full"
 								onSubmit={handleAddNode}
 							>
-								<LabeledTextField
-									id="nodeSlug"
-									label="Slug"
-									defaultValue={`node-${getSlug()}`}
-								/>
 								<LabeledSelectField
 									id="entitySlug"
 									label="Entity"
@@ -335,11 +314,6 @@ const DiagramQuickBuildDisplay = () => {
 								className="mt-4 space-y-4"
 								onSubmit={handleAddRelationship}
 							>
-								<LabeledTextField
-									id="relationshipSlug"
-									label="Slug"
-									defaultValue={`relationship-${getSlug()}`}
-								/>
 								<LabeledSelectField
 									id="sourceNodeSlug"
 									label="Source Node"
