@@ -12,11 +12,12 @@ import { useDiagrams } from "../DiagramsContext";
 const DiagramQuickBuildDisplay = () => {
 	const { slug } = useParams();
 	const { diagrams } = useDiagrams();
-	const { entities } = useEntities();
+	const { entities, addEntity } = useEntities();
 	const { nodes, addNode, removeNode } = useNodes();
 	const { relationships, addRelationship, removeRelationship } =
 		useRelationships();
 
+	const [entityAndNodeFormKey, setEntityAndNodeFormKey] = useState(0);
 	const [nodeFormKey, setNodeFormKey] = useState(0);
 	const [relationshipFormKey, setRelationshipFormKey] = useState(0);
 	const [message, setMessage] = useState<string | null>(null);
@@ -45,6 +46,55 @@ const DiagramQuickBuildDisplay = () => {
 	if (!diagram) {
 		return <div className="p-4">Diagram not found.</div>;
 	}
+
+	const handleCreateEntityAndNode = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		setMessage(null);
+		setError(null);
+
+		const elements = e.currentTarget.elements;
+		const entityTitle = elements.namedItem("entityTitle");
+
+		if (!entityTitle || !("value" in entityTitle)) {
+			setError("Could not read entity name.");
+			return;
+		}
+
+		const entityTitleValue = entityTitle.value.trim();
+		if (!entityTitleValue) {
+			setError("Please enter an entity name.");
+			return;
+		}
+
+		if (
+			Object.values(entities).some(
+				(entity) =>
+					entity.title.toLowerCase() === entityTitleValue.toLowerCase(),
+			)
+		) {
+			setError("An entity with that name already exists.");
+			return;
+		}
+
+		const entitySlug = `entity-${getSlug()}`;
+		const nodeSlug = `node-${getSlug()}`;
+
+		addEntity({
+			slug: entitySlug,
+			title: entityTitleValue,
+			description: "",
+		});
+
+		addNode({
+			slug: nodeSlug,
+			diagramSlug: slug,
+			entitySlug,
+			subDiagramSlug: undefined,
+		});
+
+		setMessage("Entity and node created.");
+		setEntityAndNodeFormKey((k) => k + 1);
+	};
 
 	const handleAddNode = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -202,6 +252,33 @@ const DiagramQuickBuildDisplay = () => {
 							{error || message}
 						</div>
 					)}
+				</div>
+
+				<div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+					<h2 className="text-lg font-semibold text-slate-800">
+						Quick Create Entity + Node
+					</h2>
+					<p className="text-sm text-slate-600 mt-2">
+						Create a new entity and automatically add it to this diagram as a
+						node.
+					</p>
+					<form
+						key={entityAndNodeFormKey}
+						className="mt-4 space-y-4"
+						onSubmit={handleCreateEntityAndNode}
+					>
+						<LabeledTextField
+							id="entityTitle"
+							label="Entity Name"
+							placeholder="Enter entity name"
+						/>
+						<button
+							type="submit"
+							className="w-full px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-md transition"
+						>
+							Create Entity + Node
+						</button>
+					</form>
 				</div>
 
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
