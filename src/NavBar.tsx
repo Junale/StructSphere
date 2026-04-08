@@ -23,8 +23,8 @@ const NavBar = () => {
 				{/* Desktop navigation */}
 				<nav className="hidden md:flex items-center justify-end flex-1 gap-2">
 					<StyledNavLink to="/" label="Home" />
-					<StyledNavLink to="/entity" label="Entities" />
 					<StyledNavLink to="/diagram" label="Diagrams" />
+					<StyledNavLink to="/entity" label="Entities" />
 					<StyledNavLink to="/node" label="Nodes" />
 					<StyledNavLink to="/relationship" label="Relationships" />
 					<StyledNavLink to="/import-export" label="Import/Export" />
